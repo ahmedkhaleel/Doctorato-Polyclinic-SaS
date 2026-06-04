@@ -2,19 +2,21 @@
 import { computed } from 'vue';
 import { usePage, router, Link } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 defineOptions({ layout: DoctorLayout });
 
 const props = defineProps({ patients: Object });
 
 const page = usePage();
+const { confirm } = useConfirm();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 const t = (ar, en) => (isRtl.value ? ar : en);
 
 function unfavorite(p) {
-    if (confirm(t('إزالة من المفضّلة؟', 'Remove from favorites?'))) {
+    confirm(t('إزالة من المفضّلة؟', 'Remove from favorites?'), () => {
         router.post(`/doctor/patients/${p.id}/favorite/toggle`, {}, { preserveScroll: true });
-    }
+    });
 }
 </script>
 

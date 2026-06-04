@@ -5,16 +5,17 @@ namespace Tests\Feature;
 use Tests\TestCase;
 
 /**
- * UX rule (docs/ADMIN_UI_AUDIT_PLAN.md): the admin panel must use the branded,
+ * UX rule (docs/ADMIN_UI_AUDIT_PLAN.md): every panel must use the branded,
  * bilingual GlobalConfirmDialog (via useConfirm()), never the native, English,
- * unbranded window.confirm(). This guard scans every admin Vue page and fails
- * if a native confirm() call sneaks back in.
+ * unbranded window.confirm(). This guard scans ALL Vue pages (Admin, Doctor,
+ * Secretary, Patient, Frontend, Webmaster) and fails if a native confirm()
+ * call sneaks back in. GlobalConfirmDialog is mounted in every panel layout.
  */
 class NoNativeConfirmInAdminTest extends TestCase
 {
     public function test_no_native_confirm_in_admin_pages(): void
     {
-        $dir = resource_path('js/Pages/Admin');
+        $dir = resource_path('js/Pages');
 
         // Matches: window.confirm(   OR   a bare confirm( used as a call
         // (if (confirm(...)), !confirm(...), && confirm(...)). The composable is

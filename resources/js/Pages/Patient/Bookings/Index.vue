@@ -4,18 +4,21 @@ import { usePage, Link, router, useForm } from '@inertiajs/vue3';
 import PatientLayout from '@/Layouts/PatientLayout.vue';
 import { usePatientLocale } from '@/Composables/usePatientLocale';
 import { usePatientStatus } from '@/Composables/usePatientStatus';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { lp } = usePatientLocale();
 const { bookingLabel, bookingColor } = usePatientStatus();
+const { confirm } = useConfirm();
 
 const cancellingId = ref(null);
 
 function cancelBooking(booking) {
-    if (!confirm(isRtl.value ? 'هل أنت متأكد من إلغاء هذا الحجز؟' : 'Are you sure you want to cancel this booking?')) return;
-    cancellingId.value = booking.id;
-    router.post(lp(`/bookings/${booking.id}/cancel`), {}, {
-        preserveScroll: true,
-        onFinish: () => cancellingId.value = null,
+    confirm(isRtl.value ? 'هل أنت متأكد من إلغاء هذا الحجز؟' : 'Are you sure you want to cancel this booking?', () => {
+        cancellingId.value = booking.id;
+        router.post(lp(`/bookings/${booking.id}/cancel`), {}, {
+            preserveScroll: true,
+            onFinish: () => cancellingId.value = null,
+        });
     });
 }
 

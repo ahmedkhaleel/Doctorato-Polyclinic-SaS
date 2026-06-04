@@ -3,8 +3,10 @@ import { computed, ref } from 'vue';
 import { router, useForm, usePage, Link } from '@inertiajs/vue3';
 import PatientLayout from '@/Layouts/PatientLayout.vue';
 import { usePatientLocale } from '@/Composables/usePatientLocale';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { lp } = usePatientLocale();
+const { confirm } = useConfirm();
 
 defineOptions({ layout: PatientLayout });
 
@@ -59,8 +61,9 @@ function submit() {
 }
 
 function deleteDoc(id) {
-    if (!confirm(isRtl.value ? 'هل تريد حذف هذا الملف؟' : 'Delete this document?')) return;
-    router.delete(lp(`/documents/${id}`), { preserveScroll: true });
+    confirm(isRtl.value ? 'هل تريد حذف هذا الملف؟' : 'Delete this document?', () => {
+        router.delete(lp(`/documents/${id}`), { preserveScroll: true });
+    });
 }
 
 function fmtSize(bytes) {

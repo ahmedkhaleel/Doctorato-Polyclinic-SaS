@@ -3,8 +3,10 @@ import { computed, ref } from 'vue';
 import { useForm, usePage, router } from '@inertiajs/vue3';
 import PatientLayout from '@/Layouts/PatientLayout.vue';
 import { usePatientLocale } from '@/Composables/usePatientLocale';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { lp } = usePatientLocale();
+const { confirm } = useConfirm();
 
 defineOptions({ layout: PatientLayout });
 
@@ -88,8 +90,9 @@ function onPhotoChosen(e) {
 }
 
 function deletePhoto() {
-    if (!confirm(isRtl.value ? 'هل تريد حذف الصورة الشخصية؟' : 'Remove your profile photo?')) return;
-    router.post(lp('/profile/photo/delete'), {}, { preserveScroll: true });
+    confirm(isRtl.value ? 'هل تريد حذف الصورة الشخصية؟' : 'Remove your profile photo?', () => {
+        router.post(lp('/profile/photo/delete'), {}, { preserveScroll: true });
+    });
 }
 </script>
 

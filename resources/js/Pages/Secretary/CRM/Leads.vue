@@ -2,8 +2,10 @@
 import { computed, ref, watch, onMounted, onBeforeUnmount, onUnmounted } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const page = usePage();
+const { confirm } = useConfirm();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
 const props = defineProps({
@@ -253,17 +255,17 @@ const showBulkActions = computed(() => selectedLeads.value.length > 0);
 
 function bulkUpdateStatus(status) {
     if (!selectedLeads.value.length) return;
-    if (!confirm(isRtl.value ? `تغيير حالة ${selectedLeads.value.length} عميل؟` : `Update status of ${selectedLeads.value.length} leads?`)) return;
-
-    router.post('/secretary/crm/leads/bulk-status', {
-        lead_ids: selectedLeads.value,
-        status: status,
-    }, {
-        preserveScroll: true,
-        onSuccess: () => {
-            selectedLeads.value = [];
-            selectAll.value = false;
-        },
+    confirm(isRtl.value ? `تغيير حالة ${selectedLeads.value.length} عميل؟` : `Update status of ${selectedLeads.value.length} leads?`, () => {
+        router.post('/secretary/crm/leads/bulk-status', {
+            lead_ids: selectedLeads.value,
+            status: status,
+        }, {
+            preserveScroll: true,
+            onSuccess: () => {
+                selectedLeads.value = [];
+                selectAll.value = false;
+            },
+        });
     });
 }
 
@@ -274,7 +276,7 @@ function clearSelection() {
 
 function bulkUpdatePriority(priority) {
     if (!selectedLeads.value.length) return;
-    if (!confirm(isRtl.value ? `تغيير أولوية ${selectedLeads.value.length} عميل؟` : `Update priority of ${selectedLeads.value.length} leads?`)) return;
+    confirm(isRtl.value ? `تغيير أولوية ${selectedLeads.value.length} عميل؟` : `Update priority of ${selectedLeads.value.length} leads?`, () => {
     router.post('/secretary/crm/leads/bulk-priority', {
         lead_ids: selectedLeads.value,
         priority: priority,
@@ -284,6 +286,7 @@ function bulkUpdatePriority(priority) {
             selectedLeads.value = [];
             selectAll.value = false;
         },
+    });
     });
 }
 

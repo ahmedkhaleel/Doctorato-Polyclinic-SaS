@@ -4,8 +4,11 @@ import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 import QuickAddPatientModal from '@/Components/QuickAddPatientModal.vue';
 import { useCurrency } from '@/Composables/useCurrency.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 defineOptions({ layout: SecretaryLayout });
+
+const { confirm } = useConfirm();
 
 const props = defineProps({
     booking: Object,
@@ -509,9 +512,10 @@ function onConsentFilesSelected(event) {
 }
 
 function deleteConsent(consentId) {
-    if (!confirm(isRtl.value ? 'هل تريد حذف هذا المستند؟' : 'Delete this consent document?')) return;
-    router.post(`/secretary/bookings/${props.booking.id}/consents/${consentId}/delete`, {}, {
-        preserveScroll: true,
+    confirm(isRtl.value ? 'هل تريد حذف هذا المستند؟' : 'Delete this consent document?', () => {
+        router.post(`/secretary/bookings/${props.booking.id}/consents/${consentId}/delete`, {}, {
+            preserveScroll: true,
+        });
     });
 }
 

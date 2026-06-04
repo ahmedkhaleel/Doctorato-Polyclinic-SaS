@@ -2,8 +2,10 @@
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { Link, useForm, router, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const page = usePage();
+const { confirm } = useConfirm();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
 const props = defineProps({
@@ -222,9 +224,9 @@ function submitComplete(fuId) {
 }
 
 function missFollowUp(fuId) {
-    if (confirm(isRtl.value ? 'هل تريد تحديد هذه المتابعة كفائتة؟' : 'Mark this follow-up as missed?')) {
+    confirm(isRtl.value ? 'هل تريد تحديد هذه المتابعة كفائتة؟' : 'Mark this follow-up as missed?', () => {
         router.post(`/secretary/crm/follow-ups/${fuId}/miss`, {}, { preserveScroll: true });
-    }
+    });
 }
 
 const followUpStatusColors = {
@@ -304,11 +306,12 @@ function submitConvert() {
 const reactivating = ref(false);
 function reactivateLead() {
     const msg = isRtl.value ? 'هل تريد إعادة تنشيط هذا العميل المحتمل؟' : 'Reactivate this lead back to New status?';
-    if (!confirm(msg)) return;
-    reactivating.value = true;
-    router.post(`/secretary/crm/leads/${props.lead.id}/reactivate`, {}, {
-        preserveScroll: true,
-        onFinish: () => reactivating.value = false,
+    confirm(msg, () => {
+        reactivating.value = true;
+        router.post(`/secretary/crm/leads/${props.lead.id}/reactivate`, {}, {
+            preserveScroll: true,
+            onFinish: () => reactivating.value = false,
+        });
     });
 }
 

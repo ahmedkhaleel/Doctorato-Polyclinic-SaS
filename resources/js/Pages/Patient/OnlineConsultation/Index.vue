@@ -2,8 +2,11 @@
 import { computed, ref } from 'vue';
 import { usePage, Link, router } from '@inertiajs/vue3';
 import PatientLayout from '@/Layouts/PatientLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 defineOptions({ layout: PatientLayout });
+
+const { confirm } = useConfirm();
 
 const props = defineProps({
     consultations: Object,
@@ -87,11 +90,12 @@ function canCancel(c) {
 
 const cancellingId = ref(null);
 function cancelConsultation(c) {
-    if (!confirm(isRtl.value ? 'هل أنت متأكد من إلغاء الاستشارة؟' : 'Are you sure you want to cancel?')) return;
-    cancellingId.value = c.id;
-    router.post(lp(`/online-consultations/${c.id}/cancel`), {}, {
-        preserveScroll: true,
-        onFinish: () => cancellingId.value = null,
+    confirm(isRtl.value ? 'هل أنت متأكد من إلغاء الاستشارة؟' : 'Are you sure you want to cancel?', () => {
+        cancellingId.value = c.id;
+        router.post(lp(`/online-consultations/${c.id}/cancel`), {}, {
+            preserveScroll: true,
+            onFinish: () => cancellingId.value = null,
+        });
     });
 }
 </script>

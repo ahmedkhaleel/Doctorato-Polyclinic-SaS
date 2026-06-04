@@ -2,10 +2,12 @@
 import { computed, ref } from 'vue';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 defineOptions({ layout: SecretaryLayout });
 
 const page = usePage();
+const { confirm } = useConfirm();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
 const props = defineProps({
@@ -110,11 +112,11 @@ function formatDateTime(date) {
 /* ── Actions ────────────────────────────────────────────── */
 function cancelVisit() {
     const msg = isRtl.value ? 'هل أنت متأكد من إلغاء هذه الزيارة؟' : 'Are you sure you want to cancel this visit?';
-    if (window.confirm(msg)) {
+    confirm(msg, () => {
         router.post(`/secretary/visits/${props.visit.id}/cancel`, {}, {
             preserveScroll: true,
         });
-    }
+    });
 }
 </script>
 

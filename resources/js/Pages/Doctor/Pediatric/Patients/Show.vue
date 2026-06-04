@@ -5,10 +5,12 @@ import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import SearchableSelect from '@/Components/Doctor/SearchableSelect.vue';
 import { getAgeDisplay } from '@/Composables/usePediatricAge';
 import PediatricGrowthChart from '@/Components/PediatricGrowthChart.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 defineOptions({ layout: DoctorLayout });
 
 const page = usePage();
+const { confirm } = useConfirm();
 const locale = computed(() => page.props.locale || 'ar');
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
@@ -233,9 +235,9 @@ function submitChronic() {
 // ── Delete & Toggle Actions ──
 function deleteGrowthRecord(record) {
     const msg = isRtl.value ? 'هل أنت متأكد من حذف هذا القياس؟' : 'Are you sure you want to delete this growth record?';
-    if (confirm(msg)) {
+    confirm(msg, () => {
         router.post(`/doctor/pediatric/patients/${props.patient.id}/growth/${record.id}/delete`, {}, { preserveScroll: true });
-    }
+    });
 }
 
 function toggleAllergy(allergy) {
@@ -244,9 +246,9 @@ function toggleAllergy(allergy) {
 
 function deleteAllergy(allergy) {
     const msg = isRtl.value ? 'هل أنت متأكد من حذف هذه الحساسية؟' : 'Are you sure you want to delete this allergy?';
-    if (confirm(msg)) {
+    confirm(msg, () => {
         router.post(`/doctor/pediatric/patients/${props.patient.id}/allergy/${allergy.id}/delete`, {}, { preserveScroll: true });
-    }
+    });
 }
 
 function toggleChronicCondition(condition) {
@@ -255,9 +257,9 @@ function toggleChronicCondition(condition) {
 
 function deleteChronicCondition(condition) {
     const msg = isRtl.value ? 'هل أنت متأكد من حذف هذه الحالة المزمنة؟' : 'Are you sure you want to delete this chronic condition?';
-    if (confirm(msg)) {
+    confirm(msg, () => {
         router.post(`/doctor/pediatric/patients/${props.patient.id}/chronic-condition/${condition.id}/delete`, {}, { preserveScroll: true });
-    }
+    });
 }
 
 // ── Nutrition Form ──

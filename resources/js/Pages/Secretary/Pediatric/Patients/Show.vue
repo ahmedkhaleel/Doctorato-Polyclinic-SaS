@@ -2,10 +2,12 @@
 import { computed, ref, onMounted } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 defineOptions({ layout: SecretaryLayout });
 
 const page = usePage();
+const { confirm } = useConfirm();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
 const props = defineProps({
@@ -101,11 +103,12 @@ function submitFamilyHistory() {
 
 function deleteFamilyHistory(id) {
     const msg = isRtl.value ? 'هل أنت متأكد من حذف هذا السجل؟' : 'Are you sure you want to delete this record?';
-    if (!confirm(msg)) return;
-    familyDeleting.value = id;
-    router.post(`/secretary/pediatric/family-history/${id}/delete`, {}, {
-        preserveScroll: true,
-        onFinish: () => { familyDeleting.value = null; },
+    confirm(msg, () => {
+        familyDeleting.value = id;
+        router.post(`/secretary/pediatric/family-history/${id}/delete`, {}, {
+            preserveScroll: true,
+            onFinish: () => { familyDeleting.value = null; },
+        });
     });
 }
 
