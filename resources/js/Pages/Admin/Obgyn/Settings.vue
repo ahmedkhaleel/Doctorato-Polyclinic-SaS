@@ -2,6 +2,7 @@
 import { useForm, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FormErrors from '@/Components/Ui/FormErrors.vue';
 
 // AdminLayout is applied via the <AdminLayout> wrapper below — do NOT also
 // set it via defineOptions, or the layout (and its header) renders twice.
@@ -54,6 +55,7 @@ const reminders = computed(() => [
             <div v-if="$page.props.flash?.success" class="rounded-xl bg-emerald-50 border border-emerald-200 p-4 text-emerald-800 text-sm">{{ $page.props.flash.success }}</div>
 
             <form @submit.prevent="save" class="space-y-6">
+                <FormErrors :errors="form.errors" />
                 <!-- Pricing -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                     <div class="flex items-center gap-2 mb-5">

@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FormErrors from '@/Components/Ui/FormErrors.vue';
 
 defineOptions({ layout: AdminLayout });
 
@@ -51,6 +52,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
         </Transition>
 
         <form @submit.prevent="submit" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4">
+            <FormErrors :errors="form.errors" />
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium mb-1">{{ t('Name (Arabic)', 'الاسم (عربي)') }}</label>

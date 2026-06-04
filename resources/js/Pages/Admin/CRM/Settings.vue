@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FormErrors from '@/Components/Ui/FormErrors.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 
 const { can } = usePermissions();
@@ -144,6 +145,7 @@ const slaGaugePercent = computed(() => {
 
             <!-- Tab Content -->
             <form @submit.prevent="saveSettings">
+                <FormErrors :errors="form.errors" />
 
                 <!-- ==================== GENERAL TAB ==================== -->
                 <div v-show="activeTab === 'general'">

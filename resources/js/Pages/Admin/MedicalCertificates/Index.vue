@@ -2,6 +2,7 @@
 import { ref, computed, watch } from 'vue';
 import { Link, useForm, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FormErrors from '@/Components/Ui/FormErrors.vue';
 import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { confirm } = useConfirm();
@@ -258,6 +259,7 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
                 <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-4 md:p-6 space-y-4">
                     <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'شهادة طبية جديدة' : 'New Medical Certificate' }}</h3>
                     <form @submit.prevent="submitCreate" class="space-y-4">
+                        <FormErrors :errors="form.errors" />
                         <!-- Patient Search -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'المريض' : 'Patient' }} *</label>

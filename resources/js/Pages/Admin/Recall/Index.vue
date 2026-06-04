@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FormErrors from '@/Components/Ui/FormErrors.vue';
 import PhoneWithWhatsApp from '@/Components/Patient/PhoneWithWhatsApp.vue';
 
 defineOptions({ layout: AdminLayout });
@@ -204,6 +205,7 @@ const cappedTotal = computed(() => Math.min(props.patients?.total || 0, 500));
                     </p>
                 </div>
 
+                <FormErrors :errors="bulkForm.errors" />
                 <div class="flex items-center gap-2 justify-end">
                     <button type="button" @click="showBulkConfirm = false"
                             class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-600 text-sm hover:bg-gray-50">

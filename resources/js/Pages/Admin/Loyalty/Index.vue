@@ -2,6 +2,7 @@
 import { computed, ref, watch, onMounted } from 'vue';
 import { router, Link, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FormErrors from '@/Components/Ui/FormErrors.vue';
 import { useCurrency } from '@/Composables/useCurrency';
 
 defineOptions({ layout: AdminLayout });
@@ -175,6 +176,7 @@ function initial(name) {
                 </div>
 
                 <form v-else key="edit" @submit.prevent="saveRules" class="space-y-3">
+                    <FormErrors :errors="rulesForm.errors" />
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                         <div>
                             <label class="lyl-field-label">{{ isRtl ? 'لكل زيارة (نقطة)' : 'Per visit (pts)' }}</label>

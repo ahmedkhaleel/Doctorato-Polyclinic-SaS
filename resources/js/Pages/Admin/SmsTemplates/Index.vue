@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import AiAssist from '@/Components/Ai/AiAssist.vue';
+import FormErrors from '@/Components/Ui/FormErrors.vue';
 
 defineOptions({ layout: AdminLayout });
 
@@ -124,6 +125,7 @@ const categoryLabel = (c) => ({
                         </span>
                     </div>
 
+                    <FormErrors :errors="getForm(t).errors" class="mt-4" />
                     <div class="mt-4 flex items-center gap-3">
                         <label class="flex items-center gap-2 text-sm">
                             <input type="checkbox" v-model="getForm(t).is_active" class="rounded text-[#C4A265]" />

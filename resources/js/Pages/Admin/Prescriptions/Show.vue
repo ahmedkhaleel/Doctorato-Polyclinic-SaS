@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FormErrors from '@/Components/Ui/FormErrors.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useConfirm } from '@/Composables/useConfirm.js';
 
@@ -237,6 +238,7 @@ function formatDate(date) {
             <div v-else class="bg-white rounded-lg shadow-sm p-6">
                 <h2 class="text-lg font-semibold text-gray-700 mb-4">Edit Prescription</h2>
                 <form @submit.prevent="submitEdit" class="space-y-4">
+                    <FormErrors :errors="editForm.errors" />
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Diagnosis</label>

@@ -2,6 +2,7 @@
 import { ref, computed, watch } from 'vue';
 import { Link, usePage, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FormErrors from '@/Components/Ui/FormErrors.vue';
 import { useConfirm } from '@/Composables/useConfirm.js';
 
 defineOptions({ layout: AdminLayout });
@@ -98,6 +99,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
             <div class="bg-white rounded-2xl w-full max-w-md p-6">
                 <h2 class="text-lg font-bold mb-4">{{ t('Upload photo', 'رفع صورة') }}</h2>
                 <form @submit.prevent="submit" class="space-y-3">
+                    <FormErrors :errors="form.errors" />
                     <select v-model="form.patient_id" required class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
                         <option value="">{{ t('Select patient', 'اختر المريض') }}</option>
                         <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.full_name }}</option>

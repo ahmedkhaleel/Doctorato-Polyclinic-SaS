@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { useForm, usePage, router, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FormErrors from '@/Components/Ui/FormErrors.vue';
 
 const props = defineProps({
     settings: Object,
@@ -90,6 +91,7 @@ const tabs = [
             </div>
 
             <form @submit.prevent="submit" class="space-y-6">
+                <FormErrors :errors="form.errors" />
                 <!-- Master switch -->
                 <section class="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
                     <h2 class="font-bold text-gray-800">{{ t('التشغيل العام', 'Master control') }}</h2>

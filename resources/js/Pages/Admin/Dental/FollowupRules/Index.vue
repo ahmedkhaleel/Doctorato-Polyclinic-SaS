@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import { Link, router, usePage, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import ConfirmModal from '@/Components/Admin/ConfirmModal.vue';
+import FormErrors from '@/Components/Ui/FormErrors.vue';
 import { useLocale } from '@/Composables/useLocale.js';
 
 const { t } = useLocale();
@@ -369,6 +370,7 @@ const activeTab = ref('rules');
                         </div>
 
                         <form @submit.prevent="saveRule" class="space-y-4">
+                            <FormErrors :errors="editForm.errors" />
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="text-sm font-medium text-gray-700 mb-1 block">{{ isRtl ? 'الاسم بالعربي' : 'Arabic Label' }}</label>
