@@ -473,7 +473,7 @@ function formatDate(date) {
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
             >
-                <div v-if="drawerOpen" @click="closeDrawer" class="fixed inset-0 bg-black/30 backdrop-blur-sm z-[60]"></div>
+                <div v-if="drawerOpen" v-focus-trap="() => (drawerOpen = false)" role="dialog" aria-modal="true" @click="closeDrawer" class="fixed inset-0 bg-black/30 backdrop-blur-sm z-[60]"></div>
             </Transition>
 
             <!-- Drawer Panel -->

@@ -260,7 +260,7 @@ const receivedPercentage = computed(() => {
 
         <!-- Status Change Modal -->
         <Teleport to="body">
-            <div v-if="showStatusModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div v-if="showStatusModal" v-focus-trap="() => (showStatusModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showStatusModal = false" />
                 <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
                     <h2 class="text-lg font-bold text-gray-800 mb-4">
@@ -293,7 +293,7 @@ const receivedPercentage = computed(() => {
 
         <!-- Receive Items Modal -->
         <Teleport to="body">
-            <div v-if="showReceiveModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div v-if="showReceiveModal" v-focus-trap="() => (showReceiveModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showReceiveModal = false" />
                 <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6">
                     <div class="flex items-center justify-between mb-5">

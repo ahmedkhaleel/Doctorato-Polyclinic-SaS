@@ -271,7 +271,7 @@ const durations = [
 
         <!-- ─── Create/Edit Modal ──────────────────────────────── -->
         <Teleport to="body">
-            <div v-if="showModal" class="fixed inset-0 z-50 flex items-start justify-center pt-10 px-4 overflow-y-auto">
+            <div v-if="showModal" v-focus-trap="() => (showModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-start justify-center pt-10 px-4 overflow-y-auto">
                 <div class="fixed inset-0 bg-black/50" @click="showModal = false" />
                 <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-3xl mb-10" @click.stop>
                     <!-- Modal Header -->

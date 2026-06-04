@@ -146,7 +146,7 @@ function deleteDepartment(dept) {
 
             <!-- Modal -->
             <Teleport to="body">
-                <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+                <div v-if="showModal" v-focus-trap="() => (showModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                     <div class="fixed inset-0 bg-black/50" @click="showModal = false"></div>
                     <div class="relative bg-white rounded-xl shadow-xl w-full max-w-lg p-4 md:p-6 z-10">
                         <h2 class="text-lg font-semibold text-gray-800 mb-4">

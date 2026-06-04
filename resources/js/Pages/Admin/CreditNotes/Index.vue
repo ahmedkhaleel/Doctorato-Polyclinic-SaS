@@ -225,7 +225,7 @@ function formatDate(d) {
 
         <!-- Create Modal -->
         <Teleport to="body">
-            <div v-if="showCreateModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div v-if="showCreateModal" v-focus-trap="() => (showCreateModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showCreateModal = false" />
                 <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
                     <h2 class="text-lg font-bold text-gray-800 mb-5">{{ isRtl ? 'إشعار دائن جديد' : 'New Credit Note' }}</h2>
@@ -284,7 +284,7 @@ function formatDate(d) {
 
         <!-- Status Modal -->
         <Teleport to="body">
-            <div v-if="showStatusModal && selectedNote" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div v-if="showStatusModal && selectedNote" v-focus-trap="() => (showStatusModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showStatusModal = false" />
                 <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
                     <h2 class="text-lg font-bold text-gray-800 mb-4">{{ isRtl ? 'تحديث الحالة' : 'Update Status' }}</h2>

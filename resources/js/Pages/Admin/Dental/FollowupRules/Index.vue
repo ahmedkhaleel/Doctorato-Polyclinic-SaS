@@ -356,7 +356,7 @@ const activeTab = ref('rules');
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
             >
-                <div v-if="editingRule" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+                <div v-if="editingRule" v-focus-trap="() => (editingRule = null)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="editingRule = null"></div>
                     <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 space-y-5 z-10 max-h-[90vh] overflow-y-auto">
                         <div class="flex items-center gap-3">

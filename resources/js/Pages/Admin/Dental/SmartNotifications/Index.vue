@@ -497,7 +497,7 @@ const responseRate = computed(() => {
             leave-from-class="opacity-100"
             leave-to-class="opacity-0"
         >
-            <div v-if="showManualModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div v-if="showManualModal" v-focus-trap="() => (showManualModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="fixed inset-0 bg-black/40 backdrop-blur-sm" @click="showManualModal = false"></div>
                 <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
                     <!-- Modal header -->

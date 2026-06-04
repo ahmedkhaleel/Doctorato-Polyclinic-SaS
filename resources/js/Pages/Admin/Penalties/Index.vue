@@ -235,7 +235,7 @@ function deleteRecord(id) {
 
         <!-- Create Record Modal -->
         <Teleport to="body">
-            <div v-if="showModal" class="fixed inset-0 z-50 overflow-y-auto">
+            <div v-if="showModal" v-focus-trap="() => (showModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 overflow-y-auto">
                 <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
                     <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeModal"></div>
                     <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-full sm:max-w-lg mx-auto z-10 max-h-[90vh] overflow-y-auto">

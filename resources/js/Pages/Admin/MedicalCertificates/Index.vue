@@ -254,7 +254,7 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
 
         <!-- Create Modal -->
         <Teleport to="body">
-            <div v-if="showCreateModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div v-if="showCreateModal" v-focus-trap="() => (showCreateModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="fixed inset-0 bg-black/40" @click="showCreateModal = false"></div>
                 <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-4 md:p-6 space-y-4">
                     <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'شهادة طبية جديدة' : 'New Medical Certificate' }}</h3>

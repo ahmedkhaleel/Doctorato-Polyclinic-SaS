@@ -237,7 +237,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
         <!-- Create / edit modal -->
         <Teleport to="body">
             <Transition name="tp-modal">
-                <div v-if="showForm" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+                <div v-if="showForm" v-focus-trap="() => (showForm = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                     <div class="absolute inset-0 bg-[#0F2444]/50 backdrop-blur-sm" @click="showForm = false"></div>
                     <div class="tp-dialog relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden">
                         <div class="px-6 py-4 bg-gradient-to-br from-[#1B365D] to-[#0F2444] flex items-center gap-3">

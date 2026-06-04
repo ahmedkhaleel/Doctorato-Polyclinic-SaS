@@ -207,7 +207,7 @@ const activeCount = computed(() => props.suppliers?.data?.filter(s => s.is_activ
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
             >
-                <div v-if="showModal" class="fixed inset-0 z-[70] flex items-center justify-center p-4">
+                <div v-if="showModal" v-focus-trap="() => (showModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-[70] flex items-center justify-center p-4">
                     <div class="absolute inset-0 bg-gray-900/50 backdrop-blur-sm" @click="showModal = false" />
                     <Transition
                         enter-active-class="transition duration-300 ease-out"

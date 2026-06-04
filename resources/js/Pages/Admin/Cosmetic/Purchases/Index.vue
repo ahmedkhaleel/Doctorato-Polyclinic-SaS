@@ -223,7 +223,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
         <!-- ═══ Create modal ═══ -->
         <Teleport to="body">
             <Transition name="pkg-modal">
-                <div v-if="showCreate" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+                <div v-if="showCreate" v-focus-trap="() => (showCreate = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                     <div class="absolute inset-0 bg-[#0F2444]/50 backdrop-blur-sm" @click="showCreate = false"></div>
                     <div class="pkg-dialog relative w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden">
                         <div class="px-6 py-4 bg-gradient-to-br from-[#1B365D] to-[#0F2444] flex items-center gap-3">

@@ -251,7 +251,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
             >
-                <div v-if="showModal" class="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+                <div v-if="showModal" v-focus-trap="() => (showModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-[9999] flex items-center justify-center p-4">
                     <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" @click="closeModal"></div>
 
                     <Transition

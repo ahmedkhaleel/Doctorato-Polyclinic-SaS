@@ -201,7 +201,7 @@ function formatDateTime(iso) {
 
         <!-- Deposit Modal -->
         <Teleport to="body">
-            <div v-if="showDepositModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div v-if="showDepositModal" v-focus-trap="() => (showDepositModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="fixed inset-0 bg-black/40" @click="showDepositModal = false"></div>
                 <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-4 md:p-6 space-y-4">
                     <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'إيداع مبلغ' : 'Deposit Funds' }}</h3>
@@ -240,7 +240,7 @@ function formatDateTime(iso) {
 
         <!-- Withdraw Modal -->
         <Teleport to="body">
-            <div v-if="showWithdrawModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div v-if="showWithdrawModal" v-focus-trap="() => (showWithdrawModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="fixed inset-0 bg-black/40" @click="showWithdrawModal = false"></div>
                 <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-4 md:p-6 space-y-4">
                     <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'سحب مبلغ' : 'Withdraw Funds' }}</h3>
@@ -289,7 +289,7 @@ function formatDateTime(iso) {
 
         <!-- Adjust Modal -->
         <Teleport to="body">
-            <div v-if="showAdjustModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div v-if="showAdjustModal" v-focus-trap="() => (showAdjustModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="fixed inset-0 bg-black/40" @click="showAdjustModal = false"></div>
                 <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-4 md:p-6 space-y-4">
                     <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'تعديل الرصيد' : 'Adjust Balance' }}</h3>

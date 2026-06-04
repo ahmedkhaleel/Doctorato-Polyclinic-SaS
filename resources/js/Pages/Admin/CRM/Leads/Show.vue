@@ -1638,7 +1638,7 @@ function translateDescription(desc) {
             <transition enter-active-class="transition-all duration-300" leave-active-class="transition-all duration-200"
                 enter-from-class="opacity-0" enter-to-class="opacity-100"
                 leave-from-class="opacity-100" leave-to-class="opacity-0">
-                <div v-if="showStatusModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+                <div v-if="showStatusModal" v-focus-trap="() => (showStatusModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
                     <transition enter-active-class="transition-all duration-300 delay-100" enter-from-class="opacity-0 scale-95 translate-y-4" enter-to-class="opacity-100 scale-100 translate-y-0">
                         <div v-if="showStatusModal" class="bg-white rounded-2xl shadow-2xl w-full max-w-full sm:max-w-md overflow-hidden max-h-[90vh] overflow-y-auto">
                             <div class="h-1 bg-gradient-to-r from-red-400 via-red-500 to-red-400"></div>
@@ -1673,7 +1673,7 @@ function translateDescription(desc) {
             <transition enter-active-class="transition-opacity duration-200" leave-active-class="transition-opacity duration-200"
                 enter-from-class="opacity-0" enter-to-class="opacity-100"
                 leave-from-class="opacity-100" leave-to-class="opacity-0">
-                <div v-if="showConvertModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 overflow-y-auto">
+                <div v-if="showConvertModal" v-focus-trap="() => (showConvertModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 overflow-y-auto">
                     <transition enter-active-class="transition-all duration-300 delay-100" enter-from-class="opacity-0 scale-95 translate-y-4" enter-to-class="opacity-100 scale-100 translate-y-0">
                         <div v-if="showConvertModal" class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden my-8">
                             <div class="h-1 bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-400"></div>

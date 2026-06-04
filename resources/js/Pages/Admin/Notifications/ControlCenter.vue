@@ -443,7 +443,7 @@ const statusColor = (ch) => (channelMeta[ch]?.color || '#64748B');
 
         <!-- Template modal -->
         <Teleport to="body">
-            <div v-if="tplModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
+            <div v-if="tplModal" v-focus-trap="() => (tplModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
                 <div class="absolute inset-0 bg-black/40" @click="tplModal = false"></div>
                 <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 space-y-3 max-h-[90vh] overflow-y-auto">
                     <h3 class="font-bold text-lg text-gray-900">{{ tplForm.id ? t('تعديل قالب', 'Edit Template') : t('قالب جديد', 'New Template') }}</h3>

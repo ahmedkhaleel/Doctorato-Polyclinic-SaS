@@ -175,7 +175,7 @@ function submitStatusUpdate() {
 
         <!-- Status Update Modal -->
         <Teleport to="body">
-            <div v-if="updatingClaim" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div v-if="updatingClaim" v-focus-trap="() => (updatingClaim = null)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="updatingClaim = null" />
                 <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
                     <h2 class="text-lg font-bold text-gray-800 mb-4">
