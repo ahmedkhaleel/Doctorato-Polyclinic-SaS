@@ -22,6 +22,8 @@ return [
         'derma' => ['label_en' => 'Dermatology & Cosmetic', 'label_ar' => 'الجلدية والتجميل',      'icon' => 'sparkles',    'color' => '#1B365D'],
         'pediatric' => ['label_en' => 'Pediatrics',            'label_ar' => 'طب الأطفال',             'icon' => 'child',       'color' => '#4CAF50'],
         'obgyn' => ['label_en' => 'Obstetrics & Gynecology', 'label_ar' => 'النساء والتوليد',     'icon' => 'heart',       'color' => '#DB2777'],
+        'psychiatry' => ['label_en' => 'Psychiatry',           'label_ar' => 'الطب النفسي',            'icon' => 'lightbulb',   'color' => '#7C3AED'],
+        'neurology' => ['label_en' => 'Neurology',             'label_ar' => 'طب الأعصاب',             'icon' => 'bolt',        'color' => '#0EA5E9'],
         'insurance' => ['label_en' => 'Insurance',             'label_ar' => 'التأمين',                'icon' => 'shield',      'color' => '#EC4899'],
         'inventory' => ['label_en' => 'Inventory & Supplies',  'label_ar' => 'المخزون والمستلزمات',    'icon' => 'box',         'color' => '#F97316'],
         'content' => ['label_en' => 'Content & Website',     'label_ar' => 'المحتوى والموقع',        'icon' => 'globe',       'color' => '#6366F1'],
@@ -398,6 +400,19 @@ return [
             'label_ar' => 'النساء والتوليد',
             'group' => 'obgyn',
             'actions' => ['view', 'create', 'update', 'delete'],
+        ],
+        'psychiatry' => [
+            'label_en' => 'Psychiatry',
+            'label_ar' => 'الطب النفسي',
+            'group' => 'psychiatry',
+            // view_sensitive gates psychotherapy notes + risk assessments (heightened RBAC).
+            'actions' => ['view', 'create', 'update', 'delete', 'view_sensitive'],
+        ],
+        'neurology' => [
+            'label_en' => 'Neurology',
+            'label_ar' => 'طب الأعصاب',
+            'group' => 'neurology',
+            'actions' => ['view', 'create', 'update', 'delete', 'view_sensitive'],
         ],
 
         // ─── Insurance ─────────────────────────────────────────

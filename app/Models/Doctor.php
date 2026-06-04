@@ -40,6 +40,9 @@ class Doctor extends Model
         'pediatric_consultation_commission', 'pediatric_followup_commission',
         'pediatric_consultation_fee',
         'obgyn_consultation_fee', 'obgyn_consultation_commission',
+        'psychiatry_consultation_fee', 'psychiatry_consultation_commission',
+        'neurology_consultation_fee', 'neurology_consultation_commission',
+        'treats_children',
         'clinic_notes',
         // Telemedicine
         'online_consultation_enabled',
