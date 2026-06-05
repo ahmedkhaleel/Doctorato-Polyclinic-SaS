@@ -383,13 +383,20 @@ class AdminNeuropsychController extends Controller
     {
         $module = $this->module($request);
 
+        $planIds = MedicationPlan::where('module', $module)->pluck('id');
+
         return Inertia::render('Admin/Neuropsych/Dashboard', [
             'module' => $module,
+            'canSeeSensitive' => $this->canSeeSensitive($request, $module),
             'stats' => [
+                'active_cases' => NeuropsychEncounter::where('module', $module)->distinct('patient_id')->count('patient_id'),
                 'encounters_this_month' => NeuropsychEncounter::where('module', $module)
                     ->whereMonth('encounter_date', now()->month)->whereYear('encounter_date', now()->year)->count(),
                 'active_high_risk' => RiskAssessment::where('is_active', true)->where('risk_level', 'high')->count(),
-                'monitoring_due' => MedicationMonitoring::where('status', 'due')->whereDate('due_at', '<=', now())->count(),
+                'monitoring_due' => MedicationMonitoring::whereIn('medication_plan_id', $planIds)
+                    ->where('status', 'due')->whereDate('due_at', '<=', now())->count(),
+                'revenue_this_month' => (float) \App\Models\Invoice::where('module', $module)
+                    ->whereMonth('invoice_date', now()->month)->whereYear('invoice_date', now()->year)->sum('total'),
             ],
         ]);
     }

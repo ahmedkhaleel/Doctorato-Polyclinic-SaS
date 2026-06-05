@@ -27,10 +27,10 @@ const { values: counters, mounted } = useCountUp({
 });
 
 const cards = computed(() => [
-    { key: 'active_pregnancies', label: isRtl.value ? 'حمل نشط' : 'Active Pregnancies', color: ACCENT },
-    { key: 'high_risk', label: isRtl.value ? 'عالي الخطورة' : 'High-Risk', color: '#EF4444' },
-    { key: 'anc_this_month', label: isRtl.value ? 'متابعات هذا الشهر' : 'ANC This Month', color: '#1B365D' },
-    { key: 'deliveries_this_month', label: isRtl.value ? 'ولادات هذا الشهر' : 'Deliveries', color: '#10B981' },
+    { key: 'active_pregnancies', label: isRtl.value ? 'حمل نشط' : 'Active Pregnancies', color: ACCENT, href: '/admin/obgyn/pregnancies' },
+    { key: 'high_risk', label: isRtl.value ? 'عالي الخطورة' : 'High-Risk', color: '#EF4444', href: '/admin/obgyn/pregnancies' },
+    { key: 'anc_this_month', label: isRtl.value ? 'متابعات هذا الشهر' : 'ANC This Month', color: '#1B365D', href: '/admin/obgyn/anc' },
+    { key: 'deliveries_this_month', label: isRtl.value ? 'ولادات هذا الشهر' : 'Deliveries', color: '#10B981', href: '/admin/obgyn/deliveries' },
 ]);
 
 const trimesterTotal = computed(() => (props.trimesters[1] || 0) + (props.trimesters[2] || 0) + (props.trimesters[3] || 0) || 1);
@@ -51,13 +51,13 @@ function dueLabel(d) {
         <div class="space-y-6" :dir="isRtl ? 'rtl' : 'ltr'">
             <!-- Stat cards -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div v-for="(c, i) in cards" :key="c.key"
-                     class="relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 overflow-hidden transition-all duration-500"
+                <Link v-for="(c, i) in cards" :key="c.key" :href="c.href"
+                     class="relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 overflow-hidden transition-all duration-500 hover:shadow-md hover:-translate-y-0.5 block"
                      :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'" :style="{ transitionDelay: `${i*70}ms` }">
                     <span class="absolute top-0 inset-x-0 h-1" :style="{ background: c.color }"></span>
                     <p class="text-3xl font-bold text-gray-900 tabular-nums">{{ counters[c.key] }}</p>
                     <p class="text-sm text-gray-500 mt-1">{{ c.label }}</p>
-                </div>
+                </Link>
             </div>
 
             <!-- Revenue + trimesters -->
