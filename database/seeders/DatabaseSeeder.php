@@ -86,6 +86,7 @@ class DatabaseSeeder extends Seeder
             HeroSlideSeeder::class,
             SeoPageSeeder::class,
             ObgynServiceSeeder::class,
+            NeuropsychServiceSeeder::class,
         ]);
 
         // ── 3. Clinic reference data (always required for clinic system) ──
@@ -143,6 +144,7 @@ class DatabaseSeeder extends Seeder
                 AttendanceSeeder::class,
                 ComprehensiveDemoSeeder::class,
                 ObgynDemoSeeder::class,
+                NeuropsychDemoSeeder::class,
                 OnlineConsultationDemoSeeder::class,
                 // Fills every remaining operational table so all screens show data.
                 ShowcaseDemoSeeder::class,
