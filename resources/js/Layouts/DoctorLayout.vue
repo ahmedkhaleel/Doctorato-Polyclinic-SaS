@@ -126,6 +126,27 @@ const navGroups = computed(() => [
         ],
     },
     {
+        title: isRtl.value ? 'الطب النفسي' : 'Psychiatry',
+        key: 'psychiatry',
+        moduleKey: 'psychiatry',
+        items: [
+            { label: isRtl.value ? 'اللقاءات' : 'Encounters',  href: '/doctor/psychiatry/encounters',  icon: 'clipboard' },
+            { label: isRtl.value ? 'الأدوية' : 'Medications',   href: '/doctor/psychiatry/medications', icon: 'pill' },
+            { label: isRtl.value ? 'الدورات العلاجية' : 'Courses', href: '/doctor/psychiatry/courses',  icon: 'calendar' },
+        ],
+    },
+    {
+        title: isRtl.value ? 'طب الأعصاب' : 'Neurology',
+        key: 'neurology',
+        moduleKey: 'neurology',
+        items: [
+            { label: isRtl.value ? 'اللقاءات' : 'Encounters',  href: '/doctor/neurology/encounters',  icon: 'clipboard' },
+            { label: isRtl.value ? 'أدوات الأعصاب' : 'Neuro tools', href: '/doctor/neurology/neuro',  icon: 'grid' },
+            { label: isRtl.value ? 'الأدوية' : 'Medications',   href: '/doctor/neurology/medications', icon: 'pill' },
+            { label: isRtl.value ? 'الدورات العلاجية' : 'Courses', href: '/doctor/neurology/courses',  icon: 'calendar' },
+        ],
+    },
+    {
         title: isRtl.value ? 'خدمات عن بُعد' : 'Telemedicine',
         key: 'telemedicine',
         moduleKey: 'telemedicine',
@@ -167,6 +188,9 @@ const filteredGroups = computed(() =>
             if (g.moduleKey === 'dental' && doctorModule.value !== 'dental') return false;
             // Pediatric section only for pediatric doctors
             if (g.moduleKey === 'pediatric' && doctorModule.value !== 'pediatric') return false;
+            // Psychiatry / neurology sections only for their own doctors
+            if (g.moduleKey === 'psychiatry' && doctorModule.value !== 'psychiatry') return false;
+            if (g.moduleKey === 'neurology' && doctorModule.value !== 'neurology') return false;
             return true;
         }
         return true;

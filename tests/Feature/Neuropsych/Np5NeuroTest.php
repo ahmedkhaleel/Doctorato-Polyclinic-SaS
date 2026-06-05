@@ -103,4 +103,31 @@ class Np5NeuroTest extends TestCase
     {
         $this->actingAs($this->patientUser)->get('/ar/patient/neuropsych/diaries')->assertOk();
     }
+
+    public function test_neuro_exam_is_recorded_and_upserts(): void
+    {
+        $enc = \App\Models\NeuropsychEncounter::create([
+            'patient_id' => $this->patient->id,
+            'doctor_id' => $this->patient->id ? \App\Models\Doctor::where('user_id', $this->doctorUser->id)->value('id') : null,
+            'module' => 'neurology',
+            'encounter_date' => now()->toDateString(),
+        ]);
+
+        $this->actingAs($this->doctorUser)->post('/doctor/neurology/neuro/exam', [
+            'neuropsych_encounter_id' => $enc->id,
+            'cranial_nerves' => ['ii' => 'intact'],
+            'gait' => 'normal',
+            'romberg' => 'negative',
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('neuro_exams', ['neuropsych_encounter_id' => $enc->id, 'gait' => 'normal', 'romberg' => 'negative']);
+
+        // Upsert: a second post updates the same row, not a duplicate.
+        $this->actingAs($this->doctorUser)->post('/doctor/neurology/neuro/exam', [
+            'neuropsych_encounter_id' => $enc->id, 'gait' => 'ataxic', 'romberg' => 'positive',
+        ])->assertRedirect();
+
+        $this->assertSame(1, \App\Models\NeuroExam::where('neuropsych_encounter_id', $enc->id)->count());
+        $this->assertSame('ataxic', \App\Models\NeuroExam::where('neuropsych_encounter_id', $enc->id)->value('gait'));
+    }
 }

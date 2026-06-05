@@ -93,6 +93,15 @@ const navGroups = computed(() => [
         ],
     },
     {
+        title: isRtl.value ? 'النفسية والعصبية' : 'Mind & Nerves',
+        key: 'neuropsych',
+        anyModuleKey: ['psychiatry', 'neurology'],
+        items: [
+            { label: isRtl.value ? 'استبياناتي' : 'My Questionnaires', href: lp('/neuropsych/scales'), icon: 'clipboard' },
+            { label: isRtl.value ? 'مفكّراتي' : 'My Diaries', href: lp('/neuropsych/diaries'), icon: 'document' },
+        ],
+    },
+    {
         title: isRtl.value ? 'عن بُعد' : 'Telemedicine',
         key: 'telemedicine',
         moduleKey: 'telemedicine',
@@ -174,6 +183,9 @@ const filteredGroups = computed(() => {
         .filter(g => {
             if (g.moduleKey) {
                 return modules.value[g.moduleKey]?.enabled === true;
+            }
+            if (g.anyModuleKey) {
+                return g.anyModuleKey.some(k => modules.value[k]?.enabled === true);
             }
             return true;
         })

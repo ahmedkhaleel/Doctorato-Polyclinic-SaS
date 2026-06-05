@@ -348,6 +348,7 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
         Route::get('/neuro', [$c, 'index'])->name('doctor.neurology.neuro.index');
         Route::post('/neuro/procedures', [$c, 'storeProcedure'])->middleware('permission:neurology.update')->name('doctor.neurology.procedures.store');
         Route::post('/neuro/procedures/{neuroProcedure}/delete', [$c, 'destroyProcedure'])->middleware('permission:neurology.delete')->name('doctor.neurology.procedures.destroy');
+        Route::post('/neuro/exam', [$c, 'storeExam'])->middleware('permission:neurology.update')->name('doctor.neurology.exam.store');
         Route::post('/neuro/seizures', [$c, 'storeSeizure'])->middleware('permission:neurology.update')->name('doctor.neurology.seizures.store');
         Route::post('/neuro/headaches', [$c, 'storeHeadache'])->middleware('permission:neurology.update')->name('doctor.neurology.headaches.store');
     });

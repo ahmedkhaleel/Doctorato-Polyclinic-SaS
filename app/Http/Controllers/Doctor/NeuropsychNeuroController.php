@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Models\HeadacheDiaryEntry;
+use App\Models\NeuroExam;
 use App\Models\NeuroProcedure;
+use App\Models\NeuropsychEncounter;
 use App\Models\Patient;
 use App\Models\SeizureDiaryEntry;
 use App\Services\AuditLogger;
@@ -83,6 +85,32 @@ class NeuropsychNeuroController extends BaseDoctorController
         SeizureDiaryEntry::create(array_merge($data, ['entered_by' => 'doctor']));
 
         return back()->with('success', $this->msg('Seizure logged', 'تم تسجيل النوبة'));
+    }
+
+    /** NP5 — record a structured neurological examination for an encounter. */
+    public function storeExam(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'neuropsych_encounter_id' => 'required|exists:neuropsych_encounters,id',
+            'cranial_nerves' => 'nullable|array',
+            'motor' => 'nullable|array',
+            'sensory' => 'nullable|array',
+            'reflexes' => 'nullable|array',
+            'coordination' => 'nullable|string|max:255',
+            'gait' => 'nullable|string|max:255',
+            'romberg' => 'nullable|in:negative,positive',
+            'notes' => 'nullable|string',
+        ]);
+
+        $encounter = NeuropsychEncounter::findOrFail($data['neuropsych_encounter_id']);
+        $this->authorizeDoctor($request, $encounter);
+
+        NeuroExam::updateOrCreate(
+            ['neuropsych_encounter_id' => $encounter->id],
+            array_merge($data, ['patient_id' => $encounter->patient_id]),
+        );
+
+        return back()->with('success', $this->msg('Exam saved', 'تم حفظ الفحص'));
     }
 
     public function storeHeadache(Request $request): RedirectResponse
