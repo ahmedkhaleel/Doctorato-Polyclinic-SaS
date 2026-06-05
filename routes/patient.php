@@ -138,6 +138,7 @@ Route::middleware('patient.auth')->group(function () {
     // Shared by psychiatry & neurology: gated so the pages 403/redirect when
     // BOTH modules are disabled (the nav already hides via anyModuleKey).
     Route::middleware('module:psychiatry,neurology')->group(function () {
+        Route::get('/neuropsych', [\App\Http\Controllers\Patient\PatientNeuropsychController::class, 'overview'])->name('patient.neuropsych.overview');
         Route::get('/neuropsych/scales', [\App\Http\Controllers\Patient\PatientNeuropsychScaleController::class, 'index'])->name('patient.neuropsych.scales.index');
         Route::post('/neuropsych/scales', [\App\Http\Controllers\Patient\PatientNeuropsychScaleController::class, 'store'])->name('patient.neuropsych.scales.store')->middleware('throttle:20,1');
 

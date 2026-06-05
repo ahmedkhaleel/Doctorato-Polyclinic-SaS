@@ -97,6 +97,7 @@ const navGroups = computed(() => [
         key: 'neuropsych',
         anyModuleKey: ['psychiatry', 'neurology'],
         items: [
+            { label: isRtl.value ? 'نظرة عامة' : 'Overview', href: lp('/neuropsych'), icon: 'overview' },
             { label: isRtl.value ? 'استبياناتي' : 'My Questionnaires', href: lp('/neuropsych/scales'), icon: 'clipboard' },
             { label: isRtl.value ? 'مفكّراتي' : 'My Diaries', href: lp('/neuropsych/diaries'), icon: 'document' },
         ],

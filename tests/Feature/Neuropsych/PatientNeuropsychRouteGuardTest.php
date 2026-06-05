@@ -53,4 +53,18 @@ class PatientNeuropsychRouteGuardTest extends TestCase
         $this->actingAs($this->patientUser)->get('/ar/patient/neuropsych/scales')->assertOk();
         $this->actingAs($this->patientUser)->get('/ar/patient/neuropsych/diaries')->assertOk();
     }
+
+    public function test_overview_landing_renders_with_own_data(): void
+    {
+        ModuleManager::enable('psychiatry');
+        ModuleManager::flushStaticCache();
+
+        $this->actingAs($this->patientUser)->get('/ar/patient/neuropsych')
+            ->assertOk()
+            ->assertInertia(fn ($p) => $p
+                ->component('Patient/Neuropsych/Overview')
+                ->has('stats')
+                ->has('upcoming')
+            );
+    }
 }
