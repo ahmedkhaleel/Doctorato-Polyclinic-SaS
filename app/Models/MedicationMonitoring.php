@@ -26,4 +26,9 @@ class MedicationMonitoring extends Model
     {
         return $this->belongsTo(MedicationPlan::class, 'medication_plan_id');
     }
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
+    }
 }

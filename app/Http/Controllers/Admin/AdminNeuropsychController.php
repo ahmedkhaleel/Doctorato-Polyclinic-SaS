@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ControlledPrescription;
 use App\Models\Doctor;
 use App\Models\MedicationMonitoring;
+use App\Models\MedicationPlan;
 use App\Models\NeuropsychEncounter;
 use App\Models\NeuropsychProfile;
 use App\Models\Patient;
@@ -194,6 +196,117 @@ class AdminNeuropsychController extends Controller
             'module' => $module,
             'summary' => $summary,
             'recent' => $recent,
+        ]);
+    }
+
+    /**
+     * N4 — Risk register (sensitive): active moderate/high suicide-risk
+     * assessments across the clinic, flagging whether a safety plan is on
+     * record. Route is gated by {module}.view_sensitive.
+     */
+    public function riskRegister(Request $request): Response
+    {
+        $module = $this->module($request);
+
+        $rows = RiskAssessment::where('is_active', true)
+            ->whereIn('risk_level', ['moderate', 'high'])
+            ->with('patient:id,full_name,phone,file_number', 'doctor:id,name_ar,name_en')
+            ->orderByRaw("FIELD(risk_level,'high','moderate')")
+            ->latest('assessed_at')
+            ->paginate(25)->withQueryString()
+            ->through(fn (RiskAssessment $r) => [
+                'id' => $r->id,
+                'patient' => ['id' => $r->patient?->id, 'full_name' => $r->patient?->full_name, 'phone' => $r->patient?->phone, 'file_number' => $r->patient?->file_number],
+                'doctor' => ['name_ar' => $r->doctor?->name_ar, 'name_en' => $r->doctor?->name_en],
+                'risk_level' => $r->risk_level,
+                'tool' => $r->tool,
+                'has_safety_plan' => filled($r->safety_plan),
+                'assessed_at' => $r->assessed_at?->toDateString(),
+            ]);
+
+        return Inertia::render('Admin/Neuropsych/RiskRegister', [
+            'module' => $module,
+            'rows' => $rows,
+        ]);
+    }
+
+    /**
+     * N5 — Medications: active medication plans for the module plus a queue of
+     * overdue safety monitoring (e.g. clozapine ANC, lithium levels).
+     */
+    public function medications(Request $request): Response
+    {
+        $module = $this->module($request);
+
+        $planIds = MedicationPlan::where('module', $module)->pluck('id');
+
+        $overdue = MedicationMonitoring::whereIn('medication_plan_id', $planIds)
+            ->where('status', 'due')
+            ->whereDate('due_at', '<=', now())
+            ->with(['patient:id,full_name,phone', 'plan:id,drug'])
+            ->orderBy('due_at')
+            ->get()
+            ->map(fn (MedicationMonitoring $m) => [
+                'id' => $m->id,
+                'patient' => ['id' => $m->patient?->id, 'full_name' => $m->patient?->full_name, 'phone' => $m->patient?->phone],
+                'drug' => $m->plan?->drug,
+                'type' => $m->type,
+                'due_at' => $m->due_at?->toDateString(),
+                'days_overdue' => $m->due_at ? (int) now()->startOfDay()->diffInDays($m->due_at->startOfDay()) : 0,
+            ]);
+
+        $plans = MedicationPlan::where('module', $module)
+            ->whereNull('stopped_at')
+            ->with('patient:id,full_name,phone')
+            ->latest('started_at')
+            ->paginate(25)->withQueryString()
+            ->through(fn (MedicationPlan $p) => [
+                'id' => $p->id,
+                'patient' => ['id' => $p->patient?->id, 'full_name' => $p->patient?->full_name, 'phone' => $p->patient?->phone],
+                'drug' => $p->drug,
+                'drug_class' => $p->drug_class,
+                'dose' => $p->dose,
+                'frequency' => $p->frequency,
+                'is_controlled' => (bool) $p->is_controlled,
+                'started_at' => $p->started_at?->toDateString(),
+            ]);
+
+        return Inertia::render('Admin/Neuropsych/Medications', [
+            'module' => $module,
+            'overdue' => $overdue,
+            'plans' => $plans,
+        ]);
+    }
+
+    /**
+     * N6 — Controlled substances (sensitive): the e-prescribing audit log for
+     * the module. Route is gated by {module}.view_sensitive.
+     */
+    public function controlled(Request $request): Response
+    {
+        $module = $this->module($request);
+
+        $rx = ControlledPrescription::where('module', $module)
+            ->with('patient:id,full_name,phone,file_number', 'doctor:id,name_ar,name_en')
+            ->latest('id')
+            ->paginate(25)->withQueryString()
+            ->through(fn (ControlledPrescription $p) => [
+                'id' => $p->id,
+                'patient' => ['id' => $p->patient?->id, 'full_name' => $p->patient?->full_name, 'phone' => $p->patient?->phone],
+                'doctor' => ['name_ar' => $p->doctor?->name_ar, 'name_en' => $p->doctor?->name_en],
+                'drug' => $p->drug,
+                'schedule' => $p->schedule,
+                'quantity' => $p->quantity,
+                'status' => $p->status,
+                'gateway' => $p->gateway,
+                'external_ref' => $p->external_ref,
+                'signed_at' => $p->signed_at?->toDateString(),
+                'dispensed_at' => $p->dispensed_at?->toDateString(),
+            ]);
+
+        return Inertia::render('Admin/Neuropsych/Controlled', [
+            'module' => $module,
+            'rx' => $rx,
         ]);
     }
 
