@@ -983,6 +983,7 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
 
     // ═══ OB/GYN MODULE ════════════════════════════════════════
     Route::get('/obgyn', [\App\Http\Controllers\Admin\AdminObgynController::class, 'dashboard'])->name('admin.obgyn.dashboard')->middleware(['module:obgyn', 'permission:obgyn.view']);
+    Route::get('/obgyn/cases', [\App\Http\Controllers\Admin\AdminObgynController::class, 'cases'])->name('admin.obgyn.cases')->middleware(['module:obgyn', 'permission:obgyn.view']);
     Route::get('/obgyn/pregnancies', [\App\Http\Controllers\Admin\AdminObgynController::class, 'pregnancies'])->name('admin.obgyn.pregnancies')->middleware(['module:obgyn', 'permission:obgyn.view']);
     Route::get('/obgyn/reports', [\App\Http\Controllers\Admin\AdminObgynController::class, 'reports'])->name('admin.obgyn.reports')->middleware(['module:obgyn', 'permission:obgyn.view']);
     Route::get('/obgyn/settings', [\App\Http\Controllers\Admin\AdminObgynController::class, 'settings'])->name('admin.obgyn.settings')->middleware(['module:obgyn', 'permission:obgyn.view']);
@@ -991,6 +992,8 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
     // ─── Psychiatry & Neurology admin (NP7) — shared controller ──
     foreach (['psychiatry', 'neurology'] as $npm) {
         Route::get("/{$npm}", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'dashboard'])->defaults('npModule', $npm)->name("admin.{$npm}.dashboard")->middleware(["module:{$npm}", "permission:{$npm}.view"]);
+        Route::get("/{$npm}/cases", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'cases'])->defaults('npModule', $npm)->name("admin.{$npm}.cases")->middleware(["module:{$npm}", "permission:{$npm}.view"]);
+        Route::get("/{$npm}/encounters", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'encounters'])->defaults('npModule', $npm)->name("admin.{$npm}.encounters")->middleware(["module:{$npm}", "permission:{$npm}.view"]);
         Route::get("/{$npm}/reports", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'reports'])->defaults('npModule', $npm)->name("admin.{$npm}.reports")->middleware(["module:{$npm}", "permission:{$npm}.view"]);
         Route::get("/{$npm}/settings", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'settings'])->defaults('npModule', $npm)->name("admin.{$npm}.settings")->middleware(["module:{$npm}", "permission:{$npm}.view"]);
         Route::post("/{$npm}/settings", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'updateSettings'])->defaults('npModule', $npm)->name("admin.{$npm}.settings.update")->middleware(["module:{$npm}", "permission:{$npm}.update"]);

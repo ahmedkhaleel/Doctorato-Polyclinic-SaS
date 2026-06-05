@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\DeliveryRecord;
 use App\Models\Invoice;
+use App\Models\ObgynProfile;
 use App\Models\PapSmearScreening;
 use App\Models\Pregnancy;
 use App\Services\ModuleManager;
@@ -72,6 +73,39 @@ class AdminObgynController extends Controller
         return Inertia::render('Admin/Obgyn/Pregnancies', [
             'pregnancies' => $pregnancies,
             'filters' => ['search' => $search, 'status' => $status],
+        ]);
+    }
+
+    /**
+     * O1 — Cases: every patient with an OB/GYN profile, with gravida/para and
+     * whether they have an active pregnancy. Read-only oversight; drills into
+     * the patient. (Encounters per se are covered by Pregnancies + ANC.)
+     */
+    public function cases(Request $request): Response
+    {
+        $search = trim((string) $request->input('search'));
+
+        $cases = ObgynProfile::query()
+            ->when($search !== '', fn ($q) => $q->whereHas('patient', fn ($pq) => $pq->where('full_name', 'like', "%{$search}%")->orWhere('phone', 'like', "%{$search}%")->orWhere('file_number', 'like', "%{$search}%")))
+            ->with('patient:id,full_name,phone,file_number', 'doctor:id,name_ar,name_en')
+            ->latest('updated_at')
+            ->paginate(20)->withQueryString();
+
+        $pageIds = collect($cases->items())->pluck('patient_id')->all();
+        $activePreg = Pregnancy::active()->whereIn('patient_id', $pageIds)->pluck('patient_id')->flip();
+
+        $cases->getCollection()->transform(fn (ObgynProfile $p) => [
+            'patient' => ['id' => $p->patient?->id, 'full_name' => $p->patient?->full_name, 'phone' => $p->patient?->phone, 'file_number' => $p->patient?->file_number],
+            'doctor' => ['name_ar' => $p->doctor?->name_ar, 'name_en' => $p->doctor?->name_en],
+            'gravida' => $p->gravida,
+            'para' => $p->para,
+            'blood_group' => $p->blood_group ? trim(($p->blood_group).($p->rh_factor ?? '')) : null,
+            'has_active_pregnancy' => $activePreg->has($p->patient_id),
+        ]);
+
+        return Inertia::render('Admin/Obgyn/Cases', [
+            'cases' => $cases,
+            'filters' => ['search' => $search],
         ]);
     }
 
