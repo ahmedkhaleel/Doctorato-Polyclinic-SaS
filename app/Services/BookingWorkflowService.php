@@ -15,10 +15,7 @@ use App\Models\Setting;
 use App\Models\Visit;
 use App\Notifications\NewBookingNotification;
 use App\Notifications\NewVisitNotification;
-use App\Services\LeadService;
-use App\Services\SmsNotificationService;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class BookingWorkflowService
 {
@@ -44,15 +41,8 @@ class BookingWorkflowService
                 ->runForBranch($branchId, fn () => $this->createFromWebsite($data));
         }
 
-        // Determine module from booking type if not explicitly set
-        $module = $data['module'] ?? 'derma';
-        if (in_array($data['booking_type'] ?? '', ['dental_consultation', 'dental_service'])) {
-            $module = 'dental';
-        } elseif (in_array($data['booking_type'] ?? '', ['pediatric_consultation', 'pediatric_service'])) {
-            $module = 'pediatric';
-        } elseif (in_array($data['booking_type'] ?? '', ['obgyn_consultation', 'obgyn_service'])) {
-            $module = 'obgyn';
-        }
+        // Determine module from booking type if not explicitly set.
+        $module = self::moduleFromBookingType($data['booking_type'] ?? null) ?? ($data['module'] ?? 'derma');
 
         $booking = Booking::create([
             'booking_number' => Booking::generateBookingNumber(),
@@ -127,7 +117,7 @@ class BookingWorkflowService
                 ]);
 
                 // 3. Create appointments for each session
-                if (!empty($serviceData['appointments'])) {
+                if (! empty($serviceData['appointments'])) {
                     foreach ($serviceData['appointments'] as $index => $appt) {
                         BookingAppointment::create([
                             'booking_id' => $booking->id,
@@ -175,12 +165,12 @@ class BookingWorkflowService
 
             $notifiedDoctorIds = [];
             foreach ($freshBooking->bookingServices as $bs) {
-                if ($bs->doctor_id && $bs->doctor?->user && !in_array($bs->doctor_id, $notifiedDoctorIds)) {
+                if ($bs->doctor_id && $bs->doctor?->user && ! in_array($bs->doctor_id, $notifiedDoctorIds)) {
                     try {
                         $bs->doctor->user->notify(new NewBookingNotification($freshBooking));
                         $notifiedDoctorIds[] = $bs->doctor_id;
                     } catch (\Throwable $e) {
-                        \Illuminate\Support\Facades\Log::warning("Failed to notify doctor #{$bs->doctor_id} about booking: " . $e->getMessage());
+                        \Illuminate\Support\Facades\Log::warning("Failed to notify doctor #{$bs->doctor_id} about booking: ".$e->getMessage());
                     }
                 }
             }
@@ -231,7 +221,7 @@ class BookingWorkflowService
                 ]);
 
                 // 3. Create appointments
-                if (!empty($serviceData['appointments'])) {
+                if (! empty($serviceData['appointments'])) {
                     foreach ($serviceData['appointments'] as $index => $appt) {
                         BookingAppointment::create([
                             'booking_id' => $booking->id,
@@ -295,7 +285,7 @@ class BookingWorkflowService
         return DB::transaction(function () use ($booking, $paymentData, $userId) {
             $invoice = $booking->invoice ?? Invoice::find($booking->invoice_id);
 
-            if (!$invoice) {
+            if (! $invoice) {
                 throw new \RuntimeException('Booking has no associated invoice.');
             }
 
@@ -357,18 +347,18 @@ class BookingWorkflowService
         $visitType = 'session';
         $consultationType = null;
 
-        if ($bookingType === 'dermatology_consultation') {
+        $consultationTypes = [
+            'dermatology_consultation' => 'dermatology',
+            'cosmetic_consultation' => 'cosmetic',
+            'pediatric_consultation' => 'pediatric',
+            'dental_consultation' => 'dental',
+            'obgyn_consultation' => 'obgyn',
+            'psychiatry_consultation' => 'psychiatry',
+            'neurology_consultation' => 'neurology',
+        ];
+        if (isset($consultationTypes[$bookingType])) {
             $visitType = 'consultation';
-            $consultationType = 'dermatology';
-        } elseif ($bookingType === 'cosmetic_consultation') {
-            $visitType = 'consultation';
-            $consultationType = 'cosmetic';
-        } elseif ($bookingType === 'pediatric_consultation') {
-            $visitType = 'consultation';
-            $consultationType = 'pediatric';
-        } elseif ($bookingType === 'dental_consultation') {
-            $visitType = 'consultation';
-            $consultationType = 'dental';
+            $consultationType = $consultationTypes[$bookingType];
         }
 
         foreach ($todayAppointments as $appointment) {
@@ -408,7 +398,7 @@ class BookingWorkflowService
                     $doctor->user->notify(new NewVisitNotification($visit));
                 } catch (\Throwable $e) {
                     // Don't fail the booking flow if notification fails
-                    \Illuminate\Support\Facades\Log::warning("Failed to notify doctor #{$doctor->id}: " . $e->getMessage());
+                    \Illuminate\Support\Facades\Log::warning("Failed to notify doctor #{$doctor->id}: ".$e->getMessage());
                 }
             }
 
@@ -456,12 +446,18 @@ class BookingWorkflowService
                     'dermatology_consultation' => 'Dermatology Consultation',
                     'pediatric_consultation' => 'Pediatric Consultation',
                     'dental_consultation' => 'Dental Consultation',
+                    'obgyn_consultation' => 'OB/GYN Consultation',
+                    'psychiatry_consultation' => 'Psychiatry Consultation',
+                    'neurology_consultation' => 'Neurology Consultation',
                     default => 'Cosmetic Consultation',
                 };
                 $descAr = match ($booking->booking_type) {
                     'dermatology_consultation' => 'كشف جلدية',
                     'pediatric_consultation' => 'كشف أطفال',
                     'dental_consultation' => 'كشف أسنان',
+                    'obgyn_consultation' => 'كشف نساء وتوليد',
+                    'psychiatry_consultation' => 'كشف نفسية',
+                    'neurology_consultation' => 'كشف أعصاب',
                     default => 'كشف تجميل',
                 };
             }
@@ -494,7 +490,7 @@ class BookingWorkflowService
      */
     public function addRetouchSession(Booking $booking, array $data, int $userId): BookingAppointment
     {
-        return DB::transaction(function () use ($booking, $data, $userId) {
+        return DB::transaction(function () use ($booking, $data) {
             $bookingService = BookingService::findOrFail($data['booking_service_id']);
 
             // Ensure this booking service belongs to this booking
@@ -508,7 +504,7 @@ class BookingWorkflowService
             $duration = $service?->session_duration_minutes ?? 30;
             $endTime = $data['end_time'] ?? null;
 
-            if (!$endTime && $startTime) {
+            if (! $endTime && $startTime) {
                 $parts = explode(':', $startTime);
                 $totalMin = (int) $parts[0] * 60 + (int) $parts[1] + $duration;
                 $endTime = sprintf('%02d:%02d', intdiv($totalMin, 60), $totalMin % 60);
@@ -553,12 +549,12 @@ class BookingWorkflowService
      */
     public function handleVisitCompleted(Visit $visit): void
     {
-        if (!$visit->booking_appointment_id) {
+        if (! $visit->booking_appointment_id) {
             return;
         }
 
         $appointment = BookingAppointment::find($visit->booking_appointment_id);
-        if (!$appointment) {
+        if (! $appointment) {
             return;
         }
 
@@ -596,12 +592,12 @@ class BookingWorkflowService
      */
     public function handleVisitCancelled(Visit $visit): void
     {
-        if (!$visit->booking_appointment_id) {
+        if (! $visit->booking_appointment_id) {
             return;
         }
 
         $appointment = BookingAppointment::find($visit->booking_appointment_id);
-        if (!$appointment) {
+        if (! $appointment) {
             return;
         }
 
@@ -695,18 +691,18 @@ class BookingWorkflowService
         $visitType = 'session';
         $consultationType = null;
 
-        if ($bookingType === 'dermatology_consultation') {
+        $consultationTypes = [
+            'dermatology_consultation' => 'dermatology',
+            'cosmetic_consultation' => 'cosmetic',
+            'pediatric_consultation' => 'pediatric',
+            'dental_consultation' => 'dental',
+            'obgyn_consultation' => 'obgyn',
+            'psychiatry_consultation' => 'psychiatry',
+            'neurology_consultation' => 'neurology',
+        ];
+        if (isset($consultationTypes[$bookingType])) {
             $visitType = 'consultation';
-            $consultationType = 'dermatology';
-        } elseif ($bookingType === 'cosmetic_consultation') {
-            $visitType = 'consultation';
-            $consultationType = 'cosmetic';
-        } elseif ($bookingType === 'pediatric_consultation') {
-            $visitType = 'consultation';
-            $consultationType = 'pediatric';
-        } elseif ($bookingType === 'dental_consultation') {
-            $visitType = 'consultation';
-            $consultationType = 'dental';
+            $consultationType = $consultationTypes[$bookingType];
         }
 
         if ($appointment->is_retouch) {
@@ -742,7 +738,7 @@ class BookingWorkflowService
             try {
                 $doctor->user->notify(new NewVisitNotification($visit));
             } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::warning("Failed to notify doctor #{$doctor->id}: " . $e->getMessage());
+                \Illuminate\Support\Facades\Log::warning("Failed to notify doctor #{$doctor->id}: ".$e->getMessage());
             }
         }
 
@@ -789,34 +785,49 @@ class BookingWorkflowService
      */
     private function detectModule(array $data): string
     {
-        // Check booking type first
-        if (in_array($data['booking_type'] ?? '', ['dental_consultation', 'dental_service'])) {
-            return 'dental';
-        }
-        if (in_array($data['booking_type'] ?? '', ['pediatric_consultation', 'pediatric_service'])) {
-            return 'pediatric';
-        }
-        if (in_array($data['booking_type'] ?? '', ['obgyn_consultation', 'obgyn_service'])) {
-            return 'obgyn';
+        // Check booking type first.
+        if ($m = self::moduleFromBookingType($data['booking_type'] ?? null)) {
+            return $m;
         }
 
-        // Check first service's doctor module
+        // Non-derma medical specialties that own services/doctors and can be
+        // inferred from the first service's doctor or service.
+        $inferable = ['dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology'];
+
         $firstService = $data['services'][0] ?? null;
         if ($firstService) {
             if (! empty($firstService['doctor_id'])) {
                 $doctor = \App\Models\Doctor::find($firstService['doctor_id']);
-                if ($doctor && in_array($doctor->module, ['dental', 'pediatric', 'obgyn'])) {
+                if ($doctor && in_array($doctor->module, $inferable, true)) {
                     return $doctor->module;
                 }
             }
             if (! empty($firstService['service_id'])) {
                 $service = \App\Models\Service::find($firstService['service_id']);
-                if ($service && in_array($service->module, ['dental', 'pediatric', 'obgyn'])) {
+                if ($service && in_array($service->module, $inferable, true)) {
                     return $service->module;
                 }
             }
         }
 
         return 'derma';
+    }
+
+    /**
+     * Map a booking_type to its owning medical module, or null when the type
+     * is module-agnostic (generic 'service', 'package_bundle', etc.).
+     * Single source of truth for both website and secretary booking flows.
+     */
+    public static function moduleFromBookingType(?string $bookingType): ?string
+    {
+        return match ($bookingType) {
+            'dental_consultation', 'dental_service' => 'dental',
+            'pediatric_consultation', 'pediatric_service' => 'pediatric',
+            'obgyn_consultation', 'obgyn_service' => 'obgyn',
+            'psychiatry_consultation', 'psychiatry_service' => 'psychiatry',
+            'neurology_consultation', 'neurology_service' => 'neurology',
+            'dermatology_consultation', 'cosmetic_consultation' => 'derma',
+            default => null,
+        };
     }
 }

@@ -145,27 +145,36 @@ const moduleDoctors = computed(() => {
     return (props.doctors || []).filter(d => d.module === selectedModule.value);
 });
 
-// Booking types per module
-const bookingTypes = computed(() => {
-    if (selectedModule.value === 'dental') {
-        return [
-            { key: 'dental_consultation', icon: 'M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342', color: 'cyan' },
-            { key: 'dental_service', icon: 'M11.42 15.17l-5.658-5.66A4.022 4.022 0 013 6.476V5a1 1 0 011-1h2.476c1.064 0 2.084.423 2.836 1.176l5.658 5.66M11.42 15.17l2.496-2.496M11.42 15.17l4.243 4.243a2 2 0 002.828 0l.586-.586a2 2 0 000-2.828L14.83 11.758M14.83 11.758L18 8.586a2 2 0 000-2.828l-.586-.586a2 2 0 00-2.828 0L11.42 8.414', color: 'teal' },
-        ];
-    }
-    if (selectedModule.value === 'pediatric') {
-        return [
-            { key: 'pediatric_consultation', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z', color: 'green' },
-            { key: 'pediatric_service', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', color: 'lime' },
-        ];
-    }
-    // Default: derma
-    return [
+// Booking types per module — one source of truth for all six medical
+// specialties. New specialties added to MEDICAL_MODULES only need an entry here.
+const BOOKING_TYPES_BY_MODULE = {
+    dental: [
+        { key: 'dental_consultation', icon: 'M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342', color: 'cyan' },
+        { key: 'dental_service', icon: 'M11.42 15.17l-5.658-5.66A4.022 4.022 0 013 6.476V5a1 1 0 011-1h2.476c1.064 0 2.084.423 2.836 1.176l5.658 5.66M11.42 15.17l2.496-2.496M11.42 15.17l4.243 4.243a2 2 0 002.828 0l.586-.586a2 2 0 000-2.828L14.83 11.758M14.83 11.758L18 8.586a2 2 0 000-2.828l-.586-.586a2 2 0 00-2.828 0L11.42 8.414', color: 'teal' },
+    ],
+    pediatric: [
+        { key: 'pediatric_consultation', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z', color: 'green' },
+        { key: 'pediatric_service', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', color: 'lime' },
+    ],
+    obgyn: [
+        { key: 'obgyn_consultation', icon: 'M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z', color: 'pink' },
+        { key: 'obgyn_service', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', color: 'rose' },
+    ],
+    psychiatry: [
+        { key: 'psychiatry_consultation', icon: 'M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18', color: 'violet' },
+        { key: 'psychiatry_service', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', color: 'purple' },
+    ],
+    neurology: [
+        { key: 'neurology_consultation', icon: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z', color: 'sky' },
+        { key: 'neurology_service', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', color: 'blue' },
+    ],
+    derma: [
         { key: 'dermatology_consultation', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', color: 'blue' },
         { key: 'cosmetic_consultation', icon: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z', color: 'pink' },
         { key: 'service', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', color: 'emerald' },
-    ];
-});
+    ],
+};
+const bookingTypes = computed(() => BOOKING_TYPES_BY_MODULE[selectedModule.value] || BOOKING_TYPES_BY_MODULE.derma);
 
 function selectDepartment(slug) {
     selectedModule.value = slug;
@@ -187,11 +196,9 @@ const today = computed(() => {
 });
 
 // Booking type helpers
-const isConsultation = computed(() =>
-    ['dermatology_consultation', 'cosmetic_consultation', 'dental_consultation', 'pediatric_consultation'].includes(form.booking_type)
-);
+const isConsultation = computed(() => form.booking_type.endsWith('_consultation'));
 
-const isService = computed(() => ['service', 'dental_service', 'pediatric_service'].includes(form.booking_type));
+const isService = computed(() => ['service', 'dental_service', 'pediatric_service', 'obgyn_service', 'psychiatry_service', 'neurology_service'].includes(form.booking_type));
 
 // Filtered services based on selected category + module
 const filteredServices = computed(() => {

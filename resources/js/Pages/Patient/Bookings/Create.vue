@@ -65,29 +65,38 @@ const form = useForm({
     branch_id: '',
 });
 
-/* Booking types per module */
-const bookingTypes = computed(() => {
-    if (selectedModule.value === 'dental') {
-        return [
-            { value: 'dental_consultation', label: isRtl.value ? 'كشف أسنان' : 'Dental Consultation', desc: isRtl.value ? 'فحص وتشخيص مشاكل الأسنان' : 'Dental examination and diagnosis' },
-            { value: 'dental_service', label: isRtl.value ? 'خدمة أسنان' : 'Dental Service', desc: isRtl.value ? 'حجز علاج أو إجراء لطب الأسنان' : 'Book a dental treatment or procedure' },
-        ];
-    }
-    if (selectedModule.value === 'pediatric') {
-        return [
-            { value: 'pediatric_consultation', label: isRtl.value ? 'كشف أطفال' : 'Pediatric Consultation', desc: isRtl.value ? 'فحص وتشخيص صحة الطفل' : 'Child health examination and diagnosis' },
-            { value: 'pediatric_service', label: isRtl.value ? 'خدمة أطفال' : 'Pediatric Service', desc: isRtl.value ? 'حجز خدمة طب أطفال' : 'Book a pediatric service' },
-        ];
-    }
-    return [
+/* Booking types per module — covers all six medical specialties. */
+const BOOKING_TYPES_BY_MODULE = computed(() => ({
+    dental: [
+        { value: 'dental_consultation', label: isRtl.value ? 'كشف أسنان' : 'Dental Consultation', desc: isRtl.value ? 'فحص وتشخيص مشاكل الأسنان' : 'Dental examination and diagnosis' },
+        { value: 'dental_service', label: isRtl.value ? 'خدمة أسنان' : 'Dental Service', desc: isRtl.value ? 'حجز علاج أو إجراء لطب الأسنان' : 'Book a dental treatment or procedure' },
+    ],
+    pediatric: [
+        { value: 'pediatric_consultation', label: isRtl.value ? 'كشف أطفال' : 'Pediatric Consultation', desc: isRtl.value ? 'فحص وتشخيص صحة الطفل' : 'Child health examination and diagnosis' },
+        { value: 'pediatric_service', label: isRtl.value ? 'خدمة أطفال' : 'Pediatric Service', desc: isRtl.value ? 'حجز خدمة طب أطفال' : 'Book a pediatric service' },
+    ],
+    obgyn: [
+        { value: 'obgyn_consultation', label: isRtl.value ? 'كشف نساء وتوليد' : 'OB/GYN Consultation', desc: isRtl.value ? 'فحص واستشارة نساء وتوليد' : 'Obstetrics & gynecology examination' },
+        { value: 'obgyn_service', label: isRtl.value ? 'خدمة نساء وتوليد' : 'OB/GYN Service', desc: isRtl.value ? 'حجز سونار أو متابعة حمل أو إجراء' : 'Book an ultrasound, antenatal follow-up or procedure' },
+    ],
+    psychiatry: [
+        { value: 'psychiatry_consultation', label: isRtl.value ? 'كشف نفسية' : 'Psychiatry Consultation', desc: isRtl.value ? 'فحص واستشارة طب نفسي' : 'Psychiatric examination and consultation' },
+        { value: 'psychiatry_service', label: isRtl.value ? 'خدمة نفسية' : 'Psychiatry Service', desc: isRtl.value ? 'حجز جلسة أو متابعة علاجية' : 'Book a therapy session or treatment follow-up' },
+    ],
+    neurology: [
+        { value: 'neurology_consultation', label: isRtl.value ? 'كشف أعصاب' : 'Neurology Consultation', desc: isRtl.value ? 'فحص واستشارة طب أعصاب' : 'Neurological examination and consultation' },
+        { value: 'neurology_service', label: isRtl.value ? 'خدمة أعصاب' : 'Neurology Service', desc: isRtl.value ? 'حجز إجراء أو فحص عصبي' : 'Book a neurological procedure or test' },
+    ],
+    derma: [
         { value: 'dermatology_consultation', label: isRtl.value ? 'استشارة جلدية' : 'Dermatology Consultation', desc: isRtl.value ? 'فحص وتشخيص مشاكل الجلد' : 'Skin examination and diagnosis' },
         { value: 'cosmetic_consultation', label: isRtl.value ? 'استشارة تجميلية' : 'Cosmetic Consultation', desc: isRtl.value ? 'استشارة عمليات التجميل والعناية' : 'Cosmetic procedure consultation' },
         { value: 'service', label: isRtl.value ? 'حجز خدمة' : 'Book a Service', desc: isRtl.value ? 'حجز خدمة علاجية أو تجميلية' : 'Book a treatment or cosmetic service' },
-    ];
-});
+    ],
+}));
+const bookingTypes = computed(() => BOOKING_TYPES_BY_MODULE.value[selectedModule.value] || BOOKING_TYPES_BY_MODULE.value.derma);
 
-const isConsultation = computed(() => ['dermatology_consultation', 'cosmetic_consultation', 'dental_consultation', 'pediatric_consultation'].includes(form.booking_type));
-const isService = computed(() => ['service', 'dental_service', 'pediatric_service'].includes(form.booking_type));
+const isConsultation = computed(() => form.booking_type.endsWith('_consultation'));
+const isService = computed(() => ['service', 'dental_service', 'pediatric_service', 'obgyn_service', 'psychiatry_service', 'neurology_service'].includes(form.booking_type));
 
 /* Filter services and doctors by module */
 const filteredCategories = computed(() => {

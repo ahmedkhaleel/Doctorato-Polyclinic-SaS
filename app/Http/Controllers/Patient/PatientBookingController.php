@@ -20,7 +20,7 @@ class PatientBookingController extends BasePatientController
         $patient = $this->patient($request);
 
         $filters = $request->validate([
-            'module' => 'nullable|string|in:derma,dental,pediatric',
+            'module' => 'nullable|string|in:derma,dental,pediatric,obgyn,psychiatry,neurology',
         ]);
 
         $query = Booking::where('patient_id', $patient->id)
@@ -75,16 +75,18 @@ class PatientBookingController extends BasePatientController
         $patientCodes = DiscountCode::whereIn('id', $codeIds)
             ->where('is_active', true)
             ->whereColumn('used_count', '<', 'max_uses')
-            ->where(function ($q) { $q->whereNull('end_date')->orWhere('end_date', '>=', now()); })
+            ->where(function ($q) {
+                $q->whereNull('end_date')->orWhere('end_date', '>=', now());
+            })
             ->orderByDesc('created_at')
             ->limit(5)
             ->get(['code', 'discount_value', 'discount_type', 'end_date'])
             ->map(fn ($d) => [
-                'code'       => $d->code,
-                'amount'     => (float) $d->discount_value,
-                'type'       => $d->discount_type, // 'fixed' or 'percentage'
+                'code' => $d->code,
+                'amount' => (float) $d->discount_value,
+                'type' => $d->discount_type, // 'fixed' or 'percentage'
                 'expires_at' => $d->end_date?->toDateString(),
-                'source'     => 'loyalty',
+                'source' => 'loyalty',
             ]);
 
         // Multi-branch: offer a branch picker only when enabled with >1 branch.
@@ -112,8 +114,8 @@ class PatientBookingController extends BasePatientController
         $patient = $this->patient($request);
 
         $data = $request->validate([
-            'booking_type' => 'required|in:dermatology_consultation,cosmetic_consultation,service,dental_consultation,dental_service,pediatric_consultation,pediatric_service,obgyn_consultation,obgyn_service',
-            'module' => 'nullable|string|in:derma,dental,pediatric,obgyn',
+            'booking_type' => 'required|in:dermatology_consultation,cosmetic_consultation,service,dental_consultation,dental_service,pediatric_consultation,pediatric_service,obgyn_consultation,obgyn_service,psychiatry_consultation,psychiatry_service,neurology_consultation,neurology_service',
+            'module' => 'nullable|string|in:derma,dental,pediatric,obgyn,psychiatry,neurology',
             'service_id' => 'nullable|exists:services,id',
             'doctor_id' => 'nullable|exists:doctors,id',
             'preferred_date' => 'required|date|after_or_equal:today',
@@ -123,17 +125,9 @@ class PatientBookingController extends BasePatientController
             'branch_id' => 'nullable|integer|exists:branches,id',
         ]);
 
-        // Auto-detect module from booking type
-        $module = $data['module'] ?? ModuleManager::getDefaultModule();
-        if (in_array($data['booking_type'] ?? '', ['dental_consultation', 'dental_service'])) {
-            $module = 'dental';
-        }
-        if (in_array($data['booking_type'] ?? '', ['pediatric_consultation', 'pediatric_service'])) {
-            $module = 'pediatric';
-        }
-        if (in_array($data['booking_type'] ?? '', ['obgyn_consultation', 'obgyn_service'])) {
-            $module = 'obgyn';
-        }
+        // Auto-detect module from booking type (shared single source of truth).
+        $module = \App\Services\BookingWorkflowService::moduleFromBookingType($data['booking_type'] ?? null)
+            ?? ($data['module'] ?? ModuleManager::getDefaultModule());
 
         $create = fn () => Booking::create([
             'booking_number' => Booking::generateBookingNumber(),
@@ -172,7 +166,7 @@ class PatientBookingController extends BasePatientController
         }
 
         // Only allow cancelling unconfirmed or confirmed bookings
-        if (!in_array($booking->status, ['unconfirmed', 'confirmed'])) {
+        if (! in_array($booking->status, ['unconfirmed', 'confirmed'])) {
             return back()->with('error', 'This booking cannot be cancelled.');
         }
 
@@ -196,33 +190,33 @@ class PatientBookingController extends BasePatientController
             abort(403);
         }
 
-        if (!in_array($booking->status, ['unconfirmed', 'confirmed'])) {
+        if (! in_array($booking->status, ['unconfirmed', 'confirmed'])) {
             return back()->with('error', 'This booking cannot be rescheduled.');
         }
 
         $data = $request->validate([
             'preferred_date' => ['required', 'date', 'after_or_equal:today'],
             'preferred_time' => ['nullable', 'date_format:H:i'],
-            'reason'         => ['nullable', 'string', 'max:255'],
+            'reason' => ['nullable', 'string', 'max:255'],
         ]);
 
         $booking->update([
             'preferred_date' => $data['preferred_date'],
             'preferred_time' => $data['preferred_time'] ?? $booking->preferred_time,
             // Re-enter the queue so a human re-confirms availability.
-            'status'         => 'unconfirmed',
-            'notes'          => trim(
-                ($booking->notes ? $booking->notes . "\n" : '')
-                . '[' . now()->toDateString() . '] '
-                . 'Patient rescheduled.'
-                . ($data['reason'] ?? null ? ' Reason: ' . $data['reason'] : '')
+            'status' => 'unconfirmed',
+            'notes' => trim(
+                ($booking->notes ? $booking->notes."\n" : '')
+                .'['.now()->toDateString().'] '
+                .'Patient rescheduled.'
+                .($data['reason'] ?? null ? ' Reason: '.$data['reason'] : '')
             ),
         ]);
 
         \App\Services\AuditLogger::log('booking_rescheduled_by_patient', $booking, [
-            'new_date'   => $data['preferred_date'],
-            'new_time'   => $data['preferred_time'] ?? null,
-            'reason'     => $data['reason'] ?? null,
+            'new_date' => $data['preferred_date'],
+            'new_time' => $data['preferred_time'] ?? null,
+            'reason' => $data['reason'] ?? null,
             'patient_id' => $patient->id,
         ]);
 
