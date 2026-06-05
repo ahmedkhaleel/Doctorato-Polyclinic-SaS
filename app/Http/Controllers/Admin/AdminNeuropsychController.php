@@ -9,8 +9,10 @@ use App\Models\NeuropsychEncounter;
 use App\Models\NeuropsychProfile;
 use App\Models\Patient;
 use App\Models\RiskAssessment;
+use App\Models\ScaleResult;
 use App\Services\ModuleManager;
 use App\Services\NeuroPsych\RiskAssessmentService;
+use App\Services\NeuroPsych\ScaleEngine;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -130,6 +132,68 @@ class AdminNeuropsychController extends Controller
             'encounters' => $encounters,
             'doctors' => $doctors,
             'filters' => ['doctor_id' => $doctorId, 'from' => $from, 'to' => $to],
+        ]);
+    }
+
+    /**
+     * N3 — Outcomes (measurement-based care): per-scale severity distribution,
+     * flagged count, and a simple improvement rate (first vs latest score per
+     * patient) for the scales that belong to this module.
+     */
+    public function outcomes(Request $request): Response
+    {
+        $module = $this->module($request);
+        $defs = ScaleEngine::forModule($module);                 // keyed by scale_key
+        $keys = array_keys($defs);
+
+        $summary = [];
+        foreach ($defs as $key => $def) {
+            $rows = ScaleResult::where('scale_key', $key)->get(['patient_id', 'score', 'severity', 'flag', 'taken_at']);
+
+            // Improvement: patients with >=2 results — latest score lower than first
+            // counts as improved (lower = better on PHQ-9 / GAD-7 / HIT-6).
+            $improved = 0;
+            $comparable = 0;
+            foreach ($rows->groupBy('patient_id') as $g) {
+                if ($g->count() < 2) {
+                    continue;
+                }
+                $comparable++;
+                $sorted = $g->sortBy('taken_at')->values();
+                if ((int) $sorted->last()->score < (int) $sorted->first()->score) {
+                    $improved++;
+                }
+            }
+
+            $summary[] = [
+                'key' => $key,
+                'name_en' => $def['name_en'],
+                'name_ar' => $def['name_ar'],
+                'total' => $rows->count(),
+                'flagged' => $rows->where('flag', true)->count(),
+                'by_severity' => $rows->groupBy('severity')->map->count(),
+                'improved_pct' => $comparable > 0 ? (int) round($improved / $comparable * 100) : null,
+            ];
+        }
+
+        $recent = ScaleResult::whereIn('scale_key', $keys)
+            ->with('patient:id,full_name,phone')
+            ->latest('taken_at')
+            ->paginate(25)->withQueryString()
+            ->through(fn (ScaleResult $r) => [
+                'id' => $r->id,
+                'scale_key' => strtoupper($r->scale_key),
+                'patient' => ['id' => $r->patient?->id, 'full_name' => $r->patient?->full_name, 'phone' => $r->patient?->phone],
+                'score' => $r->score,
+                'severity' => $r->severity,
+                'flag' => (bool) $r->flag,
+                'taken_at' => $r->taken_at?->toDateString(),
+            ]);
+
+        return Inertia::render('Admin/Neuropsych/Outcomes', [
+            'module' => $module,
+            'summary' => $summary,
+            'recent' => $recent,
         ]);
     }
 

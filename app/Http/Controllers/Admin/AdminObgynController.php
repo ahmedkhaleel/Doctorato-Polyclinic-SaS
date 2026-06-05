@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AntenatalVisit;
 use App\Models\DeliveryRecord;
 use App\Models\Invoice;
+use App\Models\ObgynLabTest;
 use App\Models\ObgynProfile;
 use App\Models\PapSmearScreening;
 use App\Models\Pregnancy;
@@ -106,6 +108,80 @@ class AdminObgynController extends Controller
         return Inertia::render('Admin/Obgyn/Cases', [
             'cases' => $cases,
             'filters' => ['search' => $search],
+        ]);
+    }
+
+    /**
+     * O2 — ANC queue: active pregnancies whose next scheduled antenatal visit
+     * is due soon or overdue, derived from each pregnancy's latest visit's
+     * next_visit_date. A short operational work-queue (not paginated).
+     */
+    public function anc(Request $request): Response
+    {
+        $reminderDays = (int) (DB::table('module_settings')->where('module', 'obgyn')->where('key', 'anc_reminder_days')->value('value') ?? 7);
+        $today = now()->startOfDay();
+        $horizon = $today->copy()->addDays($reminderDays);
+
+        // Latest antenatal visit per active pregnancy that has a next visit date.
+        $latest = AntenatalVisit::whereNotNull('next_visit_date')
+            ->whereHas('pregnancy', fn ($q) => $q->active())
+            ->with(['pregnancy.patient:id,full_name,phone,file_number', 'pregnancy.doctor:id,name_ar,name_en'])
+            ->get()
+            ->groupBy('pregnancy_id')
+            ->map(fn ($g) => $g->sortByDesc('visit_date')->first());
+
+        $queue = $latest
+            ->filter(fn ($v) => $v->next_visit_date && $v->next_visit_date <= $horizon)
+            ->sortBy('next_visit_date')
+            ->values()
+            ->map(function ($v) use ($today) {
+                $due = \Illuminate\Support\Carbon::parse($v->next_visit_date)->startOfDay();
+                $days = $today->diffInDays($due, false);   // negative = overdue
+
+                return [
+                    'pregnancy_id' => $v->pregnancy_id,
+                    'patient' => ['id' => $v->pregnancy?->patient?->id, 'full_name' => $v->pregnancy?->patient?->full_name, 'phone' => $v->pregnancy?->patient?->phone, 'file_number' => $v->pregnancy?->patient?->file_number],
+                    'doctor' => ['name_ar' => $v->pregnancy?->doctor?->name_ar, 'name_en' => $v->pregnancy?->doctor?->name_en],
+                    'last_visit' => optional($v->visit_date)->toDateString(),
+                    'next_visit_date' => $due->toDateString(),
+                    'days_until' => (int) $days,
+                    'overdue' => $days < 0,
+                ];
+            });
+
+        return Inertia::render('Admin/Obgyn/Anc', [
+            'queue' => $queue,
+            'reminderDays' => $reminderDays,
+        ]);
+    }
+
+    /**
+     * O3 — Lab tests oversight: OB/GYN lab results, defaulting to abnormal-first
+     * for quick triage; filterable to all.
+     */
+    public function labs(Request $request): Response
+    {
+        $only = $request->input('filter', 'abnormal');    // abnormal | all
+
+        $labs = ObgynLabTest::query()
+            ->when($only === 'abnormal', fn ($q) => $q->where('is_abnormal', true))
+            ->with('patient:id,full_name,phone,file_number')
+            ->latest('result_date')
+            ->paginate(25)->withQueryString()
+            ->through(fn (ObgynLabTest $t) => [
+                'id' => $t->id,
+                'patient' => ['id' => $t->patient?->id, 'full_name' => $t->patient?->full_name, 'phone' => $t->patient?->phone],
+                'test_type' => $t->test_type,
+                'value' => $t->value,
+                'unit' => $t->unit,
+                'reference_range' => $t->reference_range,
+                'is_abnormal' => (bool) $t->is_abnormal,
+                'result_date' => optional($t->result_date)->toDateString(),
+            ]);
+
+        return Inertia::render('Admin/Obgyn/Labs', [
+            'labs' => $labs,
+            'filters' => ['filter' => $only],
         ]);
     }
 
