@@ -29,6 +29,9 @@ const props = defineProps({
     dentalSpecialistFee: { type: Number, default: 0 },
     pediatricConsultantFee: { type: Number, default: 0 },
     pediatricSpecialistFee: { type: Number, default: 0 },
+    obgynConsultationFee: { type: Number, default: 0 },
+    psychiatryConsultationFee: { type: Number, default: 0 },
+    neurologyConsultationFee: { type: Number, default: 0 },
 });
 
 /* ------------------------------------------------------------------ */
@@ -108,11 +111,27 @@ const modules = computed(() => page.props.modules || {});
 const isDermaEnabled = computed(() => modules.value.derma?.enabled !== false);
 const isDentalEnabled = computed(() => modules.value.dental?.enabled === true);
 const isPediatricEnabled = computed(() => modules.value.pediatric?.enabled === true);
+const isObgynEnabled = computed(() => modules.value.obgyn?.enabled === true);
+const isPsychiatryEnabled = computed(() => modules.value.psychiatry?.enabled === true);
+const isNeurologyEnabled = computed(() => modules.value.neurology?.enabled === true);
 const isTelemedicineEnabled = computed(() => modules.value?.telemedicine?.enabled === true);
 
-const isConsultation = computed(() =>
-    bookingType.value === 'dermatology_consultation' || bookingType.value === 'cosmetic_consultation' || bookingType.value === 'dental_consultation' || bookingType.value === 'pediatric_consultation'
-);
+const isConsultation = computed(() => bookingType.value.endsWith('_consultation'));
+
+// Human label for the selected consultation type (summary/receipt headings).
+const consultationLabel = computed(() => {
+    const ar = {
+        dermatology_consultation: 'استشارة جلدية', cosmetic_consultation: 'استشارة تجميلية',
+        dental_consultation: 'استشارة أسنان', pediatric_consultation: 'استشارة أطفال',
+        obgyn_consultation: 'استشارة نساء وتوليد', psychiatry_consultation: 'كشف نفسية', neurology_consultation: 'كشف أعصاب',
+    };
+    const en = {
+        dermatology_consultation: 'Dermatology Consultation', cosmetic_consultation: 'Cosmetic Consultation',
+        dental_consultation: 'Dental Consultation', pediatric_consultation: 'Pediatric Consultation',
+        obgyn_consultation: 'OB/GYN Consultation', psychiatry_consultation: 'Psychiatry Consultation', neurology_consultation: 'Neurology Consultation',
+    };
+    return (isRtl.value ? ar : en)[bookingType.value] || (isRtl.value ? 'استشارة' : 'Consultation');
+});
 
 const isDental = computed(() =>
     bookingType.value === 'dental_consultation' || bookingType.value === 'dental_service'
@@ -124,9 +143,14 @@ const isPediatric = computed(() =>
 
 const defaultMod = computed(() => page.props.defaultModule || 'derma');
 
+// Map the chosen booking_type to its owning module (prefix-based for the
+// non-derma specialties). Derma's two consultation types fall through to the
+// default module.
 const currentModule = computed(() => {
-    if (isDental.value) return 'dental';
-    if (isPediatric.value) return 'pediatric';
+    const t = bookingType.value;
+    for (const m of ['dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology']) {
+        if (t.startsWith(m)) return m;
+    }
     return defaultMod.value;
 });
 
@@ -184,6 +208,45 @@ const bookingTypeCards = computed(() => {
         });
     }
 
+    if (isObgynEnabled.value) {
+        groups.push({
+            module: 'obgyn',
+            titleAr: 'النساء والتوليد',
+            titleEn: 'OB/GYN',
+            color: '#DB2777',
+            items: [
+                { value: 'obgyn_consultation', titleAr: 'استشارة نساء وتوليد', titleEn: 'OB/GYN Consultation', descAr: 'فحص واستشارة نساء وتوليد', descEn: 'Obstetrics & gynecology consultation', iconPath: 'M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z' },
+                { value: 'obgyn_service', titleAr: 'خدمة نساء وتوليد', titleEn: 'OB/GYN Service', descAr: 'سونار أو متابعة حمل أو إجراء', descEn: 'Ultrasound, antenatal follow-up or procedure', iconPath: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' },
+            ],
+        });
+    }
+
+    if (isPsychiatryEnabled.value) {
+        groups.push({
+            module: 'psychiatry',
+            titleAr: 'الطب النفسي',
+            titleEn: 'Psychiatry',
+            color: '#7C3AED',
+            items: [
+                { value: 'psychiatry_consultation', titleAr: 'كشف نفسية', titleEn: 'Psychiatry Consultation', descAr: 'فحص واستشارة طب نفسي', descEn: 'Psychiatric examination & consultation', iconPath: 'M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18' },
+                { value: 'psychiatry_service', titleAr: 'خدمة نفسية', titleEn: 'Psychiatry Service', descAr: 'جلسة أو متابعة علاجية', descEn: 'Therapy session or follow-up', iconPath: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' },
+            ],
+        });
+    }
+
+    if (isNeurologyEnabled.value) {
+        groups.push({
+            module: 'neurology',
+            titleAr: 'طب الأعصاب',
+            titleEn: 'Neurology',
+            color: '#0EA5E9',
+            items: [
+                { value: 'neurology_consultation', titleAr: 'كشف أعصاب', titleEn: 'Neurology Consultation', descAr: 'فحص واستشارة طب أعصاب', descEn: 'Neurological examination & consultation', iconPath: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z' },
+                { value: 'neurology_service', titleAr: 'خدمة أعصاب', titleEn: 'Neurology Service', descAr: 'إجراء أو فحص عصبي', descEn: 'Neurological procedure or test', iconPath: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' },
+            ],
+        });
+    }
+
     return groups;
 });
 
@@ -234,6 +297,17 @@ function getConsultationFeeForDoctor(doctorId) {
         if (doctor?.doctor_type === 'specialist') return props.pediatricSpecialistFee || 0;
         return props.pediatricConsultantFee || 0;
     }
+    // obgyn / psychiatry / neurology — prefer the doctor's own specialty fee,
+    // fall back to the module-level consultation fee.
+    if (bookingType.value === 'obgyn_consultation') {
+        return Number(doctor?.obgyn_consultation_fee) || props.obgynConsultationFee || 0;
+    }
+    if (bookingType.value === 'psychiatry_consultation') {
+        return Number(doctor?.psychiatry_consultation_fee) || props.psychiatryConsultationFee || 0;
+    }
+    if (bookingType.value === 'neurology_consultation') {
+        return Number(doctor?.neurology_consultation_fee) || props.neurologyConsultationFee || 0;
+    }
     return 0;
 }
 
@@ -272,6 +346,17 @@ watch(bookingType, (newType) => {
         serviceRows[0].service_id = '';
         serviceRows[0].unit_price = props.pediatricConsultantFee || 0;
     } else if (newType === 'pediatric_service') {
+        serviceRows[0].sessions_count = 1;
+        serviceRows[0].service_id = '';
+        serviceRows[0].unit_price = 0;
+    } else if (['obgyn_consultation', 'psychiatry_consultation', 'neurology_consultation'].includes(newType)) {
+        serviceRows[0].sessions_count = 1;
+        serviceRows[0].service_id = '';
+        // Module-level fee until a doctor is picked (then onConsultationDoctorChange refines it).
+        serviceRows[0].unit_price = newType === 'obgyn_consultation' ? (props.obgynConsultationFee || 0)
+            : newType === 'psychiatry_consultation' ? (props.psychiatryConsultationFee || 0)
+            : (props.neurologyConsultationFee || 0);
+    } else if (['obgyn_service', 'psychiatry_service', 'neurology_service'].includes(newType)) {
         serviceRows[0].sessions_count = 1;
         serviceRows[0].service_id = '';
         serviceRows[0].unit_price = 0;
@@ -862,7 +947,7 @@ const stepLabels = computed(() => isRtl.value ? [
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                         <div class="border-b border-gray-100 pb-2 mb-4">
                             <h2 class="text-sm font-bold text-gray-800">
-                                {{ bookingType === 'dermatology_consultation' ? (isRtl ? 'استشارة جلدية' : 'Dermatology Consultation') : bookingType === 'dental_consultation' ? (isRtl ? 'استشارة أسنان' : 'Dental Consultation') : bookingType === 'pediatric_consultation' ? (isRtl ? 'استشارة أطفال' : 'Pediatric Consultation') : (isRtl ? 'استشارة تجميلية' : 'Cosmetic Consultation') }}
+                                {{ consultationLabel }}
                             </h2>
                             <p class="text-xs text-gray-400 mt-1">{{ isRtl ? 'اختر الطبيب وأكد رسوم الكشف' : 'Select the doctor and confirm the consultation fee' }}</p>
                         </div>
@@ -1079,7 +1164,7 @@ const stepLabels = computed(() => isRtl.value ? [
                     >
                         <h2 class="text-sm font-bold text-gray-800 mb-1">
                             {{ isConsultation
-                                ? (bookingType === 'dermatology_consultation' ? (isRtl ? 'استشارة جلدية' : 'Dermatology Consultation') : bookingType === 'dental_consultation' ? (isRtl ? 'استشارة أسنان' : 'Dental Consultation') : bookingType === 'pediatric_consultation' ? (isRtl ? 'استشارة أطفال' : 'Pediatric Consultation') : (isRtl ? 'استشارة تجميلية' : 'Cosmetic Consultation'))
+                                ? (consultationLabel)
                                 : (getService(row.service_id)?.name_en || getService(row.service_id)?.name_ar || (isRtl ? 'الخدمة' : 'Service') + ' ' + (sIndex + 1))
                             }}
                         </h2>
@@ -1226,7 +1311,7 @@ const stepLabels = computed(() => isRtl.value ? [
                                     <div>
                                         <p class="text-sm font-semibold text-gray-800">
                                             {{ isConsultation
-                                                ? (bookingType === 'dermatology_consultation' ? (isRtl ? 'استشارة جلدية' : 'Dermatology Consultation') : bookingType === 'dental_consultation' ? (isRtl ? 'استشارة أسنان' : 'Dental Consultation') : bookingType === 'pediatric_consultation' ? (isRtl ? 'استشارة أطفال' : 'Pediatric Consultation') : (isRtl ? 'استشارة تجميلية' : 'Cosmetic Consultation'))
+                                                ? (consultationLabel)
                                                 : (getService(row.service_id)?.name_en || getService(row.service_id)?.name_ar || '-')
                                             }}
                                         </p>

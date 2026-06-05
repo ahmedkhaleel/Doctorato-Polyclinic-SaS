@@ -13,11 +13,11 @@ class StoreBookingRequest extends FormRequest
 
     public function rules(): array
     {
-        $isService = in_array($this->input('booking_type'), ['service', 'dental_service', 'pediatric_service']);
+        $isService = in_array($this->input('booking_type'), ['service', 'dental_service', 'pediatric_service', 'obgyn_service', 'psychiatry_service', 'neurology_service']);
 
         return [
             'patient_id' => 'required|exists:patients,id',
-            'booking_type' => 'required|in:dermatology_consultation,cosmetic_consultation,dental_consultation,dental_service,pediatric_consultation,pediatric_service,service',
+            'booking_type' => 'required|in:dermatology_consultation,cosmetic_consultation,dental_consultation,dental_service,pediatric_consultation,pediatric_service,obgyn_consultation,obgyn_service,psychiatry_consultation,psychiatry_service,neurology_consultation,neurology_service,service',
             'notes' => 'nullable|string|max:1000',
             'services' => 'required|array|min:1',
             'services.*.service_id' => $isService ? 'required|exists:services,id' : 'nullable',

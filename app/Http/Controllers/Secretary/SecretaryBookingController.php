@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Secretary;
 
+use App\Http\Requests\StoreBookingRequest;
 use App\Models\Booking;
 use App\Models\BookingAppointment;
 use App\Models\BookingConsent;
@@ -13,7 +14,6 @@ use App\Models\PaymentMethod;
 use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Models\Setting;
-use App\Http\Requests\StoreBookingRequest;
 use App\Services\AuditLogger;
 use App\Services\BookingWorkflowService;
 use App\Services\LeadService;
@@ -35,7 +35,7 @@ class SecretaryBookingController extends BaseSecretaryController
             'search' => 'nullable|string|max:100',
             'status' => 'nullable|string|in:unconfirmed,confirmed,in_progress,completed,cancelled',
             'source' => 'nullable|string|in:website,secretary,walk_in,phone',
-            'module' => 'nullable|string|in:derma,dental,pediatric,obgyn',
+            'module' => 'nullable|string|in:derma,dental,pediatric,obgyn,psychiatry,neurology',
         ]);
 
         $query = Booking::with(['patient', 'bookingServices.service', 'invoice'])
@@ -82,7 +82,7 @@ class SecretaryBookingController extends BaseSecretaryController
         $services = Service::active()->bookable()->orderBy('display_order')
             ->get(['id', 'name_ar', 'name_en', 'price', 'price_after_discount', 'default_sessions', 'session_duration_minutes', 'category_id', 'module']);
         $doctors = Doctor::active()->orderBy('display_order')
-            ->get(['id', 'name_ar', 'name_en', 'doctor_type', 'dermatology_fee', 'cosmetic_fee', 'module', 'dental_consultation_fee', 'dental_service_fee']);
+            ->get(['id', 'name_ar', 'name_en', 'doctor_type', 'dermatology_fee', 'cosmetic_fee', 'module', 'dental_consultation_fee', 'dental_service_fee', 'obgyn_consultation_fee', 'psychiatry_consultation_fee', 'neurology_consultation_fee']);
         $doctorSchedules = DoctorSchedule::active()
             ->get(['doctor_id', 'day_of_week', 'start_time', 'end_time']);
 
@@ -102,6 +102,11 @@ class SecretaryBookingController extends BaseSecretaryController
             'dentalSpecialistFee' => (float) Setting::get('dental_specialist_fee', 0),
             'pediatricConsultantFee' => (float) Setting::get('pediatric_consultant_fee', 0),
             'pediatricSpecialistFee' => (float) Setting::get('pediatric_specialist_fee', 0),
+            // Module-level consultation fees (fallback when a doctor has no
+            // specialty fee set) — seeded in module_settings.
+            'obgynConsultationFee' => (float) \App\Services\ModuleManager::getSetting('obgyn', 'consultation_fee', 0),
+            'psychiatryConsultationFee' => (float) \App\Services\ModuleManager::getSetting('psychiatry', 'consultation_fee', 0),
+            'neurologyConsultationFee' => (float) \App\Services\ModuleManager::getSetting('neurology', 'consultation_fee', 0),
         ]);
     }
 
@@ -209,16 +214,16 @@ class SecretaryBookingController extends BaseSecretaryController
         // Enforce valid state transitions to prevent data corruption
         $allowedTransitions = [
             'unconfirmed' => ['confirmed', 'cancelled'],
-            'confirmed'   => ['in_progress', 'cancelled'],
+            'confirmed' => ['in_progress', 'cancelled'],
             'in_progress' => ['completed', 'cancelled'],
-            'completed'   => [],  // Terminal state
-            'cancelled'   => ['unconfirmed'],  // Allow re-opening cancelled bookings
+            'completed' => [],  // Terminal state
+            'cancelled' => ['unconfirmed'],  // Allow re-opening cancelled bookings
         ];
 
         $currentStatus = $booking->status;
         $newStatus = $data['status'];
 
-        if ($newStatus !== $currentStatus && !in_array($newStatus, $allowedTransitions[$currentStatus] ?? [])) {
+        if ($newStatus !== $currentStatus && ! in_array($newStatus, $allowedTransitions[$currentStatus] ?? [])) {
             return redirect()->back()->with('error', $this->msg("Cannot change status from '{$currentStatus}' to '{$newStatus}'.", "لا يمكن تغيير الحالة من '{$currentStatus}' إلى '{$newStatus}'."));
         }
 
@@ -287,8 +292,8 @@ class SecretaryBookingController extends BaseSecretaryController
 
         $visitCount = count($result['visits_created']);
         $successMsg = $this->msg(
-            'Payment recorded successfully.' . ($visitCount > 0 ? " {$visitCount} visit(s) created for today's appointments." : ''),
-            'تم تسجيل الدفعة بنجاح.' . ($visitCount > 0 ? " تم إنشاء {$visitCount} زيارة(زيارات) لمواعيد اليوم." : ''),
+            'Payment recorded successfully.'.($visitCount > 0 ? " {$visitCount} visit(s) created for today's appointments." : ''),
+            'تم تسجيل الدفعة بنجاح.'.($visitCount > 0 ? " تم إنشاء {$visitCount} زيارة(زيارات) لمواعيد اليوم." : ''),
         );
 
         return redirect()->back()->with('success', $successMsg);
@@ -316,6 +321,7 @@ class SecretaryBookingController extends BaseSecretaryController
             return redirect()->back()->with('error', $e->getMessage());
         } catch (\Throwable $e) {
             report($e);
+
             return redirect()->back()->with('error', $this->msg(
                 'Failed to add retouch session. Please try again.',
                 'فشل إضافة جلسة المتابعة. يرجى المحاولة مرة أخرى.'

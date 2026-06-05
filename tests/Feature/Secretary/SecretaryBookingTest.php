@@ -20,9 +20,13 @@ class SecretaryBookingTest extends TestCase
     use RefreshDatabase;
 
     protected User $secretary;
+
     protected Patient $patient;
+
     protected Doctor $doctor;
+
     protected Service $service;
+
     protected PaymentMethod $paymentMethod;
 
     protected function setUp(): void
@@ -213,6 +217,40 @@ class SecretaryBookingTest extends TestCase
 
         $response->assertRedirect();
         $this->assertDatabaseHas('bookings', ['booking_type' => 'cosmetic_consultation']);
+    }
+
+    public function test_secretary_can_create_psychiatry_consultation(): void
+    {
+        $this->actingAs($this->secretary);
+
+        $tomorrow = now()->addDay()->format('Y-m-d');
+
+        $response = $this->post('/secretary/bookings', [
+            'patient_id' => $this->patient->id,
+            'booking_type' => 'psychiatry_consultation',
+            'services' => [
+                [
+                    'service_id' => null,
+                    'doctor_id' => $this->doctor->id,
+                    'sessions_count' => 1,
+                    'unit_price' => 300,
+                    'discount_per_session' => 0,
+                    'appointments' => [
+                        [
+                            'doctor_id' => $this->doctor->id,
+                            'date' => $tomorrow,
+                            'start_time' => '13:00',
+                            'end_time' => '13:30',
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        $response->assertRedirect();
+        // booking_type is accepted by StoreBookingRequest and the module is
+        // auto-detected as psychiatry.
+        $this->assertDatabaseHas('bookings', ['booking_type' => 'psychiatry_consultation', 'module' => 'psychiatry']);
     }
 
     public function test_secretary_can_view_booking_details(): void
