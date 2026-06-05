@@ -7,6 +7,7 @@ import MseForm from '@/Components/Clinical/MseForm.vue';
 import RiskAssessmentPanel from '@/Components/Clinical/RiskAssessmentPanel.vue';
 import { useConfirm } from '@/Composables/useConfirm.js';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import axios from 'axios';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -72,6 +73,42 @@ function remove(enc) {
     confirm(t('Delete this encounter?', 'حذف هذا اللقاء؟'), () => {
         router.delete(route(`doctor.${props.module}.encounters.destroy`, enc.id), { preserveScroll: true });
     });
+}
+
+// ── AI note assist (np_note_assist) — non-diagnostic draft from MSE + notes ──
+const aiNoteEnabled = computed(() => {
+    const ai = page.props.ai;
+    return !!ai?.enabled && Array.isArray(ai?.features) && ai.features.includes('np_note_assist');
+});
+const aiDrafting = ref(false);
+const aiError = ref('');
+function buildAiContext() {
+    const mse = Object.entries(form.mse || {}).filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`).join('; ');
+    return [
+        form.subjective ? `Subjective: ${form.subjective}` : '',
+        form.objective ? `Objective: ${form.objective}` : '',
+        mse ? `MSE: ${mse}` : '',
+    ].filter(Boolean).join('\n');
+}
+async function draftWithAi() {
+    if (aiDrafting.value) return;
+    const context = buildAiContext();
+    if (!context) { aiError.value = t('Add an MSE or notes first.', 'أدخل فحص الحالة أو ملاحظات أولًا.'); return; }
+    aiDrafting.value = true;
+    aiError.value = '';
+    try {
+        const { data } = await axios.post('/doctor/ai/np-note', { context });
+        if (data.ok) {
+            // Append the draft to the Plan field (non-destructive).
+            form.plan = form.plan ? `${form.plan}\n${data.text}` : data.text;
+        } else {
+            aiError.value = data.message || t('AI is unavailable.', 'الذكاء الاصطناعي غير متاح.');
+        }
+    } catch (e) {
+        aiError.value = e.response?.data?.message || t('Could not draft a note.', 'تعذّرت الصياغة.');
+    } finally {
+        aiDrafting.value = false;
+    }
 }
 
 function patientName(enc) { return enc.patient?.full_name || '—'; }
@@ -253,7 +290,15 @@ function riskChipClass(level) {
 
                     <!-- MSE -->
                     <div class="rounded-xl border border-slate-200 p-3">
-                        <p class="text-xs font-bold text-slate-700 mb-2">{{ t('Mental Status Examination', 'فحص الحالة العقلية') }}</p>
+                        <div class="flex items-center justify-between mb-2">
+                            <p class="text-xs font-bold text-slate-700">{{ t('Mental Status Examination', 'فحص الحالة العقلية') }}</p>
+                            <button v-if="aiNoteEnabled" type="button" @click="draftWithAi" :disabled="aiDrafting"
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white disabled:opacity-50 transition" :style="{ background: accent }">
+                                <svg class="w-3.5 h-3.5" :class="{ 'animate-spin': aiDrafting }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                                {{ aiDrafting ? t('Drafting…', 'جارٍ الصياغة…') : t('Draft note with AI', 'صياغة بالـ AI') }}
+                            </button>
+                        </div>
+                        <p v-if="aiError" class="text-[11px] text-amber-600 mb-2">{{ aiError }}</p>
                         <MseForm v-model="form.mse" />
                     </div>
 
