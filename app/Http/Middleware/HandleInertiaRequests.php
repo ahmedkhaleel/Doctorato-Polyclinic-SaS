@@ -29,9 +29,16 @@ class HandleInertiaRequests extends Middleware
         $isWebmasterRoute = str_starts_with($request->path(), 'webmaster');
         $isPatientRoute = (bool) preg_match('#^(ar|en)/patient#', $request->path());
 
-        // Update last_seen_at for online status tracking
-        if ($request->user()) {
-            $request->user()->updateQuietly(['last_seen_at' => now()]);
+        if ($user = $request->user()) {
+            // Eager-load the role once — it's read many times below (role name,
+            // display, permissions accessor) and in panel middleware.
+            $user->loadMissing('role');
+
+            // Throttle the online-status write to once/minute per user instead
+            // of an UPDATE on every single request (hot write path on shared DB).
+            if (\Illuminate\Support\Facades\Cache::add('seen:'.$user->id, 1, 60)) {
+                $user->updateQuietly(['last_seen_at' => now()]);
+            }
         }
 
         return [
@@ -77,11 +84,15 @@ class HandleInertiaRequests extends Middleware
                     return null;
                 }
                 try {
+                    // Clinic-wide counters are identical for every admin — cache
+                    // briefly so each full page load doesn't re-run 3 COUNTs.
+                    $global = $this->globalUnreadCounts();
+
                     return [
-                        'unread_bookings' => Booking::where('is_read', false)->count(),
-                        'unread_messages' => ContactMessage::where('is_read', false)->count(),
+                        'unread_bookings' => $global['unread_bookings'],
+                        'unread_messages' => $global['unread_messages'],
                         'unread_system' => $request->user()->unreadNotifications()->count(),
-                        'crm_overdue_count' => LeadFollowUp::overdue()->count(),
+                        'crm_overdue_count' => $global['crm_overdue_count'],
                     ];
                 } catch (\Throwable) {
                     return ['unread_bookings' => 0, 'unread_messages' => 0, 'unread_system' => 0, 'crm_overdue_count' => 0];
@@ -132,9 +143,11 @@ class HandleInertiaRequests extends Middleware
                     return null;
                 }
                 try {
+                    $global = $this->globalUnreadCounts();
+
                     return [
-                        'unread_bookings' => Booking::where('is_read', false)->count(),
-                        'unread_messages' => ContactMessage::where('is_read', false)->count(),
+                        'unread_bookings' => $global['unread_bookings'],
+                        'unread_messages' => $global['unread_messages'],
                         'unread_dental' => $request->user()->unreadNotifications()->count(),
                         'crm_overdue_count' => LeadFollowUp::overdue()
                             ->forUser($request->user()->id)
@@ -149,6 +162,19 @@ class HandleInertiaRequests extends Middleware
                     ->whereNull('read_at')->count(),
             ] : null,
         ];
+    }
+
+    /**
+     * Clinic-wide unread counters shared by all staff. Cached 30s so a burst
+     * of full page loads doesn't re-run the same 3 COUNT(*) queries each time.
+     */
+    private function globalUnreadCounts(): array
+    {
+        return \Illuminate\Support\Facades\Cache::remember('inertia.global_unread', 30, fn () => [
+            'unread_bookings' => Booking::where('is_read', false)->count(),
+            'unread_messages' => ContactMessage::where('is_read', false)->count(),
+            'crm_overdue_count' => LeadFollowUp::overdue()->count(),
+        ]);
     }
 
     private function getTranslations(string $locale): array
@@ -209,7 +235,9 @@ class HandleInertiaRequests extends Middleware
     private function getBranchData(Request $request, bool $isPatientRoute): ?array
     {
         $user = $request->user();
-        if ($isPatientRoute || ! $user) {
+        // Multi-branch is behind a kill-switch (default off) — skip the branch
+        // queries entirely while it's disabled instead of querying every request.
+        if ($isPatientRoute || ! $user || ! config('branches.enabled')) {
             return null;
         }
 

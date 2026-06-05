@@ -64,15 +64,13 @@ class BackupController extends Controller
     public function runFull(Request $request)
     {
         try {
-            Artisan::call('backup:run');
-            $output = Artisan::output();
+            // Queue it — a full DB+files backup can take tens of seconds and
+            // would otherwise tie up a PHP worker / time out on shared hosting.
+            Artisan::queue('backup:run');
 
-            Log::info('Manual full backup triggered', [
-                'user_id' => auth()->id(),
-                'output' => $output,
-            ]);
+            Log::info('Manual full backup queued', ['user_id' => auth()->id()]);
 
-            AuditLogger::log('created', null, ['type' => 'full'], 'Triggered manual full backup');
+            AuditLogger::log('created', null, ['type' => 'full'], 'Queued manual full backup');
 
             return back()->with('success', 'تم بدء النسخ الاحتياطي الكامل بنجاح.');
         } catch (\Throwable $e) {
@@ -91,15 +89,11 @@ class BackupController extends Controller
     public function runDatabase(Request $request)
     {
         try {
-            Artisan::call('backup:run', ['--only-db' => true]);
-            $output = Artisan::output();
+            Artisan::queue('backup:run', ['--only-db' => true]);
 
-            Log::info('Manual DB backup triggered', [
-                'user_id' => auth()->id(),
-                'output' => $output,
-            ]);
+            Log::info('Manual DB backup queued', ['user_id' => auth()->id()]);
 
-            AuditLogger::log('created', null, ['type' => 'database'], 'Triggered manual database backup');
+            AuditLogger::log('created', null, ['type' => 'database'], 'Queued manual database backup');
 
             return back()->with('success', 'تم بدء نسخ قاعدة البيانات بنجاح.');
         } catch (\Throwable $e) {
