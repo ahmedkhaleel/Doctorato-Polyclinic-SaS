@@ -104,6 +104,14 @@ class CommissionCalculator
             return (float) $doctor->dental_consultation_commission;
         }
 
+        // obgyn / psychiatry / neurology — per-doctor specialty commission.
+        if (in_array($consultationType, ['obgyn', 'psychiatry', 'neurology'], true)) {
+            $col = "{$consultationType}_consultation_commission";
+            if ($doctor->{$col} !== null) {
+                return (float) $doctor->{$col};
+            }
+        }
+
         return (float) ($doctor->default_commission_percentage ?? 0);
     }
 
@@ -122,6 +130,7 @@ class CommissionCalculator
             if ($doctor->doctor_type === 'consultant') {
                 return (float) Setting::get('dermatology_consultant_fee', 0);
             }
+
             return (float) Setting::get('dermatology_specialist_fee', 0);
         }
 
@@ -130,6 +139,7 @@ class CommissionCalculator
             if ($doctor->cosmetic_fee !== null && (float) $doctor->cosmetic_fee > 0) {
                 return (float) $doctor->cosmetic_fee;
             }
+
             return (float) Setting::get('cosmetic_consultation_fee', 0);
         }
 
@@ -138,6 +148,7 @@ class CommissionCalculator
             if ($doctor->pediatric_consultation_fee !== null && (float) $doctor->pediatric_consultation_fee > 0) {
                 return (float) $doctor->pediatric_consultation_fee;
             }
+
             return (float) Setting::get('pediatric_consultation_fee', 0);
         }
 
@@ -146,7 +157,19 @@ class CommissionCalculator
             if ($doctor->dental_consultation_fee !== null && (float) $doctor->dental_consultation_fee > 0) {
                 return (float) $doctor->dental_consultation_fee;
             }
+
             return (float) \App\Services\ModuleManager::getSetting('dental', 'consultation_fee', 300);
+        }
+
+        // obgyn / psychiatry / neurology — per-doctor specialty fee, then the
+        // module-level consultation fee.
+        if (in_array($consultationType, ['obgyn', 'psychiatry', 'neurology'], true)) {
+            $col = "{$consultationType}_consultation_fee";
+            if ($doctor->{$col} !== null && (float) $doctor->{$col} > 0) {
+                return (float) $doctor->{$col};
+            }
+
+            return (float) \App\Services\ModuleManager::getSetting($consultationType, 'consultation_fee', 0);
         }
 
         return (float) ($doctor->consultation_fee ?? 0);

@@ -29,6 +29,11 @@ const props = defineProps({
     followupWindowDays: { type: Number, default: 15 },
     dentalConsultantFee: { type: Number, default: 0 },
     dentalSpecialistFee: { type: Number, default: 0 },
+    pediatricConsultantFee: { type: Number, default: 0 },
+    pediatricSpecialistFee: { type: Number, default: 0 },
+    obgynConsultationFee: { type: Number, default: 0 },
+    psychiatryConsultationFee: { type: Number, default: 0 },
+    neurologyConsultationFee: { type: Number, default: 0 },
 });
 
 /* ------------------------------------------------------------------ */
@@ -113,46 +118,44 @@ function getDoctor(id) {
 
 /* ── Module availability ── */
 const modules = computed(() => page.props.modules || {});
-const isDentalEnabled = computed(() => {
-    const dental = Object.values(modules.value).find(m => m.slug === 'dental');
-    return dental?.enabled ?? false;
-});
-const isPediatricEnabled = computed(() => {
-    const ped = Object.values(modules.value).find(m => m.slug === 'pediatric');
-    return ped?.enabled ?? false;
-});
+const moduleEnabled = (slug) => Object.values(modules.value).find(m => m.slug === slug)?.enabled ?? false;
+const isDentalEnabled = computed(() => moduleEnabled('dental'));
+const isPediatricEnabled = computed(() => moduleEnabled('pediatric'));
+const isObgynEnabled = computed(() => moduleEnabled('obgyn'));
+const isPsychiatryEnabled = computed(() => moduleEnabled('psychiatry'));
+const isNeurologyEnabled = computed(() => moduleEnabled('neurology'));
 const isTelemedicineEnabled = computed(() => modules.value?.telemedicine?.enabled === true);
 
-const isConsultation = computed(() =>
-    ['dermatology_consultation', 'cosmetic_consultation', 'dental_consultation', 'pediatric_consultation'].includes(bookingType.value)
-);
+const isConsultation = computed(() => bookingType.value.endsWith('_consultation'));
 
 const isDental = computed(() =>
     bookingType.value === 'dental_consultation' || bookingType.value === 'dental_service'
 );
 
-const filteredServices = computed(() => {
-    if (isDental.value) return (props.services || []).filter(s => s.module === 'dental');
-    return (props.services || []).filter(s => !s.module || s.module === 'derma');
-});
-
-const filteredServiceCategories = computed(() => {
-    if (isDental.value) {
-        return (props.serviceCategories || []).map(cat => ({
-            ...cat,
-            services: (cat.services || []).filter(s => s.module === 'dental')
-        })).filter(cat => cat.services.length > 0);
+// Module that owns the chosen booking_type (prefix-based; derma is the default).
+const currentModule = computed(() => {
+    const t = bookingType.value;
+    for (const m of ['dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology']) {
+        if (t.startsWith(m)) return m;
     }
-    return (props.serviceCategories || []).map(cat => ({
-        ...cat,
-        services: (cat.services || []).filter(s => !s.module || s.module === 'derma')
-    })).filter(cat => cat.services.length > 0);
+    return 'derma';
 });
 
-const filteredDoctors = computed(() => {
-    if (isDental.value) return (props.doctors || []).filter(d => d.module === 'dental');
-    return (props.doctors || []).filter(d => !d.module || d.module === 'derma');
-});
+const matchesModule = (svcOrDoc) => {
+    const mod = currentModule.value;
+    return mod === 'derma' ? (!svcOrDoc.module || svcOrDoc.module === 'derma') : svcOrDoc.module === mod;
+};
+
+const filteredServices = computed(() => (props.services || []).filter(matchesModule));
+
+const filteredServiceCategories = computed(() =>
+    (props.serviceCategories || []).map(cat => ({
+        ...cat,
+        services: (cat.services || []).filter(matchesModule),
+    })).filter(cat => cat.services.length > 0)
+);
+
+const filteredDoctors = computed(() => (props.doctors || []).filter(matchesModule));
 
 function getConsultationFeeForDoctor(doctorId) {
     const doctor = getDoctor(doctorId);
@@ -172,6 +175,14 @@ function getConsultationFeeForDoctor(doctorId) {
         if (doctor?.doctor_type === 'specialist') return props.dentalSpecialistFee || 0;
         return props.dentalConsultantFee || 0;
     }
+    if (bookingType.value === 'pediatric_consultation') {
+        if (doctor?.doctor_type === 'consultant') return props.pediatricConsultantFee || 0;
+        if (doctor?.doctor_type === 'specialist') return props.pediatricSpecialistFee || 0;
+        return props.pediatricConsultantFee || 0;
+    }
+    if (bookingType.value === 'obgyn_consultation') return Number(doctor?.obgyn_consultation_fee) || props.obgynConsultationFee || 0;
+    if (bookingType.value === 'psychiatry_consultation') return Number(doctor?.psychiatry_consultation_fee) || props.psychiatryConsultationFee || 0;
+    if (bookingType.value === 'neurology_consultation') return Number(doctor?.neurology_consultation_fee) || props.neurologyConsultationFee || 0;
     return 0;
 }
 
@@ -197,6 +208,20 @@ watch(bookingType, (newType) => {
         serviceRows[0].service_id = '';
         serviceRows[0].unit_price = props.dentalConsultantFee || 0;
     } else if (newType === 'dental_service') {
+        serviceRows[0].sessions_count = 1;
+        serviceRows[0].service_id = '';
+        serviceRows[0].unit_price = 0;
+    } else if (newType === 'pediatric_consultation') {
+        serviceRows[0].sessions_count = 1;
+        serviceRows[0].service_id = '';
+        serviceRows[0].unit_price = props.pediatricConsultantFee || 0;
+    } else if (['obgyn_consultation', 'psychiatry_consultation', 'neurology_consultation'].includes(newType)) {
+        serviceRows[0].sessions_count = 1;
+        serviceRows[0].service_id = '';
+        serviceRows[0].unit_price = newType === 'obgyn_consultation' ? (props.obgynConsultationFee || 0)
+            : newType === 'psychiatry_consultation' ? (props.psychiatryConsultationFee || 0)
+            : (props.neurologyConsultationFee || 0);
+    } else if (['pediatric_service', 'obgyn_service', 'psychiatry_service', 'neurology_service'].includes(newType)) {
         serviceRows[0].sessions_count = 1;
         serviceRows[0].service_id = '';
         serviceRows[0].unit_price = 0;
@@ -658,7 +683,7 @@ function getServiceLabel(id) {
                         {{ isRtl ? 'استشارة أونلاين' : 'Online Consultation' }}
                     </Link>
 
-                    <div class="grid gap-3 md:gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4" :class="{ 'xl:grid-cols-6': isDentalEnabled && isPediatricEnabled, 'xl:grid-cols-5': (isDentalEnabled || isPediatricEnabled) && !(isDentalEnabled && isPediatricEnabled) }">
+                    <div class="grid gap-3 md:gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
 
                         <!-- 1. Derma & Cosmetic (combined) -->
                         <button type="button"
@@ -756,6 +781,54 @@ function getServiceLabel(id) {
                             </div>
                             <p class="booking-type-title">{{ isRtl ? 'خدمة أطفال' : 'Pediatric Service' }}</p>
                             <p class="booking-type-sub">{{ isRtl ? 'تطعيم / متابعة نمو' : 'Vaccine / growth check' }}</p>
+                            <span class="booking-type-check" aria-hidden="true">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </span>
+                        </button>
+
+                        <!-- OB/GYN consultation -->
+                        <button v-if="isObgynEnabled" type="button"
+                            @click="bookingType = 'obgyn_consultation'"
+                            :class="['booking-type-card group theme-rose', bookingType === 'obgyn_consultation' ? 'is-active' : '']">
+                            <div class="booking-type-icon">
+                                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>
+                                </svg>
+                            </div>
+                            <p class="booking-type-title">{{ isRtl ? 'كشف نساء وتوليد' : 'OB/GYN Consultation' }}</p>
+                            <p class="booking-type-sub">{{ isRtl ? 'فحص واستشارة' : 'Examination & consultation' }}</p>
+                            <span class="booking-type-check" aria-hidden="true">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </span>
+                        </button>
+
+                        <!-- Psychiatry consultation -->
+                        <button v-if="isPsychiatryEnabled" type="button"
+                            @click="bookingType = 'psychiatry_consultation'"
+                            :class="['booking-type-card group theme-violet', bookingType === 'psychiatry_consultation' ? 'is-active' : '']">
+                            <div class="booking-type-icon">
+                                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/>
+                                </svg>
+                            </div>
+                            <p class="booking-type-title">{{ isRtl ? 'كشف نفسية' : 'Psychiatry Consultation' }}</p>
+                            <p class="booking-type-sub">{{ isRtl ? 'فحص واستشارة نفسية' : 'Psychiatric consultation' }}</p>
+                            <span class="booking-type-check" aria-hidden="true">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </span>
+                        </button>
+
+                        <!-- Neurology consultation -->
+                        <button v-if="isNeurologyEnabled" type="button"
+                            @click="bookingType = 'neurology_consultation'"
+                            :class="['booking-type-card group theme-sky', bookingType === 'neurology_consultation' ? 'is-active' : '']">
+                            <div class="booking-type-icon">
+                                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>
+                                </svg>
+                            </div>
+                            <p class="booking-type-title">{{ isRtl ? 'كشف أعصاب' : 'Neurology Consultation' }}</p>
+                            <p class="booking-type-sub">{{ isRtl ? 'فحص واستشارة عصبية' : 'Neurological consultation' }}</p>
                             <span class="booking-type-check" aria-hidden="true">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                             </span>
@@ -1658,6 +1731,39 @@ function getServiceLabel(id) {
     --theme-icon-color: #047857;
     --theme-active-icon-from: #10B981;
     --theme-active-icon-to: #047857;
+}
+
+/* Theme: Rose (OB/GYN) */
+.booking-type-card.theme-rose {
+    --theme-accent: #DB2777;
+    --theme-bg: rgba(219, 39, 119, 0.05);
+    --theme-icon-bg-from: rgba(219, 39, 119, 0.12);
+    --theme-icon-bg-to: rgba(219, 39, 119, 0.04);
+    --theme-icon-color: #BE185D;
+    --theme-active-icon-from: #DB2777;
+    --theme-active-icon-to: #BE185D;
+}
+
+/* Theme: Violet (Psychiatry) */
+.booking-type-card.theme-violet {
+    --theme-accent: #7C3AED;
+    --theme-bg: rgba(124, 58, 237, 0.05);
+    --theme-icon-bg-from: rgba(124, 58, 237, 0.12);
+    --theme-icon-bg-to: rgba(124, 58, 237, 0.04);
+    --theme-icon-color: #6D28D9;
+    --theme-active-icon-from: #7C3AED;
+    --theme-active-icon-to: #6D28D9;
+}
+
+/* Theme: Sky (Neurology) */
+.booking-type-card.theme-sky {
+    --theme-accent: #0EA5E9;
+    --theme-bg: rgba(14, 165, 233, 0.05);
+    --theme-icon-bg-from: rgba(14, 165, 233, 0.12);
+    --theme-icon-bg-to: rgba(14, 165, 233, 0.04);
+    --theme-icon-color: #0369A1;
+    --theme-active-icon-from: #0EA5E9;
+    --theme-active-icon-to: #0369A1;
 }
 
 .booking-type-icon {

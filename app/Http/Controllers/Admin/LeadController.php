@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CommunicationTemplate;
+use App\Models\CrmCampaign;
 use App\Models\Lead;
 use App\Models\LeadActivity;
 use App\Models\LeadFollowUp;
 use App\Models\LeadScoringRule;
 use App\Models\LeadSource;
-use App\Models\CrmCampaign;
-use App\Models\CommunicationTemplate;
 use App\Models\Patient;
 use App\Models\User;
 use App\Services\AuditLogger;
@@ -134,7 +134,7 @@ class LeadController extends Controller
         $data['created_by'] = auth()->id();
         $data['score'] = 0;
 
-        if (!empty($data['assigned_to'])) {
+        if (! empty($data['assigned_to'])) {
             $data['assigned_at'] = now();
         }
 
@@ -266,7 +266,7 @@ class LeadController extends Controller
             'campaign_id' => 'nullable|exists:crm_campaigns,id',
             'assigned_to' => 'nullable|exists:users,id',
             'priority' => 'required|in:1,2,3',
-            'status' => 'nullable|in:' . implode(',', Lead::STATUSES),
+            'status' => 'nullable|in:'.implode(',', Lead::STATUSES),
             'interested_services' => 'nullable|array',
             'notes' => 'nullable|string',
             'loss_reason' => 'nullable|string',
@@ -364,7 +364,7 @@ class LeadController extends Controller
         LeadActivity::create([
             'lead_id' => $lead->id,
             'type' => 'follow_up_scheduled',
-            'subject' => "Follow-up scheduled: {$data['type']} at " . $data['scheduled_at'],
+            'subject' => "Follow-up scheduled: {$data['type']} at ".$data['scheduled_at'],
             'performed_by' => auth()->id(),
         ]);
 
@@ -377,7 +377,7 @@ class LeadController extends Controller
     public function updateStatus(Request $request, Lead $lead): RedirectResponse
     {
         $data = $request->validate([
-            'status' => 'required|in:' . implode(',', Lead::STATUSES),
+            'status' => 'required|in:'.implode(',', Lead::STATUSES),
             'loss_reason' => 'nullable|required_if:status,lost|string',
         ]);
 
@@ -391,7 +391,7 @@ class LeadController extends Controller
         }
 
         // Track first contact time (SLA)
-        if ($oldStatus === 'new' && $data['status'] !== 'new' && !$lead->first_contacted_at) {
+        if ($oldStatus === 'new' && $data['status'] !== 'new' && ! $lead->first_contacted_at) {
             $updateData['first_contacted_at'] = now();
         }
 
@@ -442,7 +442,7 @@ class LeadController extends Controller
      */
     public function reactivate(Request $request, Lead $lead): RedirectResponse
     {
-        if (!in_array($lead->status, ['lost', 'dormant'])) {
+        if (! in_array($lead->status, ['lost', 'dormant'])) {
             return back()->with('error', 'Only lost or dormant leads can be reactivated.');
         }
 
@@ -488,7 +488,7 @@ class LeadController extends Controller
         ]);
 
         // Derive correct booking_type from department
-        if (!empty($data['create_booking'])) {
+        if (! empty($data['create_booking'])) {
             $bookingType = $data['booking_type'] ?? 'service';
             if ($bookingType === 'service' && isset($data['department'])) {
                 $bookingType = match ($data['department']) {
@@ -503,6 +503,8 @@ class LeadController extends Controller
                     'dental' => 'dental_consultation',
                     'pediatric' => 'pediatric_consultation',
                     'obgyn' => 'obgyn_consultation',
+                    'psychiatry' => 'psychiatry_consultation',
+                    'neurology' => 'neurology_consultation',
                     default => 'dermatology_consultation',
                 };
             }
@@ -529,7 +531,7 @@ class LeadController extends Controller
         $successMessage = "Lead converted to patient #{$patient->file_number} successfully.";
 
         // Optionally create booking
-        if (!empty($data['create_booking'])) {
+        if (! empty($data['create_booking'])) {
             $service = $data['service_id'] ? \App\Models\Service::find($data['service_id']) : null;
             $unitPrice = $service?->price ?? 0;
 
@@ -606,7 +608,7 @@ class LeadController extends Controller
             'lead_ids.*' => 'exists:leads,id',
             'action' => 'required|in:assign,status,delete',
             'assigned_to' => 'required_if:action,assign|nullable|exists:users,id',
-            'status' => 'required_if:action,status|nullable|in:' . implode(',', Lead::STATUSES),
+            'status' => 'required_if:action,status|nullable|in:'.implode(',', Lead::STATUSES),
         ]);
 
         $leads = Lead::whereIn('id', $data['lead_ids'])->get();
@@ -619,6 +621,7 @@ class LeadController extends Controller
                     $lead->assignTo($data['assigned_to']);
                     LeadActivity::logAssignment($lead, $oldAssignee, $data['assigned_to']);
                 }
+
                 return back()->with('success', "{$count} leads assigned successfully.");
 
             case 'status':
@@ -627,6 +630,7 @@ class LeadController extends Controller
                     $lead->update(['status' => $data['status']]);
                     LeadActivity::logStatusChange($lead, $oldStatus, $data['status']);
                 }
+
                 return back()->with('success', "{$count} leads updated to '{$data['status']}'.");
 
             case 'delete':
@@ -634,6 +638,7 @@ class LeadController extends Controller
                     AuditLogger::log('deleted', $lead);
                     $lead->delete();
                 }
+
                 return back()->with('success', "{$count} leads deleted.");
         }
 
@@ -650,7 +655,7 @@ class LeadController extends Controller
         // Export specific selected leads
         if ($ids = $request->input('ids')) {
             $idArray = array_filter(explode(',', $ids), 'is_numeric');
-            if (!empty($idArray)) {
+            if (! empty($idArray)) {
                 $query->whereIn('id', $idArray);
             }
         } else {
@@ -669,8 +674,8 @@ class LeadController extends Controller
             if ($search = $request->input('search')) {
                 $query->where(function ($q) use ($search) {
                     $q->where('full_name', 'like', "%{$search}%")
-                      ->orWhere('phone', 'like', "%{$search}%")
-                      ->orWhere('email', 'like', "%{$search}%");
+                        ->orWhere('phone', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
                 });
             }
             if ($dateFrom = $request->input('date_from')) {
@@ -685,7 +690,7 @@ class LeadController extends Controller
 
         $headers = [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="leads-export-' . date('Y-m-d') . '.csv"',
+            'Content-Disposition' => 'attachment; filename="leads-export-'.date('Y-m-d').'.csv"',
         ];
 
         $callback = function () use ($leads) {
@@ -782,7 +787,7 @@ class LeadController extends Controller
         LeadActivity::create([
             'lead_id' => $followUp->lead_id,
             'type' => 'follow_up_scheduled',
-            'subject' => "Follow-up rescheduled to " . $data['scheduled_at'],
+            'subject' => 'Follow-up rescheduled to '.$data['scheduled_at'],
             'performed_by' => auth()->id(),
         ]);
 
@@ -924,6 +929,7 @@ class LeadController extends Controller
         while (($row = fgetcsv($handle)) !== false) {
             if (count($row) !== count($header)) {
                 $errors++;
+
                 continue;
             }
 
@@ -939,6 +945,7 @@ class LeadController extends Controller
             // Skip if no name
             if (empty($leadData['full_name'])) {
                 $errors++;
+
                 continue;
             }
 
@@ -953,6 +960,7 @@ class LeadController extends Controller
                 }
                 if ($exists) {
                     $skipped++;
+
                     continue;
                 }
             }
@@ -1020,8 +1028,12 @@ class LeadController extends Controller
         fclose($handle);
 
         $message = "{$imported} leads imported successfully.";
-        if ($skipped > 0) $message .= " {$skipped} duplicates skipped.";
-        if ($errors > 0) $message .= " {$errors} rows had errors.";
+        if ($skipped > 0) {
+            $message .= " {$skipped} duplicates skipped.";
+        }
+        if ($errors > 0) {
+            $message .= " {$errors} rows had errors.";
+        }
 
         return redirect()->route('admin.leads.index')->with('success', $message);
     }
@@ -1115,7 +1127,7 @@ class LeadController extends Controller
         ]);
 
         // Soft-delete the secondary lead
-        $secondary->update(['status' => Lead::STATUS_LOST, 'loss_reason' => 'Merged into lead #' . $primary->id]);
+        $secondary->update(['status' => Lead::STATUS_LOST, 'loss_reason' => 'Merged into lead #'.$primary->id]);
         $secondary->delete();
 
         return redirect("/admin/leads/{$primary->id}")->with('success', "Leads merged successfully. Lead #{$secondary->id} has been archived.");
@@ -1251,7 +1263,7 @@ class LeadController extends Controller
         $dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
         // Preferred channel
-        $preferredChannel = !empty($channelSuccess)
+        $preferredChannel = ! empty($channelSuccess)
             ? array_search(max($channelSuccess), $channelSuccess)
             : ($comms->countBy('type')->sortDesc()->keys()->first());
 
