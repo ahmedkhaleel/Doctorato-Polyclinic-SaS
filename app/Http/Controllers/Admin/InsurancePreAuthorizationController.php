@@ -33,8 +33,8 @@ class InsurancePreAuthorizationController extends Controller
         if ($s = $request->input('search')) {
             $query->where(function ($q) use ($s) {
                 $q->where('auth_number', 'like', "%{$s}%")
-                  ->orWhere('procedure_description', 'like', "%{$s}%")
-                  ->orWhereHas('patient', fn ($p) => $p->where('full_name', 'like', "%{$s}%")->orWhere('file_number', 'like', "%{$s}%"));
+                    ->orWhere('procedure_description', 'like', "%{$s}%")
+                    ->orWhereHas('patient', fn ($p) => $p->where('full_name', 'like', "%{$s}%")->orWhere('file_number', 'like', "%{$s}%"));
             });
         }
         if ($status = $request->input('status')) {
@@ -43,16 +43,16 @@ class InsurancePreAuthorizationController extends Controller
 
         return Inertia::render('Admin/Insurance/PreAuthorizations/Index', [
             'preAuths' => $query->latest()->paginate(15)->withQueryString(),
-            'filters'  => $request->only(['search', 'status']),
-            'stats'    => [
-                'pending'  => InsurancePreAuthorization::where('status', 'pending')->count(),
+            'filters' => $request->only(['search', 'status']),
+            'stats' => [
+                'pending' => InsurancePreAuthorization::where('status', 'pending')->count(),
                 'approved' => InsurancePreAuthorization::whereIn('status', ['approved', 'partially_approved'])->count(),
-                'expired'  => InsurancePreAuthorization::where('status', 'expired')->count(),
+                'expired' => InsurancePreAuthorization::where('status', 'expired')->count(),
                 'approved_amount' => (float) InsurancePreAuthorization::whereIn('status', ['approved', 'partially_approved'])->sum('approved_amount'),
             ],
             'patients' => Patient::orderBy('full_name')->limit(500)->get(['id', 'full_name', 'phone', 'file_number']),
             'insurances' => PatientInsurance::with('company:id,name_ar,name_en')
-                ->where('status', 'active')
+                ->active()  // PatientInsurance has no `status` column — it's is_active
                 ->get(['id', 'patient_id', 'insurance_company_id', 'policy_number']),
             'doctors' => Doctor::active()->orderBy('name_ar')->get(['id', 'name_ar', 'name_en']),
         ]);
@@ -61,18 +61,18 @@ class InsurancePreAuthorizationController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'patient_id'            => 'required|exists:patients,id',
-            'patient_insurance_id'  => 'required|exists:patient_insurances,id',
-            'doctor_id'             => 'nullable|exists:doctors,id',
+            'patient_id' => 'required|exists:patients,id',
+            'patient_insurance_id' => 'required|exists:patient_insurances,id',
+            'doctor_id' => 'nullable|exists:doctors,id',
             'procedure_description' => 'required|string|max:2000',
-            'icd_code'              => 'nullable|string|max:20',
-            'cpt_code'              => 'nullable|string|max:20',
-            'estimated_cost'        => 'required|numeric|min:0',
+            'icd_code' => 'nullable|string|max:20',
+            'cpt_code' => 'nullable|string|max:20',
+            'estimated_cost' => 'required|numeric|min:0',
         ]);
 
         $preAuth = InsurancePreAuthorization::create($data + [
-            'auth_number'  => InsurancePreAuthorization::generateAuthNumber(),
-            'status'       => 'pending',
+            'auth_number' => InsurancePreAuthorization::generateAuthNumber(),
+            'status' => 'pending',
             'requested_by' => auth()->id(),
         ]);
 
@@ -84,11 +84,11 @@ class InsurancePreAuthorizationController extends Controller
     public function updateStatus(Request $request, InsurancePreAuthorization $preAuthorization): RedirectResponse
     {
         $data = $request->validate([
-            'status'           => 'required|in:pending,approved,partially_approved,rejected,expired',
-            'approved_amount'  => 'nullable|numeric|min:0',
-            'valid_from'       => 'nullable|date',
-            'valid_until'      => 'nullable|date|after_or_equal:valid_from',
-            'conditions'       => 'nullable|string|max:2000',
+            'status' => 'required|in:pending,approved,partially_approved,rejected,expired',
+            'approved_amount' => 'nullable|numeric|min:0',
+            'valid_from' => 'nullable|date',
+            'valid_until' => 'nullable|date|after_or_equal:valid_from',
+            'conditions' => 'nullable|string|max:2000',
             'rejection_reason' => 'nullable|string|max:1000',
         ]);
 
@@ -96,9 +96,9 @@ class InsurancePreAuthorizationController extends Controller
 
         if (in_array($data['status'], ['approved', 'partially_approved'], true)) {
             $update['approved_amount'] = $data['approved_amount'] ?? $preAuthorization->estimated_cost;
-            $update['valid_from']  = $data['valid_from'] ?? now()->toDateString();
+            $update['valid_from'] = $data['valid_from'] ?? now()->toDateString();
             $update['valid_until'] = $data['valid_until'] ?? now()->addDays(30)->toDateString();
-            $update['conditions']  = $data['conditions'] ?? null;
+            $update['conditions'] = $data['conditions'] ?? null;
             $update['rejection_reason'] = null;
         } elseif ($data['status'] === 'rejected') {
             $update['rejection_reason'] = $data['rejection_reason'] ?? null;

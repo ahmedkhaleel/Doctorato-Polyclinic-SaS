@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Service;
 use App\Models\Supply;
 use App\Models\SupplyTransaction;
 use App\Models\Visit;
@@ -13,11 +12,17 @@ class InventoryManager
     /**
      * Deduct supplies for a completed visit (based on service_supplies mapping).
      *
+     * DEPRECATED / UNUSED: visit consumption now goes exclusively through
+     * ServiceSupplyConsumptionService::consumeForVisit() (idempotent). Kept
+     * only for reference; do NOT re-wire this into the visit-complete path —
+     * it would double-deduct. `usage` quantity is stored POSITIVE here to
+     * stay consistent with every other consumption path.
+     *
      * @return array List of deducted supplies with low-stock warnings
      */
     public function deductForVisit(Visit $visit): array
     {
-        if (!$visit->service_id) {
+        if (! $visit->service_id) {
             return [];
         }
 
@@ -36,7 +41,7 @@ class InventoryManager
                 SupplyTransaction::create([
                     'supply_id' => $supply->id,
                     'transaction_type' => 'usage',
-                    'quantity' => -$qty,
+                    'quantity' => $qty,
                     'visit_id' => $visit->id,
                     'notes' => "Auto-deducted for visit #{$visit->id}",
                     'created_by' => auth()->id(),

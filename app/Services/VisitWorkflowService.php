@@ -11,7 +11,6 @@ use App\Models\PackageBundleBookingService;
 use App\Models\Setting;
 use App\Models\Visit;
 use App\Observers\CrmEventObserver;
-use App\Services\SmsNotificationService;
 use Illuminate\Support\Facades\DB;
 
 class VisitWorkflowService
@@ -67,7 +66,7 @@ class VisitWorkflowService
             }
 
             // 3. Auto-generate invoice (skip for booking-linked or bundle-linked visits — invoice already exists)
-            if (!$visit->booking_id && !$visit->package_bundle_booking_id) {
+            if (! $visit->booking_id && ! $visit->package_bundle_booking_id) {
                 $results['invoice'] = $this->generateInvoice($visit);
             }
 
@@ -123,10 +122,12 @@ class VisitWorkflowService
                 $results['commission'] = $commission;
             }
 
-            // 5. Deduct inventory (for service sessions)
-            if ($visit->visit_type === 'session' && $visit->service_id) {
-                $results['inventory'] = $this->inventoryManager->deductForVisit($visit);
-            }
+            // NOTE: inventory consumption is handled once, idempotently, by
+            // ServiceSupplyConsumptionService::consumeForVisit() at step 1b
+            // (covers session + any service). The previous second call to
+            // InventoryManager::deductForVisit() here double-deducted stock for
+            // session visits — removed. Reversal on cancel still uses
+            // InventoryManager::returnForVisit() (sign-agnostic via abs()).
         });
 
         // 6. CRM: Update linked lead pipeline and scoring
@@ -167,7 +168,7 @@ class VisitWorkflowService
 
             if ($activePayout) {
                 throw new \RuntimeException(
-                    'Cannot cancel a visit that is part of a confirmed or paid payout (Payout #' . $activePayout->payout_number . ').'
+                    'Cannot cancel a visit that is part of a confirmed or paid payout (Payout #'.$activePayout->payout_number.').'
                 );
             }
 

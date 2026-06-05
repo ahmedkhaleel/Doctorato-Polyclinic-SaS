@@ -70,7 +70,7 @@ class PayrollController extends Controller
         $month = (int) $request->month;
         $year = (int) $request->year;
 
-        $payrollService = new PayrollService();
+        $payrollService = new PayrollService;
         $employees = Employee::active()->with('user')->get();
         $generated = 0;
 
@@ -177,13 +177,18 @@ class PayrollController extends Controller
     {
         $request->validate(['ids' => 'required|array', 'ids.*' => 'exists:salary_slips,id']);
 
-        $count = SalarySlip::whereIn('id', $request->ids)
-            ->where('status', 'approved')
-            ->update([
-                'status' => 'paid',
-                'paid_by' => auth()->id(),
-                'paid_at' => now(),
-            ]);
+        // Iterate (not a bulk UPDATE) so each paid slip also posts to the
+        // expense ledger via LaborExpenseService — matching single markPaid().
+        // The bulk UPDATE previously skipped this, undercounting salary cost.
+        $slips = SalarySlip::whereIn('id', $request->ids)->where('status', 'approved')->get();
+        $count = 0;
+        $labor = app(\App\Services\LaborExpenseService::class);
+
+        foreach ($slips as $slip) {
+            $slip->update(['status' => 'paid', 'paid_by' => auth()->id(), 'paid_at' => now()]);
+            $labor->recordForSalarySlip($slip->fresh());
+            $count++;
+        }
 
         AuditLogger::log('bulk_marked_paid_payroll', null, ['count' => $count]);
 
