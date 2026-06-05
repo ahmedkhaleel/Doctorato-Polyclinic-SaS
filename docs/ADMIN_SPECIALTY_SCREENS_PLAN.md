@@ -1,6 +1,6 @@
 # Admin (Super-Admin) Specialty Screens — Design & Build Plan
 
-**Status:** Proposed for review · **Date:** 2026-06-05
+**Status:** ✅ Built & deployed (Phases A–E) · **Date:** 2026-06-05
 **Scope:** Complete the super-admin oversight surface for **Psychiatry**,
 **Neurology**, and **OB/GYN** — the three medical modules whose admin nav
 is currently thin (Dashboard / Reports / Settings only).
@@ -124,28 +124,33 @@ AdminLayout.vue nav group ({m})
 Ordered by value/risk. Each phase: controller methods → routes → shared Vue
 pages → nav items → `npm run build` → feature tests → green UI guards → commit.
 
-### Phase A — Visibility (read-only, highest value, lowest risk)
-- [ ] N1 Cases (psych + neuro)  ·  O1 Cases (obgyn)
-- [ ] N2 Encounters log (+ billing status)  ·  O4 Encounters (obgyn)
-- [ ] Nav items + permission wiring + tests
+### Phase A — Visibility (read-only, highest value, lowest risk) ✅
+- [x] N1 Cases (psych + neuro)  ·  O1 Cases (obgyn)
+- [x] N2 Encounters log (+ billing status)  ·  (obgyn encounters = Pregnancies + ANC)
+- [x] Nav items + permission wiring + tests
 
-### Phase B — Quality / outcomes
-- [ ] N3 Outcomes (measurement-based care: PHQ-9/GAD-7/HIT-6 trends)
-- [ ] O2 ANC due/overdue queue  ·  O3 Lab tests oversight
+### Phase B — Quality / outcomes ✅
+- [x] N3 Outcomes (measurement-based care: PHQ-9/GAD-7/HIT-6 trends + improvement rate)
+- [x] O2 ANC due/overdue queue  ·  O3 Lab tests oversight (abnormal-first)
 
-### Phase C — Safety & compliance (sensitive, careful RBAC + audit)
-- [ ] N4 Risk register 🔒
-- [ ] N5 Medications & overdue-monitoring queue
-- [ ] N6 Controlled substances audit 🔒
+### Phase C — Safety & compliance (sensitive, RBAC + view_sensitive) ✅
+- [x] N4 Risk register 🔒
+- [x] N5 Medications & overdue-monitoring queue
+- [x] N6 Controlled substances audit 🔒
 
-### Phase D — Programs & neuro
-- [ ] N7 Treatment courses (consent + progress)
-- [ ] N8 Neuro tools (procedures + diary engagement)
-- [ ] O5 Deliveries / outcomes register
+### Phase D — Programs & neuro ✅
+- [x] N7 Treatment courses (consent + progress)
+- [x] N8 Neuro tools (procedures + diary engagement)
+- [x] O5 Deliveries / outcomes register
 
-### Phase E — Dashboard enrichment
-- [ ] KPI tiles on each module dashboard (active cases, encounters MTD,
-      flagged risks, overdue monitoring, revenue) linking into the new lists.
+### Phase E — Dashboard enrichment ✅
+- [x] KPI tiles on each module dashboard (active cases, encounters MTD,
+      flagged risks, overdue monitoring, revenue) linking into the new lists;
+      sensitive tile gated by view_sensitive.
+
+**Tests:** AdminScreensPhaseA–E tests (all green) + 6 UI regression guards.
+**Delivery:** committed + pushed to `main`; auto-deployed to cPanel; each
+phase verified green in CI (MySQL) before the next.
 
 ---
 
