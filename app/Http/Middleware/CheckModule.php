@@ -2,16 +2,23 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\ModuleManager;
 use Closure;
 use Illuminate\Http\Request;
-use App\Services\ModuleManager;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckModule
 {
-    public function handle(Request $request, Closure $next, string $module): Response
+    /**
+     * Accepts one or more module slugs. With several (e.g.
+     * `module:psychiatry,neurology`) access is granted if ANY of them is
+     * enabled — used by shared surfaces like the neuropsych patient pages.
+     */
+    public function handle(Request $request, Closure $next, string ...$modules): Response
     {
-        if (!ModuleManager::isEnabled($module)) {
+        $anyEnabled = collect($modules)->contains(fn ($m) => ModuleManager::isEnabled($m));
+
+        if (! $anyEnabled) {
             if ($request->expectsJson() || $request->is('api/*')) {
                 return response()->json([
                     'message' => 'This module is not enabled.',
@@ -30,6 +37,7 @@ class CheckModule
             // For patient portal (locale prefix)
             if (in_array($prefix, ['ar', 'en']) && $request->segment(2) === 'patient') {
                 $route = 'patient.dashboard';
+
                 return redirect()->route($route, ['locale' => $prefix])
                     ->with('error', 'هذا القسم غير مفعل / This module is not enabled.');
             }

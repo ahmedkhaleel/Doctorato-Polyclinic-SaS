@@ -134,14 +134,17 @@ Route::middleware('patient.auth')->group(function () {
         Route::get('/obgyn', [\App\Http\Controllers\Patient\PatientObgynController::class, 'overview'])->name('patient.obgyn.overview');
     });
 
-    // ─── Measurement-based-care scales (psychiatry/neurology, NP2) ──
-    Route::get('/neuropsych/scales', [\App\Http\Controllers\Patient\PatientNeuropsychScaleController::class, 'index'])->name('patient.neuropsych.scales.index');
-    Route::post('/neuropsych/scales', [\App\Http\Controllers\Patient\PatientNeuropsychScaleController::class, 'store'])->name('patient.neuropsych.scales.store')->middleware('throttle:20,1');
+    // ─── Neuropsych patient pages (NP2 scales + NP5 diaries) ──
+    // Shared by psychiatry & neurology: gated so the pages 403/redirect when
+    // BOTH modules are disabled (the nav already hides via anyModuleKey).
+    Route::middleware('module:psychiatry,neurology')->group(function () {
+        Route::get('/neuropsych/scales', [\App\Http\Controllers\Patient\PatientNeuropsychScaleController::class, 'index'])->name('patient.neuropsych.scales.index');
+        Route::post('/neuropsych/scales', [\App\Http\Controllers\Patient\PatientNeuropsychScaleController::class, 'store'])->name('patient.neuropsych.scales.store')->middleware('throttle:20,1');
 
-    // ─── Seizure & headache diaries (neurology, NP5) ──
-    Route::get('/neuropsych/diaries', [\App\Http\Controllers\Patient\PatientNeuroDiaryController::class, 'index'])->name('patient.neuropsych.diaries.index');
-    Route::post('/neuropsych/diaries/seizure', [\App\Http\Controllers\Patient\PatientNeuroDiaryController::class, 'storeSeizure'])->name('patient.neuropsych.diaries.seizure')->middleware('throttle:30,1');
-    Route::post('/neuropsych/diaries/headache', [\App\Http\Controllers\Patient\PatientNeuroDiaryController::class, 'storeHeadache'])->name('patient.neuropsych.diaries.headache')->middleware('throttle:30,1');
+        Route::get('/neuropsych/diaries', [\App\Http\Controllers\Patient\PatientNeuroDiaryController::class, 'index'])->name('patient.neuropsych.diaries.index');
+        Route::post('/neuropsych/diaries/seizure', [\App\Http\Controllers\Patient\PatientNeuroDiaryController::class, 'storeSeizure'])->name('patient.neuropsych.diaries.seizure')->middleware('throttle:30,1');
+        Route::post('/neuropsych/diaries/headache', [\App\Http\Controllers\Patient\PatientNeuroDiaryController::class, 'storeHeadache'])->name('patient.neuropsych.diaries.headache')->middleware('throttle:30,1');
+    });
 
     // ─── Online Consultations ───────────────────────────────
     Route::get('/online-consultations', [OnlineConsultationController::class, 'index'])

@@ -187,15 +187,13 @@ const { can } = usePermissions();
 const filteredGroups = computed(() =>
     navGroups.value.filter(g => {
         if (g.moduleKey) {
-            // Module must be enabled system-wide
+            // Module must be enabled system-wide.
             if (modules.value[g.moduleKey]?.enabled !== true) return false;
-            // Dental section only for dental doctors
-            if (g.moduleKey === 'dental' && doctorModule.value !== 'dental') return false;
-            // Pediatric section only for pediatric doctors
-            if (g.moduleKey === 'pediatric' && doctorModule.value !== 'pediatric') return false;
-            // Psychiatry / neurology sections only for their own doctors
-            if (g.moduleKey === 'psychiatry' && doctorModule.value !== 'psychiatry') return false;
-            if (g.moduleKey === 'neurology' && doctorModule.value !== 'neurology') return false;
+            // A medical-specialty section is shown only to doctors of that
+            // specialty (a derma doctor shouldn't see the OB/GYN or dental
+            // clinical tools). Applies uniformly to all six specialties.
+            const MEDICAL = ['derma', 'dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology'];
+            if (MEDICAL.includes(g.moduleKey) && doctorModule.value !== g.moduleKey) return false;
             return true;
         }
         return true;

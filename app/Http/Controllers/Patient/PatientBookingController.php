@@ -50,17 +50,20 @@ class PatientBookingController extends BasePatientController
             $q->where('bookable', true)->where('status', 'active')->select('id', 'name_en', 'name_ar', 'category_id', 'price', 'session_duration_minutes', 'module');
         }])->orderBy('display_order')->get();
 
-        $doctors = Doctor::where('status', 'active')
-            ->select('id', 'name_en', 'name_ar', 'specialization_en', 'specialization_ar', 'photo', 'module')
-            ->with('schedules')
-            ->get();
-
-        // Only show MEDICAL modules (derma, dental, pediatric) on the patient
-        // booking page — HR / Inventory / Insurance are administrative modules
-        // and should never appear as department filters here.
+        // Only show MEDICAL modules on the patient booking page — HR /
+        // Inventory / Insurance are administrative and never appear here.
         $activeModules = collect(ModuleManager::getActiveModules())
             ->only(ModuleManager::MEDICAL_MODULES)
             ->all();
+        $enabledMedicalSlugs = array_keys($activeModules);
+
+        // Only doctors of an enabled medical specialty — keeps disabled-module
+        // doctors out of the picker (the Vue also filters by selected module).
+        $doctors = Doctor::where('status', 'active')
+            ->whereIn('module', $enabledMedicalSlugs)
+            ->select('id', 'name_en', 'name_ar', 'specialization_en', 'specialization_ar', 'photo', 'module')
+            ->with('schedules')
+            ->get();
 
         // Patient's own active discount codes (LOYAL-* from loyalty
         // redemptions, FRIEND-* from referrals, etc.) — shown as one-tap
