@@ -18,6 +18,10 @@ class ModuleSettingController extends Controller
             $settings = ModuleManager::getSettings($slug);
             $modules[] = array_merge($info, [
                 'settings' => $settings,
+                // Drives the Medical vs Administrative split in the UI.
+                // Derived from MEDICAL_MODULES so new specialties never drift
+                // into the administrative bucket.
+                'is_medical' => in_array($slug, ModuleManager::MEDICAL_MODULES, true),
             ]);
         }
 
@@ -51,7 +55,7 @@ class ModuleSettingController extends Controller
             AuditLogger::log('enabled', null, ['module' => $module], "Enabled module: {$module}");
         } else {
             $result = ModuleManager::disable($module);
-            if (!$result) {
+            if (! $result) {
                 return redirect()->back()->with('error', 'لا يمكن تعطيل آخر تخصص طبي فعّال — يجب أن يبقى تخصص واحد على الأقل');
             }
             AuditLogger::log('disabled', null, ['module' => $module], "Disabled module: {$module}");

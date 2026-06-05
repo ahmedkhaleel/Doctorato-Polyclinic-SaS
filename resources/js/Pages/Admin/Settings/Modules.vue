@@ -11,14 +11,19 @@ const props = defineProps({
     modules: Array,
 });
 
-const medicalSlugs = ['derma', 'dental', 'pediatric'];
+// Medical vs Administrative split is driven by the backend `is_medical`
+// flag (derived from ModuleManager::MEDICAL_MODULES) so new medical
+// specialties — obgyn, psychiatry, neurology — never drift into the
+// administrative bucket. Fallback list kept for older payloads.
+const medicalFallback = ['derma', 'dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology'];
+const isMedical = (m) => (m.is_medical !== undefined ? m.is_medical : medicalFallback.includes(m.slug));
 
 const medicalModules = computed(() =>
-    props.modules.filter(m => medicalSlugs.includes(m.slug))
+    props.modules.filter(isMedical)
 );
 
 const adminModules = computed(() =>
-    props.modules.filter(m => !medicalSlugs.includes(m.slug))
+    props.modules.filter(m => !isMedical(m))
 );
 
 const togglingModule = ref(null);
