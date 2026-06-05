@@ -11,6 +11,24 @@ jobs:
     name: PHP tests + frontend build
     runs-on: ubuntu-latest
 
+    # Prod runs on MySQL; test against MySQL too (matches phpunit.xml:
+    # 127.0.0.1:3308 / aura_test / root with empty password). SQLite was
+    # rejecting MySQL-only DDL like `ALTER TABLE ... MODIFY COLUMN`.
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+          MYSQL_DATABASE: aura_test
+        ports:
+          # Map the container's 3306 to host 3308 so phpunit.xml's DB_PORT works as-is.
+          - 3308:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
     steps:
       - uses: actions/checkout@v4
 
@@ -18,7 +36,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-          extensions: mbstring, intl, pdo_sqlite, bcmath, gd, zip, curl
+          extensions: mbstring, intl, pdo_mysql, mysqli, bcmath, gd, zip, curl
           tools: composer:v2
           coverage: none
 
@@ -37,20 +55,32 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
-      - name: Configure SQLite test database
-        env:
-          WORKSPACE: ${{ github.workspace }}
+      - name: Configure MySQL test database
         run: |
-          mkdir -p database
-          touch database/testing.sqlite
           {
-            echo "DB_CONNECTION=sqlite"
-            echo "DB_DATABASE=${WORKSPACE}/database/testing.sqlite"
+            echo "DB_CONNECTION=mysql"
+            echo "DB_HOST=127.0.0.1"
+            echo "DB_PORT=3308"
+            echo "DB_DATABASE=aura_test"
+            echo "DB_USERNAME=root"
+            echo "DB_PASSWORD="
             echo "APP_ENV=testing"
             echo "CACHE_DRIVER=array"
             echo "SESSION_DRIVER=array"
             echo "QUEUE_CONNECTION=sync"
           } >> .env
+
+      - name: Wait for MySQL
+        run: |
+          # The service health check already gates the job; this is a
+          # belt-and-suspenders TCP probe that needs no mysql-client.
+          for i in $(seq 1 30); do
+            if (echo > /dev/tcp/127.0.0.1/3308) >/dev/null 2>&1; then
+              echo "MySQL port 3308 is accepting connections"; exit 0
+            fi
+            echo "Waiting for MySQL ($i)..."; sleep 2
+          done
+          echo "MySQL did not become ready in time" >&2; exit 1
 
       - name: Run migrations
         run: php artisan migrate --force
