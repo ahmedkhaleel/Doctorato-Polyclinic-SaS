@@ -90,6 +90,7 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
         Route::post('/summary', [$c, 'summary'])->name('doctor.ai.summary');
         Route::post('/soap', [$c, 'soap'])->name('doctor.ai.soap');
         Route::post('/differential', [$c, 'differential'])->name('doctor.ai.differential');
+        Route::post('/np-note', [$c, 'npNote'])->name('doctor.ai.npNote');
         Route::post('/icd10', [$c, 'icd10'])->name('doctor.ai.icd10');
         Route::post('/prescription', [$c, 'prescription'])->name('doctor.ai.prescription');
         Route::post('/drug-check', [$c, 'drugCheck'])->name('doctor.ai.drugCheck');

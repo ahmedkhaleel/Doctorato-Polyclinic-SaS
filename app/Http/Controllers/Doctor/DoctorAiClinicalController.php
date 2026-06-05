@@ -51,6 +51,14 @@ class DoctorAiClinicalController extends BaseDoctorController
         return $this->wrap(fn () => $assistant->differential($v['symptoms'], $this->opts($request)));
     }
 
+    /** NP — draft a psychiatry/neurology note from MSE + notes (np_note_assist). */
+    public function npNote(Request $request, ClinicalAssistant $assistant): JsonResponse
+    {
+        $v = $request->validate(['context' => 'required|string|max:4000']);
+
+        return $this->wrap(fn () => $assistant->npNote($v['context'], $this->opts($request)));
+    }
+
     public function icd10(Request $request, ClinicalAssistant $assistant): JsonResponse
     {
         $v = $request->validate(['diagnosis' => 'required|string|max:1000']);

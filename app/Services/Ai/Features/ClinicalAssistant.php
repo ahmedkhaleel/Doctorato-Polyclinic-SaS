@@ -61,6 +61,21 @@ class ClinicalAssistant
         return $this->run('soap_note', $sys, $notes, $options);
     }
 
+    /**
+     * NP — draft a psychiatry/neurology progress note from the structured Mental
+     * Status Examination + brief notes. Non-diagnostic assistant; gated by the
+     * np_note_assist feature flag.
+     */
+    public function npNote(string $context, array $options = []): AiResult
+    {
+        $locale = $options['locale'] ?? app()->getLocale();
+        $sys = $locale === 'ar'
+            ? 'أنت مساعد توثيق نفسي/عصبي (غير تشخيصي). صُغ من فحص الحالة العقلية والملاحظات المُدخلة مسوّدة ملاحظة سريرية منظّمة (الذاتي/الموضوعي/التقييم/الخطة) دون اختلاق معلومات.'
+            : 'You are a psychiatry/neurology documentation assistant (non-diagnostic). From the Mental Status Examination and notes provided, draft a structured clinical note (Subjective/Objective/Assessment/Plan) without inventing information.';
+
+        return $this->run('np_note_assist', $sys, $context, $options);
+    }
+
     /** D5 — differential diagnosis from symptoms. */
     public function differential(string $symptoms, array $options = []): AiResult
     {

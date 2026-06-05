@@ -358,6 +358,10 @@ class DataIntegrityCheckCommand extends Command
                     'employees', 'expenses', 'insurance_claims', 'patient_recall_reminders',
                     'dental_treatments', 'derma_sessions', 'cosmetic_sessions',
                     'pediatric_well_child_visits', 'antenatal_visits',
+                    // Psychiatry & Neurology branch-scoped clinical events (NP1–NP6)
+                    'neuropsych_encounters', 'neuropsych_treatment_plans', 'medication_plans',
+                    'controlled_substance_register', 'neuro_procedures', 'treatment_courses',
+                    'course_sessions',
                 ];
                 $missing = [];
                 $orphan = [];
