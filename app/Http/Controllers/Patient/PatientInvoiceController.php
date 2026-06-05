@@ -14,7 +14,7 @@ class PatientInvoiceController extends BasePatientController
     public function index(Request $request): Response
     {
         $filters = $request->validate([
-            'module' => 'nullable|string|in:derma,dental,pediatric',
+            'module' => 'nullable|string|in:derma,dental,pediatric,obgyn,psychiatry,neurology',
         ]);
 
         $query = Invoice::where('patient_id', $this->patientId($request));
@@ -79,7 +79,7 @@ class PatientInvoiceController extends BasePatientController
         $pdf = Pdf::loadView('pdf.invoice', compact('invoice', 'currency', 'clinic'))
             ->setPaper('a4', 'portrait');
 
-        $filename = preg_replace('/[^A-Za-z0-9\-\.]/', '_', $invoice->invoice_number . '.pdf');
+        $filename = preg_replace('/[^A-Za-z0-9\-\.]/', '_', $invoice->invoice_number.'.pdf');
 
         \App\Services\AuditLogger::log('patient_invoice_pdf_downloaded', $invoice, [
             'patient_id' => $this->patientId($request),

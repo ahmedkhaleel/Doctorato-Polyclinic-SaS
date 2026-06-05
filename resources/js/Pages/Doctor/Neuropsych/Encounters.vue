@@ -16,6 +16,7 @@ const props = defineProps({
     encounters: Object,        // paginator
     patients: Array,
     noteFormats: Array,
+    linkableVisits: { type: Array, default: () => [] }, // [{id, patient_id, label}] consult visits to attach
     activeRisks: { type: Object, default: () => ({}) }, // { patient_id: {level, reason_en, reason_ar} }
 });
 
@@ -33,11 +34,17 @@ const showModal = ref(false);
 const editing = ref(null);
 
 const blankForm = () => ({
-    patient_id: '', encounter_date: new Date().toISOString().slice(0, 10),
+    patient_id: '', visit_id: '', encounter_date: new Date().toISOString().slice(0, 10),
     note_format: 'soap', subjective: '', objective: '', assessment: '', plan: '',
     mse: {}, cost: 0, completed_at: '',
     diagnoses: [{ code_system: props.module === 'psychiatry' ? 'dsm5' : 'icd11', code: '', label: '', is_primary: true }],
 });
+
+// Appointments (consultation visits) the doctor can attach this encounter to,
+// so billing reuses the booking's invoice instead of creating a second one.
+function visitsForPatient(pid) {
+    return (props.linkableVisits || []).filter(v => String(v.patient_id) === String(pid));
+}
 const form = useForm(blankForm());
 
 function openAdd() {
@@ -50,7 +57,7 @@ function openAdd() {
 function openEdit(enc) {
     editing.value = enc;
     form.defaults({
-        patient_id: enc.patient_id, encounter_date: enc.encounter_date?.slice(0, 10),
+        patient_id: enc.patient_id, visit_id: enc.visit_id || '', encounter_date: enc.encounter_date?.slice(0, 10),
         note_format: enc.note_format, subjective: enc.subjective || '', objective: enc.objective || '',
         assessment: enc.assessment || '', plan: enc.plan || '', mse: enc.mse || {},
         cost: enc.cost || 0, completed_at: enc.completed_at ? enc.completed_at.slice(0, 10) : '',
@@ -267,6 +274,15 @@ function riskChipClass(level) {
                                 <option v-for="f in noteFormats" :key="f" :value="f">{{ f.toUpperCase() }}</option>
                             </select>
                         </div>
+                    </div>
+
+                    <!-- Optional: attach to a booked appointment so billing reuses its invoice. -->
+                    <div v-if="form.patient_id && visitsForPatient(form.patient_id).length">
+                        <label class="block text-xs font-medium text-gray-600 mb-1">{{ t('Link to appointment (optional)', 'ربط بموعد (اختياري)') }}</label>
+                        <select v-model="form.visit_id" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
+                            <option value="">{{ t('Not linked', 'بدون ربط') }}</option>
+                            <option v-for="v in visitsForPatient(form.patient_id)" :key="v.id" :value="v.id">{{ v.label }}</option>
+                        </select>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">

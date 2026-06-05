@@ -286,6 +286,21 @@ class DoctorDashboardController extends BaseDoctorController
             ];
         }
 
+        // ─── Psychiatry / Neurology overview (neuropsych doctors) ──
+        $neuropsych = null;
+        if (in_array($doctor->module, ['psychiatry', 'neurology'], true) && ModuleManager::isEnabled($doctor->module)) {
+            $planIds = \App\Models\MedicationPlan::where('doctor_id', $doctorId)->where('module', $doctor->module)->pluck('id');
+            $neuropsych = [
+                'encounters_this_month' => \App\Models\NeuropsychEncounter::where('doctor_id', $doctorId)->where('module', $doctor->module)
+                    ->whereMonth('encounter_date', $now->month)->whereYear('encounter_date', $now->year)->count(),
+                'active_courses' => \App\Models\TreatmentCourse::where('doctor_id', $doctorId)->where('module', $doctor->module)->where('status', 'active')->count(),
+                'monitoring_due' => \App\Models\MedicationMonitoring::whereIn('medication_plan_id', $planIds)
+                    ->where('status', 'due')->whereDate('due_at', '<=', today())->count(),
+                // Active high/moderate suicide-risk patients (psychiatry-weighted, safety signal).
+                'active_risk' => \App\Models\RiskAssessment::where('is_active', true)->whereIn('risk_level', ['high', 'moderate'])->count(),
+            ];
+        }
+
         // ─── Telemedicine snapshot (online-enabled doctors) ────
         $telemedicine = null;
         if ($doctor->online_consultation_enabled && ModuleManager::isEnabled('telemedicine')) {
@@ -326,6 +341,7 @@ class DoctorDashboardController extends BaseDoctorController
             'pediatric' => $pediatric,
             'derma' => $derma,
             'obgyn' => $obgyn,
+            'neuropsych' => $neuropsych,
             'telemedicine' => $telemedicine,
             'pendingFollowups' => $pendingFollowups,
             'todayMedicalAlerts' => $todayMedicalAlerts,

@@ -31,7 +31,14 @@ class SmsNotificationService
         $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Doctorato Polyclinic'));
         $clinicPhone = Setting::get('clinic_phone', '');
 
-        $moduleLabel = $booking->module === 'dental' ? 'أسنان' : 'جلدية';
+        $moduleLabel = match ($booking->module) {
+            'dental' => 'أسنان',
+            'pediatric' => 'أطفال',
+            'obgyn' => 'نساء وتوليد',
+            'psychiatry' => 'نفسية',
+            'neurology' => 'أعصاب',
+            default => 'جلدية',
+        };
 
         $message = "مرحباً {$patientName} 👋\n"
             ."تم تأكيد حجزك في {$clinicName}\n"

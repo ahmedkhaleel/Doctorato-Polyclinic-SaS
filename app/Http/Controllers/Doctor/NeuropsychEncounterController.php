@@ -54,11 +54,30 @@ class NeuropsychEncounterController extends BaseDoctorController
             }
         }
 
+        // Consultation visits for this doctor+module in the last 60 days that
+        // aren't yet tied to an encounter — offered in the form so billing can
+        // reuse the booking's invoice (avoids a duplicate charge).
+        $linkedVisitIds = NeuropsychEncounter::where('module', $module)->whereNotNull('visit_id')->pluck('visit_id');
+        $linkableVisits = \App\Models\Visit::where('doctor_id', $doctorId)
+            ->where('module', $module)
+            ->whereNotIn('id', $linkedVisitIds)
+            ->whereDate('visit_date', '>=', now()->subDays(60)->toDateString())
+            ->with('patient:id,full_name')
+            ->latest('visit_date')
+            ->limit(200)
+            ->get()
+            ->map(fn ($v) => [
+                'id' => $v->id,
+                'patient_id' => $v->patient_id,
+                'label' => trim(($v->patient?->full_name ?? '#'.$v->patient_id).' — '.optional($v->visit_date)->format('Y-m-d')),
+            ]);
+
         return Inertia::render('Doctor/Neuropsych/Encounters', [
             'module' => $module,
             'encounters' => $encounters,
             'patients' => Patient::active()->orderBy('full_name')->limit(500)->get(['id', 'full_name', 'phone']),
             'noteFormats' => NeuropsychEncounter::NOTE_FORMATS,
+            'linkableVisits' => $linkableVisits,
             'activeRisks' => $activeRisks,
         ]);
     }

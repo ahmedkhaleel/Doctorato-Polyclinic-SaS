@@ -29,6 +29,7 @@ const props = defineProps({
     pediatric: Object,
     derma: Object,
     obgyn: Object,
+    neuropsych: Object,
     telemedicine: Object,
     pendingFollowups: Array,
     todayMedicalAlerts: Array,
@@ -671,6 +672,34 @@ const completionDash = computed(() => {
                         <div class="text-center p-2.5 rounded-xl bg-amber-50/50">
                             <p class="text-lg font-bold text-[#C4A265] tabular-nums">{{ obgyn.due_soon ?? 0 }}</p>
                             <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'قرب الولادة' : 'Due soon' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Psychiatry / Neurology Quick Stats -->
+                <div v-if="neuropsych" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
+                    :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s">
+                    <div class="px-5 py-3.5 border-b border-gray-100 bg-gradient-to-r from-violet-50/40 to-white flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full" style="background:#7C3AED"></span>
+                        <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'ملخص النفسية والأعصاب' : 'Psychiatry / Neurology' }}</h3>
+                    </div>
+                    <div class="p-5 grid grid-cols-4 gap-3">
+                        <div class="text-center p-2.5 rounded-xl bg-violet-50/50">
+                            <p class="text-lg font-bold tabular-nums" style="color:#7C3AED">{{ neuropsych.encounters_this_month ?? 0 }}</p>
+                            <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'لقاءات الشهر' : 'Encounters' }}</p>
+                        </div>
+                        <div class="text-center p-2.5 rounded-xl bg-slate-50/50">
+                            <p class="text-lg font-bold text-[#1B365D] tabular-nums">{{ neuropsych.active_courses ?? 0 }}</p>
+                            <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'دورات نشطة' : 'Courses' }}</p>
+                        </div>
+                        <div class="text-center p-2.5 rounded-xl" :class="(neuropsych.monitoring_due ?? 0) > 0 ? 'bg-amber-50/50' : 'bg-gray-50/50'">
+                            <p class="text-lg font-bold tabular-nums" :class="(neuropsych.monitoring_due ?? 0) > 0 ? 'text-amber-600' : 'text-gray-400'">{{ neuropsych.monitoring_due ?? 0 }}</p>
+                            <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'مراقبة مستحقّة' : 'Monitoring' }}</p>
+                        </div>
+                        <div class="text-center p-2.5 rounded-xl" :class="(neuropsych.active_risk ?? 0) > 0 ? 'bg-red-50/50' : 'bg-gray-50/50'">
+                            <p class="text-lg font-bold tabular-nums" :class="(neuropsych.active_risk ?? 0) > 0 ? 'text-red-600' : 'text-gray-400'">{{ neuropsych.active_risk ?? 0 }}</p>
+                            <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'مخاطر نشطة' : 'Active risk' }}</p>
                         </div>
                     </div>
                 </div>

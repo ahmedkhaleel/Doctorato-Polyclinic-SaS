@@ -50,7 +50,7 @@ const cards = computed(() => [
         </div>
 
         <!-- Quick links -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <Link :href="lp('/neuropsych/scales')" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 hover:shadow-md hover:-translate-y-0.5 transition-all block">
                 <div class="font-bold text-gray-800">{{ t('My Questionnaires', 'استبياناتي') }}</div>
                 <p class="text-sm text-gray-500 mt-1">{{ t('Fill measurement-based questionnaires before your visit', 'املأ الاستبيانات قبل زيارتك') }}</p>
@@ -58,6 +58,22 @@ const cards = computed(() => [
             <Link :href="lp('/neuropsych/diaries')" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 hover:shadow-md hover:-translate-y-0.5 transition-all block">
                 <div class="font-bold text-gray-800">{{ t('My Diaries', 'مفكّراتي') }}</div>
                 <p class="text-sm text-gray-500 mt-1">{{ t('Log seizures and headaches to share with your doctor', 'سجّل النوبات والصداع لمشاركتها مع طبيبك') }}</p>
+            </Link>
+            <Link :href="lp('/visits')" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 hover:shadow-md hover:-translate-y-0.5 transition-all block">
+                <div class="font-bold text-gray-800">{{ t('My Visits', 'زياراتي') }}</div>
+                <p class="text-sm text-gray-500 mt-1">{{ t('Review your past consultations', 'راجع زياراتك السابقة') }}</p>
+            </Link>
+            <Link :href="lp('/prescriptions')" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 hover:shadow-md hover:-translate-y-0.5 transition-all block">
+                <div class="font-bold text-gray-800">{{ t('My Prescriptions', 'وصفاتي') }}</div>
+                <p class="text-sm text-gray-500 mt-1">{{ t('See prescribed medications', 'اطّلع على الأدوية الموصوفة') }}</p>
+            </Link>
+            <Link :href="lp('/invoices')" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 hover:shadow-md hover:-translate-y-0.5 transition-all block">
+                <div class="font-bold text-gray-800">{{ t('My Invoices', 'فواتيري') }}</div>
+                <p class="text-sm text-gray-500 mt-1">{{ t('View invoices and payments', 'اطّلع على الفواتير والمدفوعات') }}</p>
+            </Link>
+            <Link :href="lp('/bookings')" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 hover:shadow-md hover:-translate-y-0.5 transition-all block">
+                <div class="font-bold text-gray-800">{{ t('Book Appointment', 'حجز موعد') }}</div>
+                <p class="text-sm text-gray-500 mt-1">{{ t('Book a psychiatry or neurology visit', 'احجز موعد نفسية أو أعصاب') }}</p>
             </Link>
         </div>
 

@@ -16,7 +16,7 @@ class DoctorQueueController extends BaseDoctorController
         $filters = $request->validate([
             'view' => 'nullable|in:today,upcoming,past,all',
             'status' => 'nullable|in:waiting,in_progress,completed,cancelled',
-            'module' => 'nullable|in:derma,dental,pediatric',
+            'module' => 'nullable|in:derma,dental,pediatric,obgyn,psychiatry,neurology',
             'date_from' => 'nullable|date',
             'date_to' => 'nullable|date',
         ]);
@@ -58,13 +58,14 @@ class DoctorQueueController extends BaseDoctorController
             $query->where('status', $filters['status']);
         }
 
-        if ($filters['module'] ?? null) {
-            if ($filters['module'] === 'dental') {
-                $query->where('module', 'dental');
-            } else {
+        if ($module = $filters['module'] ?? null) {
+            // derma is the implicit default for legacy null-module rows.
+            if ($module === 'derma') {
                 $query->where(function ($q) {
-                    $q->where('module', '!=', 'dental')->orWhereNull('module');
+                    $q->where('module', 'derma')->orWhereNull('module');
                 });
+            } else {
+                $query->where('module', $module);
             }
         }
 
@@ -89,7 +90,7 @@ class DoctorQueueController extends BaseDoctorController
             foreach ($visits->items() as $visit) {
                 if ($visit->module === 'dental' && $visit->patient) {
                     $riskFlags = $visit->patient->getDentalRiskFlags();
-                    if (!empty($riskFlags)) {
+                    if (! empty($riskFlags)) {
                         $medicalAlerts[$visit->id] = $riskFlags;
                     }
                 }
