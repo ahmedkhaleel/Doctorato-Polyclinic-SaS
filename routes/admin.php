@@ -987,6 +987,7 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
     Route::get('/obgyn/anc', [\App\Http\Controllers\Admin\AdminObgynController::class, 'anc'])->name('admin.obgyn.anc')->middleware(['module:obgyn', 'permission:obgyn.view']);
     Route::get('/obgyn/labs', [\App\Http\Controllers\Admin\AdminObgynController::class, 'labs'])->name('admin.obgyn.labs')->middleware(['module:obgyn', 'permission:obgyn.view']);
     Route::get('/obgyn/pregnancies', [\App\Http\Controllers\Admin\AdminObgynController::class, 'pregnancies'])->name('admin.obgyn.pregnancies')->middleware(['module:obgyn', 'permission:obgyn.view']);
+    Route::get('/obgyn/deliveries', [\App\Http\Controllers\Admin\AdminObgynController::class, 'deliveries'])->name('admin.obgyn.deliveries')->middleware(['module:obgyn', 'permission:obgyn.view']);
     Route::get('/obgyn/reports', [\App\Http\Controllers\Admin\AdminObgynController::class, 'reports'])->name('admin.obgyn.reports')->middleware(['module:obgyn', 'permission:obgyn.view']);
     Route::get('/obgyn/settings', [\App\Http\Controllers\Admin\AdminObgynController::class, 'settings'])->name('admin.obgyn.settings')->middleware(['module:obgyn', 'permission:obgyn.view']);
     Route::post('/obgyn/settings', [\App\Http\Controllers\Admin\AdminObgynController::class, 'updateSettings'])->name('admin.obgyn.settings.update')->middleware(['module:obgyn', 'permission:obgyn.update']);
@@ -1001,10 +1002,14 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
         // Sensitive — safety + compliance: heightened RBAC.
         Route::get("/{$npm}/risk", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'riskRegister'])->defaults('npModule', $npm)->name("admin.{$npm}.risk")->middleware(["module:{$npm}", "permission:{$npm}.view_sensitive"]);
         Route::get("/{$npm}/controlled", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'controlled'])->defaults('npModule', $npm)->name("admin.{$npm}.controlled")->middleware(["module:{$npm}", "permission:{$npm}.view_sensitive"]);
+        Route::get("/{$npm}/courses", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'courses'])->defaults('npModule', $npm)->name("admin.{$npm}.courses")->middleware(["module:{$npm}", "permission:{$npm}.view"]);
         Route::get("/{$npm}/reports", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'reports'])->defaults('npModule', $npm)->name("admin.{$npm}.reports")->middleware(["module:{$npm}", "permission:{$npm}.view"]);
         Route::get("/{$npm}/settings", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'settings'])->defaults('npModule', $npm)->name("admin.{$npm}.settings")->middleware(["module:{$npm}", "permission:{$npm}.view"]);
         Route::post("/{$npm}/settings", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'updateSettings'])->defaults('npModule', $npm)->name("admin.{$npm}.settings.update")->middleware(["module:{$npm}", "permission:{$npm}.update"]);
     }
+
+    // Neuro tools (procedures + diary engagement) — neurology only.
+    Route::get('/neurology/neuro', [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'neuro'])->defaults('npModule', 'neurology')->name('admin.neurology.neuro')->middleware(['module:neurology', 'permission:neurology.view']);
 
     // ═══════════════════════════════════════════════════════════
     // ═══ SUPPLIERS & PURCHASE ORDERS ══════════════════════════

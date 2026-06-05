@@ -185,6 +185,33 @@ class AdminObgynController extends Controller
         ]);
     }
 
+    /**
+     * O5 — Deliveries register: delivered pregnancies with mode, outcome, and
+     * basic newborn data. Read-only outcomes oversight.
+     */
+    public function deliveries(Request $request): Response
+    {
+        $deliveries = DeliveryRecord::query()
+            ->with('pregnancy.patient:id,full_name,phone,file_number', 'doctor:id,name_ar,name_en')
+            ->latest('delivery_date')
+            ->paginate(20)->withQueryString()
+            ->through(fn (DeliveryRecord $d) => [
+                'id' => $d->id,
+                'patient' => ['id' => $d->pregnancy?->patient?->id, 'full_name' => $d->pregnancy?->patient?->full_name, 'phone' => $d->pregnancy?->patient?->phone],
+                'doctor' => ['name_ar' => $d->doctor?->name_ar, 'name_en' => $d->doctor?->name_en],
+                'delivery_date' => optional($d->delivery_date)->toDateString(),
+                'delivery_mode' => $d->delivery_mode,
+                'outcome' => $d->outcome,
+                'baby_weight_grams' => $d->baby_weight_grams,
+                'baby_sex' => $d->baby_sex,
+                'apgar' => $d->apgar_1 !== null ? ($d->apgar_1.' / '.$d->apgar_5) : null,
+            ]);
+
+        return Inertia::render('Admin/Obgyn/Deliveries', [
+            'deliveries' => $deliveries,
+        ]);
+    }
+
     public function reports(): Response
     {
         $byStatus = Pregnancy::select('status', DB::raw('count(*) as c'))->groupBy('status')->pluck('c', 'status');

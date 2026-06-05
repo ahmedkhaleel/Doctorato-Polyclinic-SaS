@@ -5,13 +5,17 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ControlledPrescription;
 use App\Models\Doctor;
+use App\Models\HeadacheDiaryEntry;
 use App\Models\MedicationMonitoring;
 use App\Models\MedicationPlan;
+use App\Models\NeuroProcedure;
 use App\Models\NeuropsychEncounter;
 use App\Models\NeuropsychProfile;
 use App\Models\Patient;
 use App\Models\RiskAssessment;
 use App\Models\ScaleResult;
+use App\Models\SeizureDiaryEntry;
+use App\Models\TreatmentCourse;
 use App\Services\ModuleManager;
 use App\Services\NeuroPsych\RiskAssessmentService;
 use App\Services\NeuroPsych\ScaleEngine;
@@ -307,6 +311,71 @@ class AdminNeuropsychController extends Controller
         return Inertia::render('Admin/Neuropsych/Controlled', [
             'module' => $module,
             'rx' => $rx,
+        ]);
+    }
+
+    /**
+     * N7 — Treatment courses (ECT / rTMS / ketamine): consent compliance and
+     * session progress per course.
+     */
+    public function courses(Request $request): Response
+    {
+        $module = $this->module($request);
+
+        $courses = TreatmentCourse::where('module', $module)
+            ->with('patient:id,full_name,phone', 'doctor:id,name_ar,name_en')
+            ->withCount(['sessions as completed_sessions' => fn ($q) => $q->whereNotNull('completed_at')])
+            ->latest('id')
+            ->paginate(20)->withQueryString()
+            ->through(fn (TreatmentCourse $c) => [
+                'id' => $c->id,
+                'patient' => ['id' => $c->patient?->id, 'full_name' => $c->patient?->full_name, 'phone' => $c->patient?->phone],
+                'doctor' => ['name_ar' => $c->doctor?->name_ar, 'name_en' => $c->doctor?->name_en],
+                'type' => $c->type,
+                'planned_sessions' => $c->planned_sessions,
+                'completed_sessions' => $c->completed_sessions,
+                'status' => $c->status,
+                'consent_required' => (bool) $c->consent_required,
+                'consent_ok' => $c->consentOk(),
+            ]);
+
+        return Inertia::render('Admin/Neuropsych/Courses', [
+            'module' => $module,
+            'courses' => $courses,
+        ]);
+    }
+
+    /**
+     * N8 — Neuro tools (neurology only): procedures log (EEG/EMG/NCS/Botox/
+     * nerve blocks) + patient diary engagement (seizure & headache, 30 days).
+     */
+    public function neuro(Request $request): Response
+    {
+        $procedures = NeuroProcedure::with('patient:id,full_name,phone')
+            ->latest('performed_at')
+            ->paginate(20)->withQueryString()
+            ->through(fn (NeuroProcedure $p) => [
+                'id' => $p->id,
+                'patient' => ['id' => $p->patient?->id, 'full_name' => $p->patient?->full_name, 'phone' => $p->patient?->phone],
+                'type' => $p->type,
+                'performed_at' => $p->performed_at?->toDateString(),
+                'has_report' => filled($p->report_path),
+                'cost' => (float) $p->cost,
+                'billed' => $p->invoice_id !== null,
+            ]);
+
+        $since = now()->subDays(30);
+        $engagement = [
+            'seizure_entries' => SeizureDiaryEntry::where('occurred_at', '>=', $since)->count(),
+            'seizure_patients' => SeizureDiaryEntry::where('occurred_at', '>=', $since)->distinct('patient_id')->count('patient_id'),
+            'headache_entries' => HeadacheDiaryEntry::where('date', '>=', $since->toDateString())->count(),
+            'headache_patients' => HeadacheDiaryEntry::where('date', '>=', $since->toDateString())->distinct('patient_id')->count('patient_id'),
+        ];
+
+        return Inertia::render('Admin/Neuropsych/Neuro', [
+            'module' => 'neurology',
+            'procedures' => $procedures,
+            'engagement' => $engagement,
         ]);
     }
 
