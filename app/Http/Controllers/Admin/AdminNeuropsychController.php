@@ -40,6 +40,37 @@ class AdminNeuropsychController extends Controller
         ]);
     }
 
+    public function reports(Request $request): Response
+    {
+        $module = $this->module($request);
+
+        // Encounters per month (last 6 months) + revenue from module-tagged invoices.
+        $since = now()->startOfMonth()->subMonths(5);
+        $byMonth = NeuropsychEncounter::where('module', $module)
+            ->where('encounter_date', '>=', $since->toDateString())
+            ->get(['encounter_date'])
+            ->groupBy(fn ($e) => $e->encounter_date->format('Y-m'))
+            ->map(fn ($g) => $g->count());
+
+        $months = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $key = now()->startOfMonth()->subMonths($i)->format('Y-m');
+            $months[] = ['month' => $key, 'encounters' => (int) ($byMonth[$key] ?? 0)];
+        }
+
+        $revenue = \App\Models\Invoice::where('module', $module)
+            ->where('invoice_date', '>=', $since->toDateString())
+            ->sum('total');
+
+        return Inertia::render('Admin/Neuropsych/Reports', [
+            'module' => $module,
+            'byMonth' => $months,
+            'totalEncounters' => array_sum(array_column($months, 'encounters')),
+            'revenue' => (float) $revenue,
+            'completedCourses' => \App\Models\TreatmentCourse::where('module', $module)->where('status', 'completed')->count(),
+        ]);
+    }
+
     public function settings(Request $request): Response
     {
         $module = $this->module($request);

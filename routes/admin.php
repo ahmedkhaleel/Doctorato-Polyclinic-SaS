@@ -991,6 +991,7 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
     // ─── Psychiatry & Neurology admin (NP7) — shared controller ──
     foreach (['psychiatry', 'neurology'] as $npm) {
         Route::get("/{$npm}", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'dashboard'])->defaults('npModule', $npm)->name("admin.{$npm}.dashboard")->middleware(["module:{$npm}", "permission:{$npm}.view"]);
+        Route::get("/{$npm}/reports", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'reports'])->defaults('npModule', $npm)->name("admin.{$npm}.reports")->middleware(["module:{$npm}", "permission:{$npm}.view"]);
         Route::get("/{$npm}/settings", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'settings'])->defaults('npModule', $npm)->name("admin.{$npm}.settings")->middleware(["module:{$npm}", "permission:{$npm}.view"]);
         Route::post("/{$npm}/settings", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'updateSettings'])->defaults('npModule', $npm)->name("admin.{$npm}.settings.update")->middleware(["module:{$npm}", "permission:{$npm}.update"]);
     }

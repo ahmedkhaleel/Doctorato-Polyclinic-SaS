@@ -40,6 +40,12 @@ class Np7AdminAiTest extends TestCase
         $this->actingAs($this->admin)->get('/admin/neurology')->assertOk();
     }
 
+    public function test_admin_reports_render_for_both_modules(): void
+    {
+        $this->actingAs($this->admin)->get('/admin/psychiatry/reports')->assertOk();
+        $this->actingAs($this->admin)->get('/admin/neurology/reports')->assertOk();
+    }
+
     public function test_admin_settings_render_and_toggle(): void
     {
         $this->actingAs($this->admin)->get('/admin/psychiatry/settings')->assertOk();
