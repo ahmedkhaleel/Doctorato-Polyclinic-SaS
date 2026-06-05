@@ -11,7 +11,6 @@ use App\Models\BookingService;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Payment;
-use App\Models\Setting;
 use App\Models\Visit;
 use App\Notifications\NewBookingNotification;
 use App\Notifications\NewVisitNotification;
@@ -748,32 +747,43 @@ class BookingWorkflowService
     /**
      * Check if a patient qualifies for a dermatology follow-up at reduced price.
      */
-    public function checkFollowUpEligibility(int $patientId): ?array
+    /**
+     * Is the patient's next consultation in $module a follow-up? A follow-up
+     * applies when they had a completed consultation of that module within the
+     * module's follow-up window. Window + fee come from the unified resolver,
+     * so every specialty (not just derma) supports follow-up pricing.
+     */
+    public function checkFollowUpEligibility(int $patientId, string $module = 'derma'): ?array
     {
-        $windowDays = (int) Setting::get('followup_window_days', 15);
-        $followUpFee = (float) Setting::get('followup_fee', 0);
+        $resolver = app(\App\Services\Pricing\PricingResolver::class);
+        $windowDays = $resolver->followUpWindowDays($module);
+        $followUpFee = $resolver->followUpFee($module);
 
         if ($windowDays <= 0 || $followUpFee <= 0) {
             return null;
         }
 
-        $cutoffDate = now()->subDays($windowDays);
+        // module → the visit.consultation_type values it produces.
+        $types = match ($module) {
+            'derma', 'dermatology' => ['dermatology', 'cosmetic'],
+            default => [$module],
+        };
 
-        $recentDermaVisit = Visit::where('patient_id', $patientId)
+        $recentVisit = Visit::where('patient_id', $patientId)
             ->where('visit_type', 'consultation')
-            ->where('consultation_type', 'dermatology')
+            ->whereIn('consultation_type', $types)
             ->where('status', 'completed')
-            ->where('visit_date', '>=', $cutoffDate)
+            ->where('visit_date', '>=', now()->subDays($windowDays))
             ->latest('visit_date')
             ->first();
 
-        if ($recentDermaVisit) {
+        if ($recentVisit) {
             return [
                 'eligible' => true,
                 'follow_up_fee' => $followUpFee,
                 'window_days' => $windowDays,
-                'original_visit_date' => $recentDermaVisit->visit_date->format('Y-m-d'),
-                'original_visit_id' => $recentDermaVisit->id,
+                'original_visit_date' => $recentVisit->visit_date->format('Y-m-d'),
+                'original_visit_id' => $recentVisit->id,
             ];
         }
 

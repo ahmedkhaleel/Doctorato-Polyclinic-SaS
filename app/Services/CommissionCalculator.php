@@ -161,15 +161,11 @@ class CommissionCalculator
             return (float) \App\Services\ModuleManager::getSetting('dental', 'consultation_fee', 300);
         }
 
-        // obgyn / psychiatry / neurology — per-doctor specialty fee, then the
-        // module-level consultation fee.
+        // obgyn / psychiatry / neurology — delegate to the unified resolver,
+        // which applies: doctor override → consultant/specialist (by
+        // doctor_type) → base consultation fee, all from module_settings.
         if (in_array($consultationType, ['obgyn', 'psychiatry', 'neurology'], true)) {
-            $col = "{$consultationType}_consultation_fee";
-            if ($doctor->{$col} !== null && (float) $doctor->{$col} > 0) {
-                return (float) $doctor->{$col};
-            }
-
-            return (float) \App\Services\ModuleManager::getSetting($consultationType, 'consultation_fee', 0);
+            return app(\App\Services\Pricing\PricingResolver::class)->consultationFee($doctor, $consultationType);
         }
 
         return (float) ($doctor->consultation_fee ?? 0);

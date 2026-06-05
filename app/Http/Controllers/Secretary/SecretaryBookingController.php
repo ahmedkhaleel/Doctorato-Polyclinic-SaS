@@ -107,7 +107,22 @@ class SecretaryBookingController extends BaseSecretaryController
             'obgynConsultationFee' => (float) \App\Services\ModuleManager::getSetting('obgyn', 'consultation_fee', 0),
             'psychiatryConsultationFee' => (float) \App\Services\ModuleManager::getSetting('psychiatry', 'consultation_fee', 0),
             'neurologyConsultationFee' => (float) \App\Services\ModuleManager::getSetting('neurology', 'consultation_fee', 0),
+            // Unified per-module pricing (consultant/specialist/base/followup)
+            // so the form can default the consultation price by doctor_type.
+            'specialtyFees' => $this->specialtyFees(),
         ]);
+    }
+
+    /** consultant/specialist/base/followup fees per medical module. */
+    private function specialtyFees(): array
+    {
+        $resolver = app(\App\Services\Pricing\PricingResolver::class);
+        $out = [];
+        foreach (['derma', 'dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology'] as $m) {
+            $out[$m] = $resolver->feesFor($m);
+        }
+
+        return $out;
     }
 
     public function store(StoreBookingRequest $request): RedirectResponse
@@ -173,10 +188,10 @@ class SecretaryBookingController extends BaseSecretaryController
                 ->get(['id', 'name_ar', 'name_en', 'price', 'price_after_discount', 'default_sessions', 'session_duration_minutes', 'category_id']);
         }
 
-        // Check follow-up eligibility for dermatology bookings
+        // Follow-up eligibility for any consultation booking (module-aware).
         $followUpInfo = null;
-        if ($booking->patient_id && $booking->booking_type === 'dermatology_consultation') {
-            $followUpInfo = $this->bookingWorkflowService->checkFollowUpEligibility($booking->patient_id);
+        if ($booking->patient_id && str_ends_with((string) $booking->booking_type, '_consultation')) {
+            $followUpInfo = $this->bookingWorkflowService->checkFollowUpEligibility($booking->patient_id, $booking->module ?? 'derma');
         }
 
         // Medical risk flags for dental bookings (shown at check-in)

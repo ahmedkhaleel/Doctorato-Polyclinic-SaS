@@ -32,7 +32,19 @@ const props = defineProps({
     obgynConsultationFee: { type: Number, default: 0 },
     psychiatryConsultationFee: { type: Number, default: 0 },
     neurologyConsultationFee: { type: Number, default: 0 },
+    specialtyFees: { type: Object, default: () => ({}) },
 });
+
+// Consultation fee for a specialty by the selected doctor's grade
+// (consultant/specialist), honoring a per-doctor override first.
+function specialtyConsultationFee(module, doctor) {
+    const f = props.specialtyFees?.[module] || {};
+    const override = Number(doctor?.[module + '_consultation_fee']) || 0;
+    if (override) return override;
+    if (doctor?.doctor_type === 'consultant' && f.consultant) return f.consultant;
+    if (doctor?.doctor_type === 'specialist' && f.specialist) return f.specialist;
+    return f.base || f.consultant || f.specialist || 0;
+}
 
 /* ------------------------------------------------------------------ */
 /*  State                                                              */
@@ -299,15 +311,9 @@ function getConsultationFeeForDoctor(doctorId) {
     }
     // obgyn / psychiatry / neurology — prefer the doctor's own specialty fee,
     // fall back to the module-level consultation fee.
-    if (bookingType.value === 'obgyn_consultation') {
-        return Number(doctor?.obgyn_consultation_fee) || props.obgynConsultationFee || 0;
-    }
-    if (bookingType.value === 'psychiatry_consultation') {
-        return Number(doctor?.psychiatry_consultation_fee) || props.psychiatryConsultationFee || 0;
-    }
-    if (bookingType.value === 'neurology_consultation') {
-        return Number(doctor?.neurology_consultation_fee) || props.neurologyConsultationFee || 0;
-    }
+    if (bookingType.value === 'obgyn_consultation') return specialtyConsultationFee('obgyn', doctor);
+    if (bookingType.value === 'psychiatry_consultation') return specialtyConsultationFee('psychiatry', doctor);
+    if (bookingType.value === 'neurology_consultation') return specialtyConsultationFee('neurology', doctor);
     return 0;
 }
 

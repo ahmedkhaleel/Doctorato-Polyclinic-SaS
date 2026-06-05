@@ -122,6 +122,8 @@ class BookingController extends Controller
             'obgynConsultationFee' => (float) \App\Services\ModuleManager::getSetting('obgyn', 'consultation_fee', 0),
             'psychiatryConsultationFee' => (float) \App\Services\ModuleManager::getSetting('psychiatry', 'consultation_fee', 0),
             'neurologyConsultationFee' => (float) \App\Services\ModuleManager::getSetting('neurology', 'consultation_fee', 0),
+            'specialtyFees' => collect(['derma', 'dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology'])
+                ->mapWithKeys(fn ($m) => [$m => app(\App\Services\Pricing\PricingResolver::class)->feesFor($m)])->all(),
             'followupFee' => (float) Setting::get('followup_fee', 0),
             'followupWindowDays' => (int) Setting::get('followup_window_days', 15),
         ]);
@@ -195,10 +197,10 @@ class BookingController extends Controller
                 ->get(['id', 'name_ar', 'name_en', 'price', 'price_after_discount', 'default_sessions', 'session_duration_minutes', 'category_id']);
         }
 
-        // Check follow-up eligibility for dermatology bookings
+        // Follow-up eligibility for any consultation booking (module-aware).
         $followUpInfo = null;
-        if ($booking->patient_id && $booking->booking_type === 'dermatology_consultation') {
-            $followUpInfo = $this->bookingWorkflowService->checkFollowUpEligibility($booking->patient_id);
+        if ($booking->patient_id && str_ends_with((string) $booking->booking_type, '_consultation')) {
+            $followUpInfo = $this->bookingWorkflowService->checkFollowUpEligibility($booking->patient_id, $booking->module ?? 'derma');
         }
 
         return Inertia::render('Admin/Bookings/Show', [
