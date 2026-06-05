@@ -52,18 +52,21 @@ class UserController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        $plainPassword = $data['password'];
+        $this->guardSuperAdminAssignment($request, (int) $data['role_id']);
+
         $user = User::create($data);
 
         AuditLogger::log('created', $user);
 
+        // SECURITY: never flash the plaintext password into the (DB-backed)
+        // session / Inertia payload. The admin set it and can convey it
+        // out-of-band; we only echo the non-secret identifiers.
         return redirect()->route('admin.users.index')->with([
             'success' => 'User created successfully.',
             'credentials' => [
                 'name' => $user->name,
                 'username' => $user->username,
                 'email' => $user->email,
-                'password' => $plainPassword,
                 'login_url' => url('/admin/login'),
             ],
         ]);
@@ -96,7 +99,7 @@ class UserController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        $plainPassword = $data['password'] ?? null;
+        $this->guardSuperAdminAssignment($request, (int) $data['role_id'], $user);
 
         if (empty($data['password'])) {
             unset($data['password']);
@@ -106,21 +109,16 @@ class UserController extends Controller
 
         AuditLogger::log('updated', $user);
 
-        $flashData = ['success' => 'User updated successfully.'];
-
-        // Flash updated credentials if password was changed or email/username updated
-        $updatedCredentials = [
-            'name' => $user->name,
-            'username' => $user->username,
-            'email' => $user->email,
-            'login_url' => url('/admin/login'),
-        ];
-        if ($plainPassword) {
-            $updatedCredentials['password'] = $plainPassword;
-        }
-        $flashData['credentials'] = $updatedCredentials;
-
-        return redirect()->route('admin.users.index')->with($flashData);
+        // SECURITY: do not flash the plaintext password (see store()).
+        return redirect()->route('admin.users.index')->with([
+            'success' => 'User updated successfully.',
+            'credentials' => [
+                'name' => $user->name,
+                'username' => $user->username,
+                'email' => $user->email,
+                'login_url' => url('/admin/login'),
+            ],
+        ]);
     }
 
     public function destroy(User $user): RedirectResponse
@@ -133,5 +131,25 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
+    }
+
+    /**
+     * Prevent privilege escalation: only a super_admin may assign the
+     * super_admin role or change an existing super_admin's role. Stops an
+     * admin with users.* from minting/elevating a super_admin.
+     */
+    private function guardSuperAdminAssignment(Request $request, int $roleId, ?User $target = null): void
+    {
+        $actorIsSuper = $request->user()?->role?->name === 'super_admin';
+        if ($actorIsSuper) {
+            return;
+        }
+
+        $targetRoleName = Role::whereKey($roleId)->value('name');
+        $editingSuper = $target && $target->role?->name === 'super_admin';
+
+        if ($targetRoleName === 'super_admin' || $editingSuper) {
+            abort(403, 'Only a super admin can assign or modify the super admin role.');
+        }
     }
 }
