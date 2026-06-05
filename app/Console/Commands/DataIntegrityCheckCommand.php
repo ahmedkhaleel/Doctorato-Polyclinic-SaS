@@ -361,7 +361,7 @@ class DataIntegrityCheckCommand extends Command
                     // Psychiatry & Neurology branch-scoped clinical events (NP1–NP6)
                     'neuropsych_encounters', 'neuropsych_treatment_plans', 'medication_plans',
                     'controlled_substance_register', 'neuro_procedures', 'treatment_courses',
-                    'course_sessions',
+                    'course_sessions', 'controlled_prescriptions',
                 ];
                 $missing = [];
                 $orphan = [];

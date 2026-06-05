@@ -10,6 +10,7 @@ import FlashMessages from '@/Components/FlashMessages.vue';
 import BranchSwitcher from '@/Components/BranchSwitcher.vue';
 
 import AttendanceReminder from '@/Components/AttendanceReminder.vue';
+import { usePermissions } from '@/Composables/usePermissions.js';
 const page = usePage();
 const SIDEBAR_STORAGE_KEY = 'DoctorLayout_sidebar_open_v2';
 const getInitialSidebarState = () => {
@@ -132,6 +133,7 @@ const navGroups = computed(() => [
         items: [
             { label: isRtl.value ? 'اللقاءات' : 'Encounters',  href: '/doctor/psychiatry/encounters',  icon: 'clipboard' },
             { label: isRtl.value ? 'الأدوية' : 'Medications',   href: '/doctor/psychiatry/medications', icon: 'pill' },
+            { label: isRtl.value ? 'الروشتات الخاضعة' : 'Controlled Rx', href: '/doctor/psychiatry/controlled-rx', icon: 'pill', permission: 'psychiatry.view_sensitive' },
             { label: isRtl.value ? 'الدورات العلاجية' : 'Courses', href: '/doctor/psychiatry/courses',  icon: 'calendar' },
         ],
     },
@@ -143,6 +145,7 @@ const navGroups = computed(() => [
             { label: isRtl.value ? 'اللقاءات' : 'Encounters',  href: '/doctor/neurology/encounters',  icon: 'clipboard' },
             { label: isRtl.value ? 'أدوات الأعصاب' : 'Neuro tools', href: '/doctor/neurology/neuro',  icon: 'grid' },
             { label: isRtl.value ? 'الأدوية' : 'Medications',   href: '/doctor/neurology/medications', icon: 'pill' },
+            { label: isRtl.value ? 'الروشتات الخاضعة' : 'Controlled Rx', href: '/doctor/neurology/controlled-rx', icon: 'pill', permission: 'neurology.view_sensitive' },
             { label: isRtl.value ? 'الدورات العلاجية' : 'Courses', href: '/doctor/neurology/courses',  icon: 'calendar' },
         ],
     },
@@ -179,6 +182,8 @@ const navGroups = computed(() => [
 
 const doctorModule = computed(() => doctor.value?.module || page.props.defaultModule || 'derma');
 
+const { can } = usePermissions();
+
 const filteredGroups = computed(() =>
     navGroups.value.filter(g => {
         if (g.moduleKey) {
@@ -194,7 +199,10 @@ const filteredGroups = computed(() =>
             return true;
         }
         return true;
-    }).filter(g => g.items.length > 0)
+    })
+        // Drop items the doctor lacks permission for (e.g. sensitive controlled-Rx).
+        .map(g => ({ ...g, items: g.items.filter(i => !i.permission || can(i.permission)) }))
+        .filter(g => g.items.length > 0)
 );
 
 /* ── Collapsible Groups State ──────────────────────────── */

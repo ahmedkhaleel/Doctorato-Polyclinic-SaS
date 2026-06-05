@@ -321,6 +321,15 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
             Route::get('/risk/{patient}/history', [\App\Http\Controllers\Doctor\NeuropsychRiskController::class, 'history'])
                 ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.view_sensitive")->name("doctor.{$npModule}.risk.history");
 
+            // Controlled-substance e-prescribing (NP-Future-1, layer B) — SENSITIVE
+            $crx = \App\Http\Controllers\Doctor\NeuropsychControlledRxController::class;
+            Route::get('/controlled-rx', [$crx, 'index'])->defaults('npModule', $npModule)->middleware("permission:{$npModule}.view_sensitive")->name("doctor.{$npModule}.controlled-rx.index");
+            Route::post('/controlled-rx', [$crx, 'store'])->defaults('npModule', $npModule)->middleware("permission:{$npModule}.view_sensitive")->name("doctor.{$npModule}.controlled-rx.store");
+            Route::post('/controlled-rx/{controlledPrescription}/sign', [$crx, 'sign'])->defaults('npModule', $npModule)->middleware("permission:{$npModule}.view_sensitive")->name("doctor.{$npModule}.controlled-rx.sign");
+            Route::post('/controlled-rx/{controlledPrescription}/submit', [$crx, 'submit'])->defaults('npModule', $npModule)->middleware("permission:{$npModule}.view_sensitive")->name("doctor.{$npModule}.controlled-rx.submit");
+            Route::post('/controlled-rx/{controlledPrescription}/dispense', [$crx, 'dispense'])->defaults('npModule', $npModule)->middleware("permission:{$npModule}.view_sensitive")->name("doctor.{$npModule}.controlled-rx.dispense");
+            Route::post('/controlled-rx/{controlledPrescription}/delete', [$crx, 'destroy'])->defaults('npModule', $npModule)->middleware("permission:{$npModule}.view_sensitive")->name("doctor.{$npModule}.controlled-rx.destroy");
+
             // Medications + monitoring + controlled register (NP4)
             Route::get('/medications', [\App\Http\Controllers\Doctor\NeuropsychMedicationController::class, 'index'])
                 ->defaults('npModule', $npModule)->name("doctor.{$npModule}.medications.index");
