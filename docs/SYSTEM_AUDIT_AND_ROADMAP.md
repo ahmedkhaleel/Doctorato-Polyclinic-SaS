@@ -172,13 +172,16 @@
 | P1‑4 | **توحيد عمق توثيق الطبيب عبر التخصصات** (نموذج زيارة مشترك + امتدادات) | `Components/Clinical/*`، controllers الأطباء | بنية موحّدة + فروق تخصصية واضحة | L |
 
 ### المرحلة P2 — إغلاق الحلقات السريرية (أسبوعان) 🟡
-| ID | البند | الملفات | معيار القبول | جهد |
-|---|---|---|---|---|
-| P2‑1 | **إدخال/مراجعة نتائج المختبر** (OB/GYN + الأسنان) | `ObgynLabTest`, `DentalLabOrder` + صفحات نتائج | أمر→نتيجة→إغلاق→ظهور للطبيب/المريض | M |
-| P2‑2 | **طبقة المخرجات (Outcomes) موحّدة** (z‑scores أطفال، PHQ‑9 change، نتائج ولادة/حديثي ولادة، نجاح علاج أسنان) | جديد `OutcomeService` + لوحات | لوحة جودة لكل تخصص + تصدير | L |
-| P2‑2 | **توقيع موافقات إلكتروني للمريض** (تجميل/أسنان) + سجل تدقيع | `CosmeticConsent`, `TreatmentPlanConsent`, صفحات المريض | المريض يوقّع إلكترونياً؛ PDF موقّع + بصمة وقت/IP | M |
-| P2‑3 | **استهلاك مخزون علاجات الأسنان تلقائياً** | `DentalTreatment` + `DrawsFromInventory`/`ServiceSupplyConsumptionService` | إكمال علاج يخصم المخزون (idempotent) + عكس عند الإلغاء | S |
-| P2‑4 | **جدولة متابعات ذاتية لكل التخصصات** (ليس الأسنان فقط) | `BookingWorkflowService::checkFollowUpEligibility` + تذكيرات | متابعة تُقترح وتُحجز عبر القنوات لكل موديول | M |
+> **تصحيح مهم (تحقّق فعليّ من الكود 2026‑06‑06):** تبيّن أن معظم بنود P2 الملموسة **مُنفّذة
+> بالفعل** — التدقيق الأولي (بوكلاء استكشاف) بالغ في تقدير الفجوات وفاته كود قائم. الحالة المُتحقّقة أدناه.
+
+| ID | البند | الحالة المُتحقّقة |
+|---|---|---|
+| P2‑1 | **إدخال/مراجعة نتائج المختبر** | ✅ **موجود** — OB/GYN: `DoctorObgynController::storeLab` يُدخل value/unit/range/abnormal/date؛ المريض يراها (`PatientObgynController` → `lab_tests`)؛ والأسنان: `DentalLabOrder` تدفّق حالة جهاز (ordered→…→delivered)، وليست «نتيجة تحليل». |
+| P2‑2a | **توقيع موافقات إلكتروني للمريض** | ✅ **موجود** — أسنان: `Patient/Dental/Consent/Sign.vue`؛ تجميل: `PatientCosmeticConsentController::sign` (توقيع canvas + `signed_at` + تخزين خاص بعد S1). |
+| P2‑3 | **استهلاك مخزون علاجات الأسنان** | ✅ **موجود** — `DentalTreatmentService::consumeInventory()` عند الإكمال (idempotent عبر `supply_transaction_id`) + `reverseInventory()` عند الإلغاء/التراجع. |
+| الجزئي | **تذكيرات المتابعة لكل التخصصات** | ✅ **مغطّى إلى حدّ كبير** — أوامر: `SendObgynReminders`, `SendPediatricVaccinationReminders`, `ProcessDentalFollowups`, `SendRecallReminders`, `SendFollowUpReminders` + `checkFollowUpEligibility` واعٍ بالموديول. |
+| P2‑2b | **طبقة مخرجات/جودة موحّدة (Outcomes)** | 🟡 **الفجوة الحقيقية الوحيدة المتبقّية في P2** — لوحة جودة سريرية مجمّعة عبر التخصصات (تتداخل مع P5). ميزة جديدة فعلية، أكبر، اختيارية. |
 
 ### المرحلة P3 — التطبيب عن بُعد الكامل (أسبوعان) 🟠
 | ID | البند | الملفات | معيار القبول | جهد |
