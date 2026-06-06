@@ -155,7 +155,20 @@ the per-module follow-up capability `module_settings` already provides.
 - Tests: mirror sync, `touchesPricing` detection, and the real `/admin/settings`
   endpoint dual-writing a dental fee. Full suite green (1538).
 
-### Phase 4 — CONTRACT: retire legacy keys
+> **Production gate PASSED (2026-06-06):** owner ran `pricing:audit --json` →
+> `pricing:backfill-module-settings` → `pricing:audit --json`. Output was
+> **identical before and after** for all modules (20 values backfilled), proving
+> the read flip + backfill are a true no-op for live pricing. Cleared to soak
+> before Phase 4.
+>
+> **Finding surfaced by the audit — pediatric resolves to 0:** the pediatric
+> editor saves `pediatric_consultation_fee` while the resolver reads
+> `pediatric_consultant_fee`/`pediatric_specialist_fee`, so pediatric consultation
+> fees resolve to 0 (bookings presumably rely on per-doctor overrides or service
+> prices). This is PRE-EXISTING (not caused by ADR-001). Reconciling it CHANGES a
+> live fee → requires explicit owner decision; tracked as a separate follow-up.
+
+### Phase 4 — CONTRACT: retire legacy keys (GATED: soak + owner go-ahead)
 - After ≥1 production cycle with no pricing incidents, remove the legacy
   `Setting` fee keys + the `settings` branch of `source()`. Leave a data
   migration that deletes the orphaned keys (idempotent).
