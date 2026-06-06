@@ -70,24 +70,50 @@ class PricingResolverCharacterizationTest extends TestCase
     }
 
     /**
-     * Driver-per-module map as it stands TODAY. Phase 2 (read-path flip) will
-     * change the legacy modules to 'module'; this assertion failing then is the
-     * expected, deliberate signal to update the migration in lockstep.
+     * ADR-001 Phase 2: module_settings is the primary store for ALL modules.
+     * The four legacy modules keep a `legacy` fallback map (used only when a key
+     * is absent from module_settings); obgyn/psych/neuro have no legacy map.
      */
-    public function test_storage_driver_per_module_is_documented(): void
+    public function test_storage_source_is_unified_with_legacy_fallback(): void
     {
         $ref = new \ReflectionMethod(PricingResolver::class, 'source');
         $ref->setAccessible(true);
-        $driver = fn (string $m) => $ref->invoke($this->resolver, $m)['driver'];
+        $src = fn (string $m) => $ref->invoke($this->resolver, $m);
 
-        // Legacy global-Setting modules (today).
+        foreach (['derma', 'cosmetic', 'dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology'] as $m) {
+            $this->assertSame('consultant_fee', $src($m)['module_keys']['consultant'], "$m reads module_settings primary");
+        }
+        // Legacy modules retain a fallback map; module_settings-native ones don't.
         foreach (['derma', 'cosmetic', 'dental', 'pediatric'] as $m) {
-            $this->assertSame('settings', $driver($m), "$m should use the legacy settings driver today");
+            $this->assertNotNull($src($m)['legacy'], "$m keeps a legacy fallback");
         }
-        // module_settings modules.
         foreach (['obgyn', 'psychiatry', 'neurology'] as $m) {
-            $this->assertSame('module', $driver($m), "$m should use the module_settings driver");
+            $this->assertNull($src($m)['legacy'], "$m has no legacy fallback");
         }
+    }
+
+    public function test_legacy_module_falls_back_to_global_setting_when_module_settings_empty(): void
+    {
+        // Legacy Setting present, NO module_settings row → resolver must use the
+        // legacy value (proves Phase 2 is safe pre-backfill).
+        Setting::set('dental_consultant_fee', 400, 'pricing');
+
+        $doctor = $this->doctor('dental', 'consultant');
+        $this->assertEqualsWithDelta(400, $this->resolver->consultationFee($doctor, 'dental'), 0.01);
+    }
+
+    public function test_module_settings_value_wins_over_legacy_when_present(): void
+    {
+        // Legacy says 400, but a backfilled/edited module_settings value wins.
+        Setting::set('dental_consultant_fee', 400, 'pricing');
+        \Illuminate\Support\Facades\DB::table('module_settings')->updateOrInsert(
+            ['module' => 'dental', 'key' => 'consultant_fee'],
+            ['value' => '999', 'group' => 'pricing', 'updated_at' => now()],
+        );
+        ModuleManager::clearCache();
+
+        $doctor = $this->doctor('dental', 'consultant');
+        $this->assertEqualsWithDelta(999, $this->resolver->consultationFee($doctor, 'dental'), 0.01);
     }
 
     public function test_pricing_audit_command_runs_read_only(): void

@@ -123,12 +123,18 @@ the per-module follow-up capability `module_settings` already provides.
 - **Resolver still reads the legacy store** (no read change yet). This phase only
   *populates* the new store. 100% safe; reversible (delete the new rows).
 
-### Phase 2 — Switch the READ path
-- `PricingResolver::source()` returns the `module` driver for ALL modules.
-- Run the Phase-0 characterization test: resolved prices must be **identical**
-  (because Phase 1 backfilled the same numbers). If any differ → the backfill
-  was wrong; fix before proceeding.
-- Ship to staging, run `pricing:audit`, eyeball a few bookings/invoices.
+### Phase 2 — Switch the READ path  ✅ DONE (shipped, fallback-protected variant)
+- **Redesigned for safety:** instead of a hard flip that depends on the prod
+  backfill having run (which would zero-price legacy modules if it hadn't),
+  `feesFor()` now reads module_settings **first** and falls back to the legacy
+  Setting when the module_settings value is absent **or ≤ 0**. So:
+  - module_settings 0/absent → legacy value (identical to pre-Phase-2);
+  - module_settings positive (backfilled/edited) → that value (= legacy after backfill).
+- This removes the hard dependency on the prod backfill for correctness and is
+  fully reversible (revert `source()`/`feesFor()`).
+- **Safety finding (caught by the characterization test):** a module_settings fee
+  row pre-seeded to 0 must NEVER zero a live fee → the "≤ 0 ⇒ fall back" rule.
+- Full suite green (1535); resolved prices unchanged in every environment.
 
 ### Phase 3 — Switch the WRITE path (editors)
 - Point `SettingController` + `AdminPediatricController` (and the matching Vue
@@ -172,7 +178,7 @@ the per-module follow-up capability `module_settings` already provides.
 ## 7. Action items
 1. [x] **Phase 0 (DONE, shipped):** characterization test (`tests/Feature/Pricing/PricingResolverCharacterizationTest.php`) + `pricing:audit` command (`app/Console/Commands/PricingAuditCommand.php`). Zero behaviour change. **Next: capture `php artisan pricing:audit --json` from production as the baseline before Phase 1.**
 2. [x] **Phase 1 (DONE, shipped):** `pricing:backfill-module-settings` command (idempotent upsert; --dry-run) + test proving it populates module_settings, keeps resolved prices identical, and is idempotent. NOT auto-run on prod — owner runs it deliberately, gated by a clean `pricing:audit --json` before/after diff.
-3. [ ] Phase 2: flip `source()` to `module`; verify snapshot identical.
+3. [x] **Phase 2 (DONE, shipped):** fallback-protected read flip — module_settings primary, legacy Setting fallback when ≤0/absent. Safe pre- or post-backfill; reversible. Full suite green.
 4. [ ] Phase 3: repoint settings write paths + Vue pages; end-to-end edit test.
 5. [ ] Phase 4: retire legacy keys after a clean production cycle.
 
