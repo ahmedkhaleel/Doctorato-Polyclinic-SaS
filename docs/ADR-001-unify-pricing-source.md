@@ -5,9 +5,13 @@
 **Deciders:** Owner (info@markeza-group.com) + engineering
 **Supersedes/affects:** `app/Services/Pricing/PricingResolver.php`, settings write paths
 
-> ⚠️ This is a **design + staged-migration plan** for review. Nothing here has
-> been applied. P5-4 touches **live revenue** (fees feed booking, billing, and
-> doctor commission), so it must roll out behind verification on staging first.
+> **Update (2026-06-06):** Phases 0–3 are **implemented & shipped** safely (read
+> path unified with legacy fallback; editors dual-write). Behaviour is identical
+> in every environment until a *positive* `module_settings` value exists, so no
+> live fee changed. **Phase 4 (retire legacy keys) is still pending** a clean
+> production cycle + the owner running `pricing:backfill-module-settings` and
+> confirming an unchanged `pricing:audit --json`. P5-4 touches **live revenue**,
+> so Phase 4 stays gated.
 
 ---
 
