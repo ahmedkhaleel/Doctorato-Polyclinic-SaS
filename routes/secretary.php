@@ -245,6 +245,12 @@ Route::middleware(['secretary.auth', 'branch.context'])->group(function () {
         Route::post('/pregnancies', [\App\Http\Controllers\Secretary\SecretaryObgynController::class, 'storePregnancy'])->name('secretary.obgyn.pregnancies.store');
     });
 
+    // ─── Dermatology & Cosmetic (front-desk: admin overview only) ───────
+    Route::prefix('derma')->middleware('module:derma')->group(function () {
+        Route::get('/overview', [\App\Http\Controllers\Secretary\SecretaryDermaController::class, 'index'])
+            ->name('secretary.derma.overview');
+    });
+
     // ─── Psychiatry & Neurology (front-desk: admin overview only) ───────
     // STRICTLY administrative — appointments/roster/billing; NO clinical content
     // and NO view_sensitive surface (that stays in the doctor portal).
