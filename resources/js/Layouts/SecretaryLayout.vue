@@ -116,6 +116,20 @@ const navGroups = [
         ],
     },
     {
+        key: 'psychiatry', titleEn: 'Psychiatry', titleAr: 'الطب النفسي',
+        moduleKey: 'psychiatry',
+        items: [
+            { labelEn: 'Front Desk', labelAr: 'مكتب الاستقبال', href: '/secretary/psychiatry/overview', icon: 'calendar' },
+        ],
+    },
+    {
+        key: 'neurology', titleEn: 'Neurology', titleAr: 'المخ والأعصاب',
+        moduleKey: 'neurology',
+        items: [
+            { labelEn: 'Front Desk', labelAr: 'مكتب الاستقبال', href: '/secretary/neurology/overview', icon: 'calendar' },
+        ],
+    },
+    {
         key: 'hr', titleEn: 'HR', titleAr: 'الموارد البشرية',
         moduleKey: 'hr',
         items: [
