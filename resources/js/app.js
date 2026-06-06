@@ -112,6 +112,18 @@ createInertiaApp({
             return obj?.[`${field}_${locale}`] || obj?.[`${field}_ar`] || '';
         };
 
+        // Make Ziggy's route() helper available inside Vue <template> scope (and
+        // <script setup>), not just as a window global. Without this, any page
+        // that calls route(...) in its template throws "route is not a function"
+        // and renders blank. Defensive: if Ziggy isn't loaded, return '#' so a
+        // missing route never crashes the page render.
+        app.config.globalProperties.route = function (name, params, absolute) {
+            if (typeof window !== 'undefined' && typeof window.route === 'function') {
+                return window.route(name, params, absolute);
+            }
+            return '#';
+        };
+
         app.mount(el);
 
         AOS.init({
