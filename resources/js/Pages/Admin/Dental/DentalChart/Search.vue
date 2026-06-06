@@ -89,7 +89,7 @@ function openChart(patientId) {
                 >
                     <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center flex-shrink-0 group-hover:from-slate-200 transition-all">
                         <span v-if="patient.photo" class="w-full h-full rounded-xl overflow-hidden">
-                            <img :src="'/storage/' + patient.photo" class="w-full h-full object-cover" />
+                            <img :src="patient.photo_url" class="w-full h-full object-cover" />
                         </span>
                         <span v-else class="text-lg font-bold text-[#1B365D]">{{ patient.full_name?.charAt(0) }}</span>
                     </div>

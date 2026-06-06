@@ -155,7 +155,7 @@ const nationalities = [
 ];
 
 const currentPhotoUrl = props.patient.photo
-    ? (props.patient.photo.startsWith('http') ? props.patient.photo : `/storage/${props.patient.photo}`)
+    ? (props.patient.photo_url)
     : null;
 </script>
 

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ChatController extends Controller
 {
@@ -44,10 +43,10 @@ class ChatController extends Controller
 
         // Get distinct user IDs that the current user has chatted with
         $contactIds = Message::where(function ($q) use ($userId) {
-                $q->where('sender_id', $userId)
-                  ->orWhere('receiver_id', $userId);
-            })
-            ->selectRaw("CASE WHEN sender_id = ? THEN receiver_id ELSE sender_id END as contact_id", [$userId])
+            $q->where('sender_id', $userId)
+                ->orWhere('receiver_id', $userId);
+        })
+            ->selectRaw('CASE WHEN sender_id = ? THEN receiver_id ELSE sender_id END as contact_id', [$userId])
             ->distinct()
             ->pluck('contact_id');
 
@@ -55,7 +54,9 @@ class ChatController extends Controller
 
         foreach ($contactIds as $contactId) {
             $contact = User::with('role')->find($contactId);
-            if (!$contact) continue;
+            if (! $contact) {
+                continue;
+            }
 
             // Last message in conversation
             $lastMessage = Message::conversation($userId, $contactId)
@@ -94,6 +95,7 @@ class ChatController extends Controller
         usort($conversations, function ($a, $b) {
             $timeA = $a['last_message']['created_at'] ?? '1970-01-01';
             $timeB = $b['last_message']['created_at'] ?? '1970-01-01';
+
             return strcmp($timeB, $timeA);
         });
 
@@ -129,6 +131,7 @@ class ChatController extends Controller
                 'receiver_id' => $msg->receiver_id,
                 'body' => $msg->body,
                 'attachment_path' => $msg->attachment_path,
+                'attachment_url' => \App\Support\SecureMedia::url($msg->attachment_path),
                 'attachment_name' => $msg->attachment_name,
                 'read_at' => $msg->read_at?->toISOString(),
                 'created_at' => $msg->created_at->toISOString(),
@@ -163,7 +166,7 @@ class ChatController extends Controller
 
         if ($request->hasFile('attachment')) {
             $file = $request->file('attachment');
-            $data['attachment_path'] = $file->store('uploads/messages', 'public');
+            $data['attachment_path'] = $file->store('uploads/messages', 'local');
             // Sanitize original filename to prevent path traversal / XSS in file names
             $data['attachment_name'] = preg_replace('/[^\w\s\-\.]/', '_', basename($file->getClientOriginalName()));
         }
@@ -265,6 +268,7 @@ class ChatController extends Controller
                 'receiver_id' => $msg->receiver_id,
                 'body' => $msg->body,
                 'attachment_path' => $msg->attachment_path,
+                'attachment_url' => \App\Support\SecureMedia::url($msg->attachment_path),
                 'attachment_name' => $msg->attachment_name,
                 'read_at' => $msg->read_at?->toISOString(),
                 'created_at' => $msg->created_at->toISOString(),
@@ -286,7 +290,7 @@ class ChatController extends Controller
 
         // Delete attachment files from storage
         foreach ($messagesWithAttachments as $path) {
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($path);
+            \App\Support\SecureMedia::delete($path);
         }
 
         // Delete all messages in the conversation
@@ -301,7 +305,9 @@ class ChatController extends Controller
     public static function loadOlderMessages(User $user, User $otherUser, $beforeId): array
     {
         $id = (int) $beforeId;
-        if (!$id) return [];
+        if (! $id) {
+            return [];
+        }
 
         $messages = Message::conversation($user->id, $otherUser->id)
             ->where('id', '<', $id)
@@ -319,6 +325,7 @@ class ChatController extends Controller
                 'receiver_id' => $msg->receiver_id,
                 'body' => $msg->body,
                 'attachment_path' => $msg->attachment_path,
+                'attachment_url' => \App\Support\SecureMedia::url($msg->attachment_path),
                 'attachment_name' => $msg->attachment_name,
                 'read_at' => $msg->read_at?->toISOString(),
                 'created_at' => $msg->created_at->toISOString(),

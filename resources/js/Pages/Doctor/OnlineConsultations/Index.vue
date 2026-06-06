@@ -129,7 +129,7 @@ function canJoin(c) {
                 <div v-for="c in filteredItems" :key="c.id" class="p-4 lg:p-5 flex flex-col md:flex-row md:items-center gap-4 hover:bg-gray-50/50 transition">
                     <div class="flex items-center gap-3 flex-1 min-w-0">
                         <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#1B365D] to-[#C4A265] flex items-center justify-center text-white font-bold shadow-md overflow-hidden flex-shrink-0">
-                            <img v-if="c.patient?.photo" :src="`/storage/${c.patient.photo}`" class="w-full h-full object-cover" :alt="c.patient.full_name" />
+                            <img v-if="c.patient?.photo" :src="c.patient.photo_url" class="w-full h-full object-cover" :alt="c.patient.full_name" />
                             <span v-else>{{ (c.patient?.full_name || 'P').charAt(0) }}</span>
                         </div>
                         <div class="min-w-0">

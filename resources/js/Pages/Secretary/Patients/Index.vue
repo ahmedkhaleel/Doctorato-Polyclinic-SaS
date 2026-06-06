@@ -120,7 +120,7 @@ onMounted(() => {
                     <div class="flex items-center gap-4 flex-1 min-w-0">
                         <div v-if="patient.photo" class="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 ring-2 ring-teal-100">
                             <img
-                                :src="patient.photo.startsWith('http') ? patient.photo : `/storage/${patient.photo}`"
+                                :src="patient.photo_url"
                                 :alt="patient.full_name"
                                 class="w-full h-full object-cover"
                             />

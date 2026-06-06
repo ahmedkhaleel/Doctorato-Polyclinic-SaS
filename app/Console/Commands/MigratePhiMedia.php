@@ -36,6 +36,10 @@ class MigratePhiMedia extends Command
         'patient-documents',
         'consents',
         'insurance-cards',
+        // S1 follow-up — patient profile photos (PII avatars) + chat attachments.
+        'uploads/patients',
+        'patient-photos',
+        'uploads/messages',
     ];
 
     public function handle(): int
