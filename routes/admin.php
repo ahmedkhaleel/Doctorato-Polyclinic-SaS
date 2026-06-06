@@ -678,6 +678,8 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
     Route::get('/reports/financial', [ReportController::class, 'financial'])->name('admin.reports.financial')->middleware('permission:reports.financial');
     Route::get('/reports/revenue-analytics', [RevenueAnalyticsController::class, 'index'])->name('admin.reports.revenue-analytics')->middleware('permission:reports.financial');
     Route::get('/reports/queue-analytics', [QueueAnalyticsController::class, 'index'])->name('admin.reports.queue-analytics')->middleware('permission:reports.view');
+    Route::get('/reports/outcomes', [\App\Http\Controllers\Admin\QualityOutcomesController::class, 'index'])->name('admin.reports.outcomes')->middleware('permission:reports.view');
+    Route::get('/reports/outcomes/export', [\App\Http\Controllers\Admin\QualityOutcomesController::class, 'export'])->name('admin.reports.outcomes.export')->middleware('permission:reports.view');
     Route::get('/reports/doctor-kpi', [DoctorKpiController::class, 'index'])->name('admin.reports.doctor-kpi')->middleware(['module:hr', 'permission:reports.view']);
     Route::get('/reports/staff-performance', [StaffPerformanceController::class, 'index'])->name('admin.reports.staff-performance')->middleware(['module:hr', 'permission:reports.view']);
     Route::get('/reports/doctors', [ReportController::class, 'doctors'])->name('admin.reports.doctors')->middleware('permission:reports.view');
