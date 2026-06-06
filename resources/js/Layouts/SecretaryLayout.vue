@@ -123,6 +123,13 @@ const navGroups = [
         ],
     },
     {
+        key: 'telemedicine', titleEn: 'Telemedicine', titleAr: 'التطبيب عن بُعد',
+        moduleKey: 'telemedicine',
+        items: [
+            { labelEn: 'Front Desk', labelAr: 'مكتب الاستقبال', href: '/secretary/telemedicine/overview', icon: 'calendar' },
+        ],
+    },
+    {
         key: 'psychiatry', titleEn: 'Psychiatry', titleAr: 'الطب النفسي',
         moduleKey: 'psychiatry',
         items: [

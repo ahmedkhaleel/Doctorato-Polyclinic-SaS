@@ -1,0 +1,1 @@
+import{D as t,E as s}from"./app-tB4PQ5Wh.js";function i(o){const e=n=>{n.key==="Escape"&&o(n)};t(()=>window.addEventListener("keydown",e)),s(()=>window.removeEventListener("keydown",e))}export{i as u};
