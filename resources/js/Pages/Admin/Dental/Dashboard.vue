@@ -610,7 +610,7 @@ const quickLinks = computed(() => [
                                      :class="idx === 0 ? 'bg-amber-100 text-amber-700' : idx === 1 ? 'bg-gray-200 text-gray-600' : idx === 2 ? 'bg-[#F5E7C8]/60 text-[#8B7043]' : 'bg-gray-50 text-gray-400'">
                                     {{ idx + 1 }}
                                 </div>
-                                <img v-if="doc.photo" :src="`/storage/${doc.photo}`" class="w-9 h-9 rounded-full object-cover flex-shrink-0" />
+                                <img v-if="doc.photo" :src="`/storage/${doc.photo}`" class="w-9 h-9 rounded-full object-cover flex-shrink-0" alt="" />
                                 <div v-else class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-[#1B365D] text-sm font-bold flex-shrink-0">
                                     {{ (doc.name_en || '?')[0] }}
                                 </div>

@@ -152,7 +152,7 @@ function submit() {
                             :class="imagePreview ? 'border-transparent' : 'border-gray-300 hover:border-gray-400'"
                         >
                             <div v-if="imagePreview" class="aspect-[16/9]">
-                                <img :src="imagePreview" class="w-full h-full object-cover" />
+                                <img :src="imagePreview" class="w-full h-full object-cover" alt="" />
                                 <label class="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
                                     <span class="text-white text-sm font-medium">Change Image</span>
                                     <input type="file" accept="image/jpeg,image/png,image/webp" @change="onImageChange" class="hidden" />

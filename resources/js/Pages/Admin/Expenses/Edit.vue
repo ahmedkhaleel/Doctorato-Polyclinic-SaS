@@ -107,7 +107,7 @@ const recurringOptions = [
                     <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-4">
                         <h2 class="text-lg font-semibold text-gray-700 border-b pb-2">{{ $t('a_receipt') }}</h2>
                         <div v-if="expense.receipt_photo" class="mb-2">
-                            <img :src="expense.receipt_photo.startsWith('http') ? expense.receipt_photo : `/storage/${expense.receipt_photo}`" class="w-full max-h-40 object-contain rounded border" />
+                            <img :src="expense.receipt_photo.startsWith('http') ? expense.receipt_photo : `/storage/${expense.receipt_photo}`" class="w-full max-h-40 object-contain rounded border" alt="" />
                             <span class="text-xs text-gray-500">{{ $t('a_current_receipt') }}</span>
                         </div>
                         <div>

@@ -464,7 +464,7 @@ const formProgress = computed(() => {
                         <div class="p-6">
                             <div v-if="photoPreview" class="mb-4 text-center">
                                 <div class="relative inline-block">
-                                    <img :src="photoPreview" class="w-28 h-28 rounded-2xl object-cover shadow-md border-2 border-white" />
+                                    <img :src="photoPreview" class="w-28 h-28 rounded-2xl object-cover shadow-md border-2 border-white" alt="" />
                                     <button type="button" @click="removePhoto" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center shadow-md hover:bg-red-600 transition" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                                     </button>

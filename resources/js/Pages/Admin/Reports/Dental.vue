@@ -365,7 +365,7 @@ function formatStatus(status) {
                                 <tr v-for="doc in revenueByDoctor" :key="doc.id" class="border-b border-gray-50 hover:bg-slate-50/30 transition">
                                     <td class="py-3 px-4">
                                         <div class="flex items-center gap-3">
-                                            <img v-if="doc.photo" :src="`/storage/${doc.photo}`" class="w-8 h-8 rounded-full object-cover" />
+                                            <img v-if="doc.photo" :src="`/storage/${doc.photo}`" class="w-8 h-8 rounded-full object-cover" alt="" />
                                             <div v-else class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-[#1B365D] text-xs font-bold">
                                                 {{ (doc.name_en || '?')[0] }}
                                             </div>
@@ -625,7 +625,7 @@ function formatStatus(status) {
                                     </div>
                                     <!-- Doctor info -->
                                     <div class="flex items-center gap-3 min-w-0">
-                                        <img v-if="doc.photo" :src="`/storage/${doc.photo}`" class="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+                                        <img v-if="doc.photo" :src="`/storage/${doc.photo}`" class="w-10 h-10 rounded-full object-cover flex-shrink-0" alt="" />
                                         <div v-else class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-[#1B365D] text-sm font-bold flex-shrink-0">
                                             {{ (doc.name_en || '?')[0] }}
                                         </div>

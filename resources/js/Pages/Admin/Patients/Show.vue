@@ -61,7 +61,7 @@ const prescriptions = computed(() => props.patient?.prescriptions || []);
                         <div class="relative group">
                             <div class="absolute -inset-1 rounded-2xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] opacity-60 blur group-hover:opacity-80 transition-opacity duration-300"></div>
                             <div v-if="patient.photo" class="relative w-20 h-20 rounded-2xl overflow-hidden ring-2 ring-white/20">
-                                <img :src="patient.photo_url" class="w-full h-full object-cover" />
+                                <img :src="patient.photo_url" class="w-full h-full object-cover" alt="" />
                             </div>
                             <div v-else class="relative w-20 h-20 rounded-2xl flex items-center justify-center text-xl md:text-2xl font-bold text-white ring-2 ring-white/20" style="background: linear-gradient(135deg, #C4A265, #A68B52);">
                                 {{ patient.full_name?.charAt(0) }}

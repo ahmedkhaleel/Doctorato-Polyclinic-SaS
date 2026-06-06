@@ -90,7 +90,7 @@ function closePhoto() {
                     <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
                         <button v-for="photo in beforePhotos" :key="photo.id" type="button" @click="openPhoto(photo)"
                             class="aspect-square rounded-lg overflow-hidden bg-gray-100 relative group">
-                            <img :src="photo.url || ('/storage/' + photo.photo_path)" class="w-full h-full object-cover" />
+                            <img :src="photo.url || ('/storage/' + photo.photo_path)" class="w-full h-full object-cover" alt="" />
                             <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-1.5">
                                 <p class="text-white text-[9px]">{{ formatDate(photo.created_at) }}</p>
                             </div>
@@ -102,7 +102,7 @@ function closePhoto() {
                     <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
                         <button v-for="photo in afterPhotos" :key="photo.id" type="button" @click="openPhoto(photo)"
                             class="aspect-square rounded-lg overflow-hidden bg-gray-100 relative group">
-                            <img :src="photo.url || ('/storage/' + photo.photo_path)" class="w-full h-full object-cover" />
+                            <img :src="photo.url || ('/storage/' + photo.photo_path)" class="w-full h-full object-cover" alt="" />
                             <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-1.5">
                                 <p class="text-white text-[9px]">{{ formatDate(photo.created_at) }}</p>
                             </div>
@@ -114,7 +114,7 @@ function closePhoto() {
                     <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
                         <button v-for="photo in otherPhotos" :key="photo.id" type="button" @click="openPhoto(photo)"
                             class="aspect-square rounded-lg overflow-hidden bg-gray-100 relative group">
-                            <img :src="photo.url || ('/storage/' + photo.photo_path)" class="w-full h-full object-cover" />
+                            <img :src="photo.url || ('/storage/' + photo.photo_path)" class="w-full h-full object-cover" alt="" />
                             <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-1.5">
                                 <p class="text-white text-[9px]">{{ formatDate(photo.created_at) }}</p>
                             </div>
@@ -185,7 +185,7 @@ function closePhoto() {
                 <button @click="closePhoto" class="absolute -top-10 ltr:right-0 rtl:left-0 text-white/80 hover:text-white text-xl">
                     &times; {{ isRtl ? 'إغلاق' : 'Close' }}
                 </button>
-                <img :src="photoPreview.url || ('/storage/' + photoPreview.photo_path)" class="max-w-full max-h-[90vh] rounded-xl" />
+                <img :src="photoPreview.url || ('/storage/' + photoPreview.photo_path)" class="max-w-full max-h-[90vh] rounded-xl" alt="" />
             </div>
         </div>
     </div>

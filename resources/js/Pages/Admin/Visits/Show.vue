@@ -781,13 +781,13 @@ function formatDateTime(date) {
                                 </button>
                             </form>
                             <div v-if="photoPreview" class="mt-3">
-                                <img :src="photoPreview" class="h-24 rounded-lg object-cover border" />
+                                <img :src="photoPreview" class="h-24 rounded-lg object-cover border" alt="" />
                             </div>
                         </div>
 
                         <div v-if="visit.photos?.length" class="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div v-for="photo in visit.photos" :key="photo.id" class="relative group">
-                                <img :src="photo.url" class="w-full h-40 object-cover rounded-lg" />
+                                <img :src="photo.url" class="w-full h-40 object-cover rounded-lg" alt="" />
                                 <div class="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-2 rounded-b-lg opacity-0 group-hover:opacity-100 transition">
                                     <p v-if="photo.caption">{{ photo.caption }}</p>
                                     <p class="text-gray-300">{{ photo.taken_at ? formatDate(photo.taken_at) : formatDate(photo.created_at) }}</p>

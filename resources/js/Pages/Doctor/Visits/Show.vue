@@ -456,7 +456,7 @@ function formatDate(date) {
                                         <p v-if="photoForm.errors.photo" class="text-xs text-red-500 mt-1">{{ photoForm.errors.photo }}</p>
                                     </div>
                                     <div v-if="photoPreview" class="w-32 h-32 rounded-xl overflow-hidden border border-gray-200 shadow-sm">
-                                        <img :src="photoPreview" class="w-full h-full object-cover" />
+                                        <img :src="photoPreview" class="w-full h-full object-cover" alt="" />
                                     </div>
                                     <div class="flex justify-end gap-2">
                                         <button type="button" @click="showPhotoUpload = false; photoForm.reset(); photoPreview = null;" class="px-4 py-2 text-xs font-medium text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>

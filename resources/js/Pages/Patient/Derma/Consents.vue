@@ -103,7 +103,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
 
                 <div class="flex items-center justify-between mt-3">
                     <div v-if="c.signed" class="flex items-center gap-3">
-                        <img v-if="c.signature" :src="c.signature" class="h-12 border border-gray-100 rounded bg-white" />
+                        <img v-if="c.signature" :src="c.signature" class="h-12 border border-gray-100 rounded bg-white" alt="" />
                         <span class="text-[11px] text-gray-400">{{ isRtl ? 'وُقّعت في' : 'Signed on' }} {{ fmtDate(c.signed_at) }}</span>
                     </div>
                     <button v-else @click="openSign(c)" class="pc-sign-btn">{{ isRtl ? '✍ التوقيع الآن' : '✍ Sign now' }}</button>
