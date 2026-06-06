@@ -48,10 +48,10 @@ class DoctorDentalComparisonController extends BaseDoctorController
         $data['doctor_id'] = $doctorId;
 
         if ($request->hasFile('before_image')) {
-            $data['before_image_path'] = $request->file('before_image')->store('dental-comparisons', 'public');
+            $data['before_image_path'] = $request->file('before_image')->store('dental-comparisons', 'local');
         }
         if ($request->hasFile('after_image')) {
-            $data['after_image_path'] = $request->file('after_image')->store('dental-comparisons', 'public');
+            $data['after_image_path'] = $request->file('after_image')->store('dental-comparisons', 'local');
         }
 
         unset($data['before_image'], $data['after_image']);

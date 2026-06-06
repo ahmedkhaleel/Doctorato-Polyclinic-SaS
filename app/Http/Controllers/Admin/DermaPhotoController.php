@@ -40,15 +40,15 @@ class DermaPhotoController extends Controller
             'image' => 'required|image|max:8192',
             'notes' => 'nullable|string',
         ]);
-        $path = $request->file('image')->store('derma/photos', 'public');
+        $path = $request->file('image')->store('derma/photos', 'local');
         DermaPhoto::create(array_merge($data, ['image_path' => $path]));
         return back()->with('success', 'تم رفع الصورة');
     }
 
     public function destroy(DermaPhoto $photo)
     {
-        if ($photo->image_path && Storage::disk('public')->exists($photo->image_path)) {
-            Storage::disk('public')->delete($photo->image_path);
+        if ($photo->image_path && \App\Support\SecureMedia::exists($photo->image_path)) {
+            \App\Support\SecureMedia::delete($photo->image_path);
         }
         $photo->delete();
         return back()->with('success', 'تم الحذف');

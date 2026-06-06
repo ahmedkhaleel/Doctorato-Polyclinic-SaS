@@ -79,10 +79,10 @@ class DentalComparisonController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('before_image')) {
-            $data['before_image_path'] = $request->file('before_image')->store('dental-comparisons', 'public');
+            $data['before_image_path'] = $request->file('before_image')->store('dental-comparisons', 'local');
         }
         if ($request->hasFile('after_image')) {
-            $data['after_image_path'] = $request->file('after_image')->store('dental-comparisons', 'public');
+            $data['after_image_path'] = $request->file('after_image')->store('dental-comparisons', 'local');
         }
 
         unset($data['before_image'], $data['after_image']);
@@ -117,15 +117,15 @@ class DentalComparisonController extends Controller
 
         if ($request->hasFile('before_image')) {
             if ($comparison->before_image_path) {
-                Storage::disk('public')->delete($comparison->before_image_path);
+                \App\Support\SecureMedia::delete($comparison->before_image_path);
             }
-            $data['before_image_path'] = $request->file('before_image')->store('dental-comparisons', 'public');
+            $data['before_image_path'] = $request->file('before_image')->store('dental-comparisons', 'local');
         }
         if ($request->hasFile('after_image')) {
             if ($comparison->after_image_path) {
-                Storage::disk('public')->delete($comparison->after_image_path);
+                \App\Support\SecureMedia::delete($comparison->after_image_path);
             }
-            $data['after_image_path'] = $request->file('after_image')->store('dental-comparisons', 'public');
+            $data['after_image_path'] = $request->file('after_image')->store('dental-comparisons', 'local');
         }
 
         unset($data['before_image'], $data['after_image']);
@@ -142,10 +142,10 @@ class DentalComparisonController extends Controller
         AuditLogger::log('deleted', $comparison);
 
         if ($comparison->before_image_path) {
-            Storage::disk('public')->delete($comparison->before_image_path);
+            \App\Support\SecureMedia::delete($comparison->before_image_path);
         }
         if ($comparison->after_image_path) {
-            Storage::disk('public')->delete($comparison->after_image_path);
+            \App\Support\SecureMedia::delete($comparison->after_image_path);
         }
 
         $comparison->delete();

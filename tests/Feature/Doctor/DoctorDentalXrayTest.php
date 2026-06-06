@@ -68,7 +68,8 @@ class DoctorDentalXrayTest extends TestCase
 
     public function test_can_upload_xray(): void
     {
-        Storage::fake('public');
+        // S1: x-rays now land on the private `local` disk.
+        Storage::fake('local');
 
         $this->actingAs($this->doctorUser)->post('/doctor/dental/xrays', [
             'patient_id' => $this->patient->id,

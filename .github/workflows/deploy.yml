@@ -40,6 +40,11 @@ jobs:
             php composer.phar install --no-dev --no-interaction --no-progress --prefer-dist --optimize-autoloader || composer install --no-dev --no-interaction --no-progress --prefer-dist --optimize-autoloader
             echo "=== migrate ==="
             php artisan migrate --force
+            echo "=== migrate PHI media to private disk (S1, idempotent) ==="
+            # Moves historical sensitive files off the world-readable public disk.
+            # Idempotent + has a public-disk read fallback, so a partial run never
+            # breaks display; warn (don't abort) so the rest of the deploy proceeds.
+            php artisan media:migrate-phi || echo "::warning::media:migrate-phi reported issues; re-run on host."
             echo "=== clear + optimize ==="
             php artisan optimize:clear
             php artisan optimize

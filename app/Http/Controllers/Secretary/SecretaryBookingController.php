@@ -352,7 +352,7 @@ class SecretaryBookingController extends BaseSecretaryController
         ]);
 
         foreach ($request->file('consents') as $file) {
-            $path = $file->store("consents/{$booking->id}", 'public');
+            $path = $file->store("consents/{$booking->id}", 'local');
 
             BookingConsent::create([
                 'booking_id' => $booking->id,
@@ -375,7 +375,7 @@ class SecretaryBookingController extends BaseSecretaryController
             abort(403);
         }
 
-        Storage::disk('public')->delete($consent->file_path);
+        \App\Support\SecureMedia::delete($consent->file_path);
         $consent->delete();
 
         AuditLogger::log('consent_deleted', $booking, [

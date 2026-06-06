@@ -198,7 +198,7 @@ function statusLabel(s) {
             </div>
             <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 p-5">
                 <div v-for="x in xrays" :key="x.id" class="aspect-square rounded-lg overflow-hidden bg-gray-900 relative group">
-                    <img v-if="x.image_path || x.url" :src="x.url || ('/storage/' + x.image_path)" class="w-full h-full object-cover" />
+                    <img v-if="x.image_path || x.url" :src="x.image_url || ('/storage/' + x.image_path)" class="w-full h-full object-cover" />
                     <div v-else class="w-full h-full flex items-center justify-center text-gray-500 text-xs">{{ isRtl ? 'بدون صورة' : 'No image' }}</div>
                     <div class="absolute bottom-0 inset-x-0 bg-black/60 text-white text-[9px] p-1">
                         {{ formatDate(x.taken_date) }}

@@ -476,7 +476,7 @@ function formatDate(date) {
                                 </p>
                                 <div class="grid grid-cols-2 gap-2">
                                     <div v-for="photo in beforePhotos" :key="photo.id" class="aspect-square rounded-xl overflow-hidden bg-gray-100 relative group cursor-pointer hover:ring-2 hover:ring-amber-300 transition-all">
-                                        <img :src="'/storage/' + photo.photo_path" :alt="photo.caption || 'Before'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                        <img :src="photo.url" :alt="photo.caption || 'Before'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                         <div v-if="photo.caption" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent text-white text-[10px] px-2 py-2 opacity-0 group-hover:opacity-100 transition-opacity">{{ photo.caption }}</div>
                                     </div>
                                 </div>
@@ -487,7 +487,7 @@ function formatDate(date) {
                                 </p>
                                 <div class="grid grid-cols-2 gap-2">
                                     <div v-for="photo in afterPhotos" :key="photo.id" class="aspect-square rounded-xl overflow-hidden bg-gray-100 relative group cursor-pointer hover:ring-2 hover:ring-emerald-300 transition-all">
-                                        <img :src="'/storage/' + photo.photo_path" :alt="photo.caption || 'After'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                        <img :src="photo.url" :alt="photo.caption || 'After'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                         <div v-if="photo.caption" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent text-white text-[10px] px-2 py-2 opacity-0 group-hover:opacity-100 transition-opacity">{{ photo.caption }}</div>
                                     </div>
                                 </div>
@@ -499,7 +499,7 @@ function formatDate(date) {
                             </p>
                             <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                 <div v-for="photo in otherPhotos" :key="photo.id" class="aspect-square rounded-xl overflow-hidden bg-gray-100 relative group cursor-pointer hover:ring-2 hover:ring-gray-300 transition-all">
-                                    <img :src="'/storage/' + photo.photo_path" :alt="photo.caption" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                    <img :src="photo.url" :alt="photo.caption" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                     <div v-if="photo.caption" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent text-white text-[10px] px-2 py-2 opacity-0 group-hover:opacity-100 transition-opacity">{{ photo.caption }}</div>
                                 </div>
                             </div>
@@ -595,7 +595,7 @@ function formatDate(date) {
                             <h4 class="text-xs font-bold text-gray-500 uppercase mb-3">{{ isRtl ? 'صور الأشعة' : 'X-Rays' }}</h4>
                             <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                 <div v-for="xray in dentalXrays.slice(0, 6)" :key="xray.id" class="aspect-square rounded-xl overflow-hidden bg-gray-100 relative group cursor-pointer hover:ring-2 hover:ring-[#C4A265]/50 transition-all">
-                                    <img :src="'/storage/' + xray.image_path" :alt="xray.notes || 'X-ray'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                    <img :src="xray.image_url" :alt="xray.notes || 'X-ray'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                     <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent text-white text-[10px] px-2 py-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <p v-if="xray.xray_type" class="capitalize">{{ xray.xray_type }}</p>
                                         <p v-if="xray.taken_date">{{ xray.taken_date }}</p>

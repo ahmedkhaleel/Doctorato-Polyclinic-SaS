@@ -23,6 +23,13 @@ Route::get('/health', HealthController::class)
     ->name('health')
     ->middleware('throttle:20,1');
 
+// Authenticated, signed serving of sensitive patient files (PHI) — replaces
+// world-readable /storage/... links. `signed` blocks anonymous enumeration;
+// the controller additionally requires an authenticated session.
+Route::get('/media', [\App\Http\Controllers\MediaController::class, 'show'])
+    ->name('media.show')
+    ->middleware('signed');
+
 // Shown when a trial/demo account's period has ended (public, no auth).
 Route::get('/trial-expired', function () {
     return \Inertia\Inertia::render('TrialExpired', [

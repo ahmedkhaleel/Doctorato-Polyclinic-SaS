@@ -238,7 +238,7 @@ class DoctorVisitController extends BaseDoctorController
         $file = $request->file('photo');
         // Sanitize filename to prevent path traversal
         $safeName = preg_replace('/[^\w\s\-\.]/', '_', basename($file->getClientOriginalName()));
-        $path = $file->store('visit-photos', 'public');
+        $path = $file->store('visit-photos', 'local');
 
         $photo = $visit->photos()->create([
             'photo_path' => $path,

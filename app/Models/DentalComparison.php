@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class DentalComparison extends Model
 {
     use BelongsToBranch;
+
     protected $fillable = [
         'patient_id',
         'doctor_id',
@@ -39,12 +40,19 @@ class DentalComparison extends Model
     protected $appends = ['before_image_url', 'after_image_url'];
 
     const CATEGORY_ORTHODONTIC = 'orthodontic';
+
     const CATEGORY_COSMETIC = 'cosmetic';
+
     const CATEGORY_IMPLANT = 'implant';
+
     const CATEGORY_WHITENING = 'whitening';
+
     const CATEGORY_RESTORATION = 'restoration';
+
     const CATEGORY_SURGICAL = 'surgical';
+
     const CATEGORY_XRAY = 'xray';
+
     const CATEGORY_OTHER = 'other';
 
     const CATEGORIES = [
@@ -77,18 +85,29 @@ class DentalComparison extends Model
 
     // ─── Accessors ──────────────────────────────────────────
 
+    // Signed, authenticated media URLs (PHI — no longer public /storage links).
     public function getBeforeImageUrlAttribute(): ?string
     {
-        if (!$this->before_image_path) return null;
-        if (str_starts_with($this->before_image_path, 'http')) return $this->before_image_path;
-        return '/storage/' . $this->before_image_path;
+        if (! $this->before_image_path) {
+            return null;
+        }
+        if (str_starts_with($this->before_image_path, 'http')) {
+            return $this->before_image_path;
+        }
+
+        return \App\Support\SecureMedia::url($this->before_image_path);
     }
 
     public function getAfterImageUrlAttribute(): ?string
     {
-        if (!$this->after_image_path) return null;
-        if (str_starts_with($this->after_image_path, 'http')) return $this->after_image_path;
-        return '/storage/' . $this->after_image_path;
+        if (! $this->after_image_path) {
+            return null;
+        }
+        if (str_starts_with($this->after_image_path, 'http')) {
+            return $this->after_image_path;
+        }
+
+        return \App\Support\SecureMedia::url($this->after_image_path);
     }
 
     // ─── Scopes ─────────────────────────────────────────────
@@ -117,16 +136,26 @@ class DentalComparison extends Model
 
     public function getToothNumbersArray(): array
     {
-        if (!$this->tooth_numbers) return [];
+        if (! $this->tooth_numbers) {
+            return [];
+        }
+
         return array_map('trim', explode(',', $this->tooth_numbers));
     }
 
     public function getDurationText(): ?string
     {
-        if (!$this->before_date || !$this->after_date) return null;
+        if (! $this->before_date || ! $this->after_date) {
+            return null;
+        }
         $diff = $this->before_date->diff($this->after_date);
-        if ($diff->y > 0) return $diff->y . ' year' . ($diff->y > 1 ? 's' : '') . ($diff->m > 0 ? " {$diff->m} months" : '');
-        if ($diff->m > 0) return $diff->m . ' month' . ($diff->m > 1 ? 's' : '');
-        return $diff->d . ' day' . ($diff->d > 1 ? 's' : '');
+        if ($diff->y > 0) {
+            return $diff->y.' year'.($diff->y > 1 ? 's' : '').($diff->m > 0 ? " {$diff->m} months" : '');
+        }
+        if ($diff->m > 0) {
+            return $diff->m.' month'.($diff->m > 1 ? 's' : '');
+        }
+
+        return $diff->d.' day'.($diff->d > 1 ? 's' : '');
     }
 }

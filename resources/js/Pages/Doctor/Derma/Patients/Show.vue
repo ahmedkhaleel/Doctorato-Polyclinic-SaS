@@ -136,7 +136,7 @@ function typeLabel(t) {
             <h2 class="font-bold text-gray-800 mb-3">{{ isRtl ? 'صور قبل / بعد' : 'Before / After' }}</h2>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div v-for="ph in beforeAfter" :key="ph.id" class="relative rounded-xl overflow-hidden aspect-square bg-gray-100">
-                    <img :src="'/storage/' + ph.image_path" :alt="ph.category" class="w-full h-full object-cover" loading="lazy" />
+                    <img :src="ph.url" :alt="ph.category" class="w-full h-full object-cover" loading="lazy" />
                     <span class="absolute top-2 start-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" :style="{ background: ph.category === 'before' ? '#6B7280' : ACCENT }">{{ ph.category === 'before' ? (isRtl ? 'قبل' : 'Before') : (isRtl ? 'بعد' : 'After') }}</span>
                 </div>
             </div>

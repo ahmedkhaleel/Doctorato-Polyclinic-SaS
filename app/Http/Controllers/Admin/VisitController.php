@@ -180,7 +180,7 @@ class VisitController extends Controller
             'photo_type' => 'nullable|string|in:before,after,during',
         ]);
 
-        $path = $request->file('photo')->store('visit-photos/'.$visit->id, 'public');
+        $path = $request->file('photo')->store('visit-photos/'.$visit->id, 'local');
 
         $visit->photos()->create([
             'photo_path' => $path,

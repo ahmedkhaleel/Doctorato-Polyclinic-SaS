@@ -87,7 +87,7 @@ class PatientDocumentController extends BasePatientController
         ]);
 
         $file = $request->file('file');
-        $path = $file->store('patient-documents/' . $patient->id, 'public');
+        $path = $file->store('patient-documents/' . $patient->id, 'local');
 
         $document = $patient->documents()->create([
             'uploaded_by'     => $request->user()->id, // the User row, not the Patient
@@ -120,9 +120,11 @@ class PatientDocumentController extends BasePatientController
         if ($document->patient_id !== $patient->id) abort(403);
         if ($document->is_confidential) abort(403);
 
-        if (! Storage::disk('public')->exists($document->file_path)) abort(404);
+        // Private disk now (SecureMedia falls back to the legacy public disk
+        // for documents not yet migrated).
+        if (! \App\Support\SecureMedia::exists($document->file_path)) abort(404);
 
-        return Storage::disk('public')->download(
+        return \App\Support\SecureMedia::download(
             $document->file_path,
             $document->original_name ?: 'document'
         );
@@ -136,7 +138,7 @@ class PatientDocumentController extends BasePatientController
         // Patients can only delete their own uploads — never staff uploads.
         if ($document->source !== 'patient_upload') abort(403);
 
-        Storage::disk('public')->delete($document->file_path);
+        \App\Support\SecureMedia::delete($document->file_path);
         $document->delete();
 
         AuditLogger::log('patient_document_deleted', $document, [

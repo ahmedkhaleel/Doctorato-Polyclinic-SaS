@@ -79,7 +79,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
 
         <div v-if="photos.data.length" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
             <div v-for="p in photos.data" :key="p.id" class="bg-white rounded-xl border border-[#C4A265]/20 overflow-hidden group hover:shadow-lg hover:shadow-[#C4A265]/10 transition">
-                <img :src="`/storage/${p.image_path}`" class="w-full h-40 object-cover" />
+                <img :src="p.url" class="w-full h-40 object-cover" />
                 <div class="p-3">
                     <div class="text-xs font-bold text-[#1B365D]">{{ p.patient?.full_name }}</div>
                     <div class="text-[10px] text-[#C4A265] font-bold uppercase mt-1 tracking-wider">{{ p.category }}</div>

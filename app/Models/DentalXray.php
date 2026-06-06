@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class DentalXray extends Model
 {
     use BelongsToBranch;
+
     protected $fillable = [
         'patient_id',
         'doctor_id',
@@ -24,11 +25,19 @@ class DentalXray extends Model
         'taken_date' => 'date',
     ];
 
+    // Expose the signed media URL to Inertia/JSON payloads.
+    protected $appends = ['image_url'];
+
     const TYPE_PANORAMIC = 'panoramic';
+
     const TYPE_PERIAPICAL = 'periapical';
+
     const TYPE_BITEWING = 'bitewing';
+
     const TYPE_CEPHALOMETRIC = 'cephalometric';
+
     const TYPE_CBCT = 'cbct';
+
     const TYPE_OCCLUSAL = 'occlusal';
 
     const TYPES = [
@@ -52,9 +61,15 @@ class DentalXray extends Model
 
     public function getImageUrlAttribute(): ?string
     {
-        if (!$this->image_path) return null;
-        if (str_starts_with($this->image_path, 'http')) return $this->image_path;
-        return '/storage/' . $this->image_path;
+        if (! $this->image_path) {
+            return null;
+        }
+        if (str_starts_with($this->image_path, 'http')) {
+            return $this->image_path;
+        }
+
+        // Signed, authenticated media URL (PHI — no longer a public /storage link).
+        return \App\Support\SecureMedia::url($this->image_path);
     }
 
     public function scopeForPatient($query, int $patientId)

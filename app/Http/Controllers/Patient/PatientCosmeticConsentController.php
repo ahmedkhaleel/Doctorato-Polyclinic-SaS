@@ -60,7 +60,7 @@ class PatientCosmeticConsentController extends BasePatientController
         }
 
         $path = 'cosmetic/signatures/sig_' . $consent->id . '_' . substr(md5($b64), 0, 8) . '.png';
-        Storage::disk('public')->put($path, $binary);
+        Storage::disk('local')->put($path, $binary);
 
         $consent->update(['signature_path' => $path, 'signed_at' => now()]);
 

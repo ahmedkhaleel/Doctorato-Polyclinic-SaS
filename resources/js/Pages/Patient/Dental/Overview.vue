@@ -359,7 +359,7 @@ const quickLinks = computed(() => [
                 </div>
                 <div class="grid grid-cols-3 gap-3">
                     <div v-for="xray in recentXrays" :key="xray.id" class="group relative">
-                        <img v-if="xray.image_path" :src="`/storage/${xray.image_path}`"
+                        <img v-if="xray.image_path" :src="xray.image_url"
                              class="w-full h-24 object-cover rounded-xl border border-gray-200 group-hover:border-slate-300 transition" />
                         <div v-else class="w-full h-24 rounded-xl bg-gray-100 flex items-center justify-center">
                             <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
