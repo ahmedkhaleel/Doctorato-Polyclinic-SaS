@@ -161,12 +161,15 @@ the per-module follow-up capability `module_settings` already provides.
 > the read flip + backfill are a true no-op for live pricing. Cleared to soak
 > before Phase 4.
 >
-> **Finding surfaced by the audit — pediatric resolves to 0:** the pediatric
-> editor saves `pediatric_consultation_fee` while the resolver reads
-> `pediatric_consultant_fee`/`pediatric_specialist_fee`, so pediatric consultation
-> fees resolve to 0 (bookings presumably rely on per-doctor overrides or service
-> prices). This is PRE-EXISTING (not caused by ADR-001). Reconciling it CHANGES a
-> live fee → requires explicit owner decision; tracked as a separate follow-up.
+> **Finding surfaced by the audit — pediatric resolved to 0 — NOW FIXED:** the
+> pediatric editor saves a single `pediatric_consultation_fee`, but the resolver
+> read `pediatric_consultant_fee`/`_specialist_fee` (never written) → pediatric
+> resolved to 0. Reconciled: the resolver + mirror now read
+> `pediatric_consultation_fee` for consultant/specialist/base (pediatric has one
+> consultation fee, like cosmetic). This honours the admin's existing input — no
+> invented number; pediatric stays 0 only if that field is genuinely unset. Owner
+> should re-run `pricing:audit` to confirm the intended pediatric value now shows.
+> Also surfaced proactively by the `module_pricing_unset` integrity check.
 
 ### Phase 4 — CONTRACT: retire legacy keys (GATED: soak + owner go-ahead)
 - After ≥1 production cycle with no pricing incidents, remove the legacy
