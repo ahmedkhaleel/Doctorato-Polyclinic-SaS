@@ -19,6 +19,9 @@ const props = defineProps({
 const panels = {
     dental: defineAsyncComponent(() => import('./Panels/DentalPanel.vue')),
     derma: defineAsyncComponent(() => import('./Panels/DermaPanel.vue')),
+    obgyn: defineAsyncComponent(() => import('./Panels/ObgynPanel.vue')),
+    psychiatry: defineAsyncComponent(() => import('./Panels/NeuroPsychPanel.vue')),
+    neurology: defineAsyncComponent(() => import('./Panels/NeuroPsychPanel.vue')),
 };
 
 const current = computed(() => panels[props.visit?.module] || null);

@@ -147,6 +147,86 @@ class DoctorVisitController extends BaseDoctorController
                 ]);
         }
 
+        // ── OB/GYN: active pregnancy (with gestational age) + labs ──
+        if ($visit->module === 'obgyn' && $visit->patient_id) {
+            $pregnancy = \App\Models\Pregnancy::where('patient_id', $visit->patient_id)
+                ->where('status', \App\Models\Pregnancy::STATUS_ACTIVE)
+                ->latest('lmp')
+                ->first();
+
+            if ($pregnancy) {
+                $days = $pregnancy->lmp ? (int) $pregnancy->lmp->diffInDays(now()) : null;
+                $extra['obgynPregnancy'] = array_merge(
+                    $pregnancy->only([
+                        'id', 'lmp', 'edd', 'gravida', 'para', 'blood_group', 'rh_factor',
+                        'is_high_risk', 'risk_factors', 'conception_method', 'status',
+                    ]),
+                    [
+                        'gestational_weeks' => $days !== null ? intdiv($days, 7) : null,
+                        'gestational_days' => $days !== null ? $days % 7 : null,
+                    ]
+                );
+
+                $extra['obgynLabTests'] = $pregnancy->labTests()
+                    ->latest('result_date')
+                    ->limit(6)
+                    ->get(['id', 'test_type', 'value', 'unit', 'reference_range', 'result_date', 'is_abnormal']);
+            }
+        }
+
+        // ── Psychiatry / Neurology: encounter + scale trend + meds + (gated) risk ──
+        if (in_array($visit->module, ['psychiatry', 'neurology'], true) && $visit->patient_id) {
+            $module = $visit->module;
+
+            $encounter = \App\Models\NeuropsychEncounter::where('patient_id', $visit->patient_id)
+                ->where('module', $module)
+                ->where('visit_id', $visit->id)
+                ->first()
+                ?? \App\Models\NeuropsychEncounter::where('patient_id', $visit->patient_id)
+                    ->where('module', $module)
+                    ->latest('encounter_date')
+                    ->first();
+
+            if ($encounter) {
+                $extra['neuroEncounter'] = $encounter->only([
+                    'id', 'note_format', 'subjective', 'objective', 'assessment', 'plan', 'mse', 'encounter_date', 'visit_id',
+                ]);
+            }
+
+            // Scale results (newest first) — feed the trend sparkline + latest chip.
+            $extra['neuroScales'] = \App\Models\ScaleResult::where('patient_id', $visit->patient_id)
+                ->latest('taken_at')
+                ->limit(12)
+                ->get(['id', 'scale_key', 'score', 'severity', 'flag', 'taken_at']);
+
+            // Active medications in this module.
+            $extra['neuroMeds'] = \App\Models\MedicationPlan::where('patient_id', $visit->patient_id)
+                ->where('module', $module)
+                ->whereNull('stopped_at')
+                ->latest('started_at')
+                ->get(['id', 'drug', 'drug_class', 'dose', 'frequency', 'route', 'is_controlled', 'started_at']);
+
+            // Risk assessment is SENSITIVE: gated by {module}.view_sensitive + audited.
+            $canSensitive = (bool) ($request->user()?->role?->hasPermission("{$module}.view_sensitive") ?? false);
+            $extra['neuroCanViewSensitive'] = $canSensitive;
+            if ($canSensitive) {
+                $risk = \App\Models\RiskAssessment::where('patient_id', $visit->patient_id)
+                    ->where('is_active', true)
+                    ->latest('assessed_at')
+                    ->first();
+                if ($risk) {
+                    $extra['neuroRisk'] = $risk->only(['id', 'type', 'tool', 'risk_level', 'assessed_at']);
+                    \App\Models\MedicalDataAccessLog::record(
+                        $visit->patient_id,
+                        'view',
+                        'neuropsych_risk',
+                        ['risk_level', 'type'],
+                        'Visit page risk summary'
+                    );
+                }
+            }
+        }
+
         // ── Patient Vitals ──────────────────────────────────
         if ($visit->patient_id) {
             $latestVitals = $visit->patient->vitals()

@@ -28,6 +28,13 @@ const props = defineProps({
     dentalMedicalInfo: Object,
     dermaActivePlan: Object,
     dermaSessions: Array,
+    obgynPregnancy: Object,
+    obgynLabTests: Array,
+    neuroEncounter: Object,
+    neuroScales: Array,
+    neuroMeds: Array,
+    neuroRisk: Object,
+    neuroCanViewSensitive: Boolean,
     latestVitals: Object,
     vitalsAlerts: Array,
     vitalsHistory: Array,
@@ -44,6 +51,13 @@ const specialtyExtras = computed(() => ({
     treatmentTypes: props.treatmentTypes,
     dermaActivePlan: props.dermaActivePlan,
     dermaSessions: props.dermaSessions,
+    obgynPregnancy: props.obgynPregnancy,
+    obgynLabTests: props.obgynLabTests,
+    neuroEncounter: props.neuroEncounter,
+    neuroScales: props.neuroScales,
+    neuroMeds: props.neuroMeds,
+    neuroRisk: props.neuroRisk,
+    neuroCanViewSensitive: props.neuroCanViewSensitive,
 }));
 
 const mounted = ref(false);
