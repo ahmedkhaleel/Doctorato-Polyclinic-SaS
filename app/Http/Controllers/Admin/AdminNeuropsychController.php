@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ControlledPrescription;
 use App\Models\Doctor;
 use App\Models\HeadacheDiaryEntry;
+use App\Models\MedicalDataAccessLog;
 use App\Models\MedicationMonitoring;
 use App\Models\MedicationPlan;
 use App\Models\NeuroProcedure;
@@ -42,6 +43,25 @@ class AdminNeuropsychController extends Controller
     private function canSeeSensitive(Request $request, string $module): bool
     {
         return (bool) $request->user()?->role?->hasPermission("{$module}.view_sensitive");
+    }
+
+    /**
+     * Write a sensitive-access audit entry for every patient surfaced on a
+     * clinic-wide sensitive page (risk register, controlled-substances log).
+     * The route is already gated by {module}.view_sensitive; this records WHO
+     * saw WHOSE sensitive data, so the access is provable in an audit.
+     */
+    private function auditSensitiveAccess(\Illuminate\Support\Collection $patientIds, string $reason): void
+    {
+        foreach ($patientIds->filter()->unique()->all() as $pid) {
+            MedicalDataAccessLog::record(
+                (int) $pid,
+                MedicalDataAccessLog::ACCESS_VIEW,
+                MedicalDataAccessLog::CATEGORY_SENSITIVE,
+                null,
+                $reason,
+            );
+        }
     }
 
     /**
@@ -228,6 +248,12 @@ class AdminNeuropsychController extends Controller
                 'assessed_at' => $r->assessed_at?->toDateString(),
             ]);
 
+        // Audit: this page exposes clinic-wide moderate/high suicide-risk data.
+        $this->auditSensitiveAccess(
+            collect($rows->items())->pluck('patient.id'),
+            "Viewed {$module} risk register (clinic-wide)",
+        );
+
         return Inertia::render('Admin/Neuropsych/RiskRegister', [
             'module' => $module,
             'rows' => $rows,
@@ -307,6 +333,12 @@ class AdminNeuropsychController extends Controller
                 'signed_at' => $p->signed_at?->toDateString(),
                 'dispensed_at' => $p->dispensed_at?->toDateString(),
             ]);
+
+        // Audit: this page exposes clinic-wide controlled-substance prescribing.
+        $this->auditSensitiveAccess(
+            collect($rx->items())->pluck('patient.id'),
+            "Viewed {$module} controlled-substances log (clinic-wide)",
+        );
 
         return Inertia::render('Admin/Neuropsych/Controlled', [
             'module' => $module,
