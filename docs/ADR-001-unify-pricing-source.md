@@ -163,8 +163,8 @@ the per-module follow-up capability `module_settings` already provides.
 - **Revisit:** if per-branch pricing demand grows, `module_settings.branch_id`
   already supports it — surface it in the editor at that point.
 
-## 7. Action items (when approved — NOT yet started)
-1. [ ] Phase 0: characterization test + `pricing:audit` command.
+## 7. Action items
+1. [x] **Phase 0 (DONE, shipped):** characterization test (`tests/Feature/Pricing/PricingResolverCharacterizationTest.php`) + `pricing:audit` command (`app/Console/Commands/PricingAuditCommand.php`). Zero behaviour change. **Next: capture `php artisan pricing:audit --json` from production as the baseline before Phase 1.**
 2. [ ] Phase 1: idempotent backfill migration/command (+ test).
 3. [ ] Phase 2: flip `source()` to `module`; verify snapshot identical.
 4. [ ] Phase 3: repoint settings write paths + Vue pages; end-to-end edit test.
