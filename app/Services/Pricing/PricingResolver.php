@@ -18,14 +18,26 @@ use App\Services\ModuleManager;
 class PricingResolver
 {
     /**
-     * Where each module's consultant/specialist/base/followup fees + window
-     * live. `settings` = global Setting keys; `module` = module_settings keys.
+     * ADR-001 Phase 2 (fallback-protected READ flip): module_settings is now the
+     * primary store for ALL modules (canonical keys below). The four legacy
+     * modules also carry a `legacy` map of their old global Setting keys —
+     * feesFor() reads module_settings first and falls back to the legacy Setting
+     * when a key is ABSENT. This is SAFE whether or not the Phase-1 backfill has
+     * run in a given environment (no zero-pricing risk) and is fully reversible.
+     * Phase 4 drops the legacy maps once backfill + write-path are confirmed.
      */
     private function source(string $module): array
     {
-        return match ($module) {
+        $moduleKeys = [
+            'consultant' => 'consultant_fee',
+            'specialist' => 'specialist_fee',
+            'base' => 'consultation_fee',
+            'followup' => 'followup_fee',
+            'window' => 'followup_window_days',
+        ];
+
+        $legacy = match ($module) {
             'derma', 'dermatology' => [
-                'driver' => 'settings',
                 'consultant' => 'dermatology_consultant_fee',
                 'specialist' => 'dermatology_specialist_fee',
                 'base' => 'default_dermatology_fee',
@@ -33,7 +45,6 @@ class PricingResolver
                 'window' => 'followup_window_days',
             ],
             'cosmetic' => [
-                'driver' => 'settings',
                 'consultant' => 'cosmetic_consultation_fee',
                 'specialist' => 'cosmetic_consultation_fee',
                 'base' => 'cosmetic_consultation_fee',
@@ -41,7 +52,6 @@ class PricingResolver
                 'window' => 'followup_window_days',
             ],
             'dental' => [
-                'driver' => 'settings',
                 'consultant' => 'dental_consultant_fee',
                 'specialist' => 'dental_specialist_fee',
                 'base' => 'dental_consultant_fee',
@@ -49,23 +59,16 @@ class PricingResolver
                 'window' => 'followup_window_days',
             ],
             'pediatric' => [
-                'driver' => 'settings',
                 'consultant' => 'pediatric_consultant_fee',
                 'specialist' => 'pediatric_specialist_fee',
                 'base' => 'pediatric_consultant_fee',
                 'followup' => 'pediatric_followup_fee',
                 'window' => 'followup_window_days',
             ],
-            // module_settings-backed specialties (obgyn / psychiatry / neurology)
-            default => [
-                'driver' => 'module',
-                'consultant' => 'consultant_fee',
-                'specialist' => 'specialist_fee',
-                'base' => 'consultation_fee',
-                'followup' => 'followup_fee',
-                'window' => 'followup_window_days',
-            ],
+            default => null, // obgyn / psychiatry / neurology: module_settings only
         };
+
+        return ['module_keys' => $moduleKeys, 'legacy' => $legacy];
     }
 
     /** Doctor-level per-specialty fee override column (highest priority). */
@@ -91,23 +94,39 @@ class PricingResolver
     public function feesFor(string $module): array
     {
         $src = $this->source($module);
+        $moduleKeys = $src['module_keys'];
+        $legacy = $src['legacy'];
 
-        if ($src['driver'] === 'module') {
-            return [
-                'consultant' => (float) ModuleManager::getSetting($module, $src['consultant'], 0),
-                'specialist' => (float) ModuleManager::getSetting($module, $src['specialist'], 0),
-                'base' => (float) ModuleManager::getSetting($module, $src['base'], 0),
-                'followup' => (float) ModuleManager::getSetting($module, $src['followup'], 0),
-                'window' => (int) ModuleManager::getSetting($module, $src['window'], 14),
-            ];
-        }
+        // Read a field from module_settings first; only a POSITIVE value there
+        // overrides. Otherwise fall back to the legacy global Setting (the 4
+        // legacy modules only). Treating 0/empty as "not set" is deliberate: a
+        // module_settings row pre-seeded to 0 must NEVER zero out a live fee —
+        // it falls back to the legacy value until a real (positive) value is
+        // backfilled/entered. Behaviour-identical to pre-Phase-2 in every env:
+        //   • legacy module, module_settings 0/absent → legacy Setting (as before)
+        //   • legacy module, backfilled (positive)    → same number (= legacy)
+        //   • obgyn/psych/neuro                        → module_settings (as before)
+        $read = function (string $field, bool $isWindow = false) use ($module, $moduleKeys, $legacy) {
+            $raw = ModuleManager::getSetting($module, $moduleKeys[$field], null);
+            $mv = $isWindow ? (int) $raw : (float) $raw;
+            if ($mv > 0) {
+                return $mv;
+            }
+            if ($legacy !== null) {
+                $lv = Setting::get($legacy[$field], $isWindow ? 15 : 0);
+
+                return $isWindow ? (int) $lv : (float) $lv;
+            }
+
+            return $isWindow ? 14 : 0.0;
+        };
 
         return [
-            'consultant' => (float) Setting::get($src['consultant'], 0),
-            'specialist' => (float) Setting::get($src['specialist'], 0),
-            'base' => (float) Setting::get($src['base'], 0),
-            'followup' => (float) Setting::get($src['followup'], 0),
-            'window' => (int) Setting::get($src['window'], 15),
+            'consultant' => $read('consultant'),
+            'specialist' => $read('specialist'),
+            'base' => $read('base'),
+            'followup' => $read('followup'),
+            'window' => $read('window', true),
         ];
     }
 
