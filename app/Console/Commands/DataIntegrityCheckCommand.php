@@ -94,6 +94,34 @@ class DataIntegrityCheckCommand extends Command
             ];
         }
 
+        // ── 3c. Enabled medical modules whose consultation fee resolves to 0 ─
+        // Catches pricing misconfiguration / legacy-key mismatches (e.g. the
+        // pediatric editor saving a key the resolver doesn't read) so a module
+        // never silently prices consultations at zero. Read-only; advisory.
+        try {
+            $resolver = app(\App\Services\Pricing\PricingResolver::class);
+            $zeroPriced = [];
+            foreach (\App\Services\ModuleManager::MEDICAL_MODULES as $m) {
+                if (! \App\Services\ModuleManager::isEnabled($m)) {
+                    continue;
+                }
+                $f = $resolver->feesFor($m);
+                if ((float) $f['consultant'] <= 0 && (float) $f['specialist'] <= 0 && (float) $f['base'] <= 0) {
+                    $zeroPriced[] = $m;
+                }
+            }
+            if (! empty($zeroPriced)) {
+                $findings[] = [
+                    'check' => 'module_pricing_unset',
+                    'count' => count($zeroPriced),
+                    'detail' => 'Enabled medical modules whose consultation fee resolves to 0: '.implode(', ', $zeroPriced),
+                    'ids' => $zeroPriced,
+                ];
+            }
+        } catch (\Throwable $e) {
+            // Resolver/module table issues are non-fatal for the audit.
+        }
+
         // ── 4. Online-enabled doctors with no online schedule ─
         $badDoctors = Doctor::onlineEnabled()
             ->whereDoesntHave('schedules', fn ($q) => $q
