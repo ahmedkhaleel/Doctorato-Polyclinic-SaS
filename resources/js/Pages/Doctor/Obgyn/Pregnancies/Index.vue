@@ -63,19 +63,27 @@ function statusText(s) {
 
 <template>
     <div class="space-y-5" :dir="isRtl ? 'rtl' : 'ltr'">
-        <!-- Header -->
-        <div class="flex items-center justify-between flex-wrap gap-3">
-            <div class="flex items-center gap-3">
-                <span class="w-2 h-8 rounded-full" :style="{ background: ACCENT }"></span>
-                <h1 class="text-xl font-bold text-gray-800">{{ isRtl ? 'ملفات الحمل' : 'Pregnancy Files' }}</h1>
+        <!-- Header band (consistent with the other specialty pages) -->
+        <header class="relative overflow-hidden rounded-3xl px-6 py-7 md:px-8 text-white shadow-lg"
+                style="background: linear-gradient(115deg,#1B365D 0%,#7a2950 55%,#DB2777 130%)">
+            <div class="absolute -top-16 ltr:-right-10 rtl:-left-10 w-56 h-56 rounded-full blur-2xl opacity-30" style="background:#C4A265"></div>
+            <div class="absolute inset-0 opacity-[0.07]" style="background-image:radial-gradient(circle at 1px 1px,#fff 1px,transparent 0);background-size:22px 22px"></div>
+            <div class="relative z-10 flex items-end justify-between flex-wrap gap-4">
+                <div>
+                    <p class="text-white/60 text-xs font-semibold tracking-wider uppercase">{{ isRtl ? 'النساء والتوليد' : 'OB / GYN' }}</p>
+                    <h1 class="text-2xl md:text-3xl font-extrabold mt-1.5 flex items-center gap-3">
+                        {{ isRtl ? 'ملفات الحمل' : 'Pregnancy Files' }}
+                        <span v-if="pregnancies.total != null" class="text-sm font-bold bg-white/15 backdrop-blur px-3 py-1 rounded-full tabular-nums">{{ pregnancies.total }}</span>
+                    </h1>
+                    <p class="text-white/70 mt-2 text-sm max-w-md">{{ isRtl ? 'متابعة الحمل من أول زيارة حتى الولادة.' : 'Track pregnancies from the first visit to delivery.' }}</p>
+                </div>
+                <button @click="showModal = true"
+                        class="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 backdrop-blur px-4 py-2.5 rounded-xl font-semibold transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    {{ isRtl ? 'فتح ملف حمل' : 'Open Pregnancy' }}
+                </button>
             </div>
-            <button @click="showModal = true"
-                    class="inline-flex items-center gap-2 text-white px-4 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-90 transition"
-                    :style="{ background: ACCENT }">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                {{ isRtl ? 'فتح ملف حمل' : 'Open Pregnancy' }}
-            </button>
-        </div>
+        </header>
 
         <!-- Filters -->
         <div class="flex items-center gap-2 flex-wrap">
