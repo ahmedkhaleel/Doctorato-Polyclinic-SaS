@@ -95,6 +95,15 @@ class SettingController extends Controller
             $updatedKeys[] = $key;
         }
 
+        // ADR-001 Phase 3 (dual-write): if any legacy fee key changed, mirror the
+        // current values into module_settings so the resolver (which prefers a
+        // positive module_settings value) stays in sync. Legacy keys remain
+        // written above as the rollback path until Phase 4 retires them.
+        $mirror = app(\App\Services\Pricing\PricingSettingsMirror::class);
+        if ($mirror->touchesPricing($updatedKeys)) {
+            $mirror->mirror();
+        }
+
         AuditLogger::log('updated', null, ['settings' => $updatedKeys]);
 
         return redirect()->back()->with('success', 'Settings updated successfully.');
