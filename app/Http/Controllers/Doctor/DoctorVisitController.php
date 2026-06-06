@@ -21,11 +21,11 @@ class DoctorVisitController extends BaseDoctorController
         $doctorId = $this->doctorId($request);
 
         $query = Visit::with([
-                'patient:id,full_name,file_number,phone',
-                'service:id,name_en,name_ar',
-                'packageBundleBooking:id,booking_number,package_bundle_id',
-                'packageBundleBooking.packageBundle:id,name_ar,name_en',
-            ])
+            'patient:id,full_name,file_number,phone',
+            'service:id,name_en,name_ar',
+            'packageBundleBooking:id,booking_number,package_bundle_id',
+            'packageBundleBooking.packageBundle:id,name_ar,name_en',
+        ])
             ->where('doctor_id', $doctorId);
 
         // Validate filter inputs
@@ -116,6 +116,35 @@ class DoctorVisitController extends BaseDoctorController
                     'allergies', 'chronic_conditions', 'current_medications', 'blood_type',
                 ]);
             }
+        }
+
+        // ── Derma: active treatment course + session log ─────
+        if ($visit->module === 'derma' && $visit->patient_id) {
+            $activePlan = \App\Models\DermaTreatmentPlan::where('patient_id', $visit->patient_id)
+                ->active()
+                ->latest('start_date')
+                ->first();
+
+            if ($activePlan) {
+                $extra['dermaActivePlan'] = array_merge(
+                    $activePlan->only([
+                        'id', 'title_ar', 'title_en', 'session_type', 'estimated_sessions',
+                        'completed_sessions', 'interval_days', 'status', 'start_date',
+                    ]),
+                    [
+                        'progress_percentage' => $activePlan->progress_percentage,
+                        'sessions_remaining' => $activePlan->sessions_remaining,
+                    ]
+                );
+            }
+
+            $extra['dermaSessions'] = \App\Models\DermaSession::where('patient_id', $visit->patient_id)
+                ->orderByRaw('COALESCE(completed_at, created_at) DESC')
+                ->limit(8)
+                ->get([
+                    'id', 'visit_id', 'session_type', 'area_treated', 'product_used',
+                    'session_number', 'total_sessions', 'cost', 'completed_at', 'next_session_date',
+                ]);
         }
 
         // ── Patient Vitals ──────────────────────────────────
