@@ -30,6 +30,36 @@ Route::get('/media', [\App\Http\Controllers\MediaController::class, 'show'])
     ->name('media.show')
     ->middleware('signed');
 
+// PWA web app manifest (P6-3, first step): makes the portals installable /
+// "Add to Home Screen" with the clinic name, navy theme, and standalone display.
+// Public + cached briefly. NO service worker is registered (a PHI-safe offline
+// shell + proper 192/512 maskable icons are a documented follow-up).
+Route::get('/manifest.webmanifest', function () {
+    $name = \App\Models\Setting::get('clinic_name', 'Doctorato Polyclinic');
+
+    return response()->json([
+        'name' => $name,
+        'short_name' => mb_substr($name, 0, 18),
+        'start_url' => '/',
+        'scope' => '/',
+        'display' => 'standalone',
+        'orientation' => 'portrait',
+        'background_color' => '#ffffff',
+        'theme_color' => '#1B365D',
+        'icons' => [
+            [
+                'src' => '/images/logo/apple-touch-icon.png',
+                'sizes' => '180x180',
+                'type' => 'image/png',
+                'purpose' => 'any',
+            ],
+        ],
+    ], 200, [
+        'Content-Type' => 'application/manifest+json; charset=utf-8',
+        'Cache-Control' => 'public, max-age=3600',
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+})->name('pwa.manifest');
+
 // Shown when a trial/demo account's period has ended (public, no auth).
 Route::get('/trial-expired', function () {
     return \Inertia\Inertia::render('TrialExpired', [
