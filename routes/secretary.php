@@ -245,6 +245,17 @@ Route::middleware(['secretary.auth', 'branch.context'])->group(function () {
         Route::post('/pregnancies', [\App\Http\Controllers\Secretary\SecretaryObgynController::class, 'storePregnancy'])->name('secretary.obgyn.pregnancies.store');
     });
 
+    // ─── Psychiatry & Neurology (front-desk: admin overview only) ───────
+    // STRICTLY administrative — appointments/roster/billing; NO clinical content
+    // and NO view_sensitive surface (that stays in the doctor portal).
+    foreach (['psychiatry', 'neurology'] as $npm) {
+        Route::prefix($npm)->middleware("module:{$npm}")->group(function () use ($npm) {
+            Route::get('/overview', [\App\Http\Controllers\Secretary\SecretaryNeuropsychController::class, 'index'])
+                ->defaults('npModule', $npm)
+                ->name("secretary.{$npm}.overview");
+        });
+    }
+
     // ─── Profile ────────────────────────────────────────────
     Route::get('/profile', [SecretaryProfileController::class, 'index'])->name('secretary.profile.index');
     Route::post('/profile/update', [SecretaryProfileController::class, 'update'])->name('secretary.profile.update');
