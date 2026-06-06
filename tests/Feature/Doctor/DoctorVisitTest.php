@@ -208,4 +208,107 @@ class DoctorVisitTest extends TestCase
         $this->assertNotEmpty($props['dermaSessions'] ?? []);
         $this->assertSame($this->visit->id, $props['dermaSessions'][0]['visit_id']);
     }
+
+    private function makeVisit(string $module, ?Doctor $doctor = null): Visit
+    {
+        $doctor ??= $this->doctor;
+        $booking = Booking::create([
+            'patient_id' => $this->patient->id, 'doctor_id' => $doctor->id,
+            'full_name' => $this->patient->full_name, 'phone' => $this->patient->phone,
+            'booking_date' => now()->toDateString(), 'start_time' => '12:00', 'end_time' => '12:30',
+            'status' => 'confirmed', 'booking_type' => $module.'_consultation',
+            'module' => $module, 'source' => 'secretary',
+        ]);
+
+        return Visit::create([
+            'patient_id' => $this->patient->id, 'doctor_id' => $doctor->id,
+            'booking_id' => $booking->id, 'visit_type' => 'consultation', 'module' => $module,
+            'status' => 'waiting', 'visit_date' => now()->toDateString(),
+        ]);
+    }
+
+    public function test_obgyn_visit_show_exposes_pregnancy_with_gestational_age(): void
+    {
+        $visit = $this->makeVisit('obgyn');
+
+        $preg = \App\Models\Pregnancy::create([
+            'patient_id' => $this->patient->id, 'doctor_id' => $this->doctor->id,
+            'lmp' => now()->subWeeks(10)->toDateString(),
+            'edd' => now()->addWeeks(30)->toDateString(), 'edd_source' => 'lmp',
+            'gravida' => 2, 'para' => 1, 'conception_method' => 'natural',
+            'is_high_risk' => true, 'risk_factors' => ['GDM'],
+            'status' => \App\Models\Pregnancy::STATUS_ACTIVE,
+        ]);
+        \App\Models\ObgynLabTest::create([
+            'patient_id' => $this->patient->id, 'pregnancy_id' => $preg->id, 'doctor_id' => $this->doctor->id,
+            'test_type' => 'Hb', 'value' => '9.0', 'unit' => 'g/dL', 'reference_range' => '11-14',
+            'result_date' => now()->toDateString(), 'is_abnormal' => true,
+        ]);
+
+        $props = $this->actingAs($this->doctorUser)
+            ->get("/doctor/visits/{$visit->id}")->assertOk()
+            ->original->getData()['page']['props'];
+
+        $this->assertNotNull($props['obgynPregnancy'] ?? null);
+        $this->assertSame(10, (int) $props['obgynPregnancy']['gestational_weeks']);
+        $this->assertTrue((bool) $props['obgynPregnancy']['is_high_risk']);
+        $this->assertNotEmpty($props['obgynLabTests'] ?? []);
+        $this->assertTrue((bool) $props['obgynLabTests'][0]['is_abnormal']);
+    }
+
+    public function test_psychiatry_risk_is_locked_without_sensitive_permission(): void
+    {
+        $visit = $this->makeVisit('psychiatry');
+        \App\Models\RiskAssessment::create([
+            'patient_id' => $this->patient->id, 'doctor_id' => $this->doctor->id,
+            'type' => 'suicide', 'tool' => 'c-ssrs', 'answers' => [],
+            'risk_level' => 'high', 'is_active' => true, 'assessed_at' => now(),
+        ]);
+        \App\Models\MedicationPlan::create([
+            'patient_id' => $this->patient->id, 'doctor_id' => $this->doctor->id,
+            'module' => 'psychiatry', 'drug' => 'Sertraline', 'dose' => '50mg',
+            'frequency' => 'OD', 'started_at' => now()->toDateString(), 'is_controlled' => false,
+        ]);
+
+        // Doctor role has no permissions → risk must be hidden, meds still visible.
+        $props = $this->actingAs($this->doctorUser)
+            ->get("/doctor/visits/{$visit->id}")->assertOk()
+            ->original->getData()['page']['props'];
+
+        $this->assertFalse((bool) ($props['neuroCanViewSensitive'] ?? false));
+        $this->assertNull($props['neuroRisk'] ?? null, 'risk must be hidden without permission');
+        $this->assertNotEmpty($props['neuroMeds'] ?? []);
+    }
+
+    public function test_psychiatry_risk_visible_and_audited_with_sensitive_permission(): void
+    {
+        // DoctorAuth requires role name 'doctor'; grant the sensitive permission to it.
+        $role = Role::where('name', 'doctor')->first();
+        $role->update(['permissions' => ['psychiatry.view_sensitive']]);
+        $user = User::create([
+            'name' => 'Sensitive Doc', 'email' => 'sens-doc@test.com',
+            'password' => bcrypt('password'), 'role_id' => $role->id, 'is_active' => true,
+        ]);
+        $doctor = Doctor::create([
+            'name_ar' => 'نفسي', 'name_en' => 'Psych', 'user_id' => $user->id,
+            'status' => 'active', 'module' => 'psychiatry',
+        ]);
+        $visit = $this->makeVisit('psychiatry', $doctor);
+        \App\Models\RiskAssessment::create([
+            'patient_id' => $this->patient->id, 'doctor_id' => $doctor->id,
+            'type' => 'suicide', 'tool' => 'c-ssrs', 'answers' => [],
+            'risk_level' => 'high', 'is_active' => true, 'assessed_at' => now(),
+        ]);
+
+        $props = $this->actingAs($user)
+            ->get("/doctor/visits/{$visit->id}")->assertOk()
+            ->original->getData()['page']['props'];
+
+        $this->assertTrue((bool) $props['neuroCanViewSensitive']);
+        $this->assertSame('high', $props['neuroRisk']['risk_level']);
+        $this->assertDatabaseHas('medical_data_access_logs', [
+            'patient_id' => $this->patient->id,
+            'data_category' => 'neuropsych_risk',
+        ]);
+    }
 }
