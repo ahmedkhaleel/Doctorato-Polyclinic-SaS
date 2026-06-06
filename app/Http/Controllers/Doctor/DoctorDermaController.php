@@ -150,7 +150,7 @@ class DoctorDermaController extends BaseDoctorController
             'image' => 'required|image|max:8192',
         ]);
 
-        $path = $request->file('image')->store('derma/photos', 'public');
+        $path = $request->file('image')->store('derma/photos', 'local');
         DermaPhoto::create([
             'patient_id' => $patient->id,
             'category' => $data['category'],

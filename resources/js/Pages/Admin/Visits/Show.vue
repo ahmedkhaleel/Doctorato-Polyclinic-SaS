@@ -737,7 +737,7 @@ function formatDateTime(date) {
                             </h3>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                                 <div v-for="xray in dentalXrays" :key="xray.id" class="relative group rounded-lg overflow-hidden border border-gray-200 hover:border-gray-300 transition">
-                                    <img :src="`/storage/${xray.image_path}`" :alt="xray.notes || 'X-ray'" class="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300" />
+                                    <img :src="xray.image_url" :alt="xray.notes || 'X-ray'" class="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300" />
                                     <div class="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[10px] px-2 py-1.5 opacity-0 group-hover:opacity-100 transition">
                                         <p v-if="xray.xray_type" class="capitalize">{{ xray.xray_type }}</p>
                                         <p v-if="xray.taken_date">{{ xray.taken_date }}</p>
@@ -787,7 +787,7 @@ function formatDateTime(date) {
 
                         <div v-if="visit.photos?.length" class="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div v-for="photo in visit.photos" :key="photo.id" class="relative group">
-                                <img :src="`/storage/${photo.photo_path}`" class="w-full h-40 object-cover rounded-lg" />
+                                <img :src="photo.url" class="w-full h-40 object-cover rounded-lg" />
                                 <div class="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-2 rounded-b-lg opacity-0 group-hover:opacity-100 transition">
                                     <p v-if="photo.caption">{{ photo.caption }}</p>
                                     <p class="text-gray-300">{{ photo.taken_at ? formatDate(photo.taken_at) : formatDate(photo.created_at) }}</p>

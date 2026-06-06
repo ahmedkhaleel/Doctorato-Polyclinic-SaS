@@ -35,7 +35,7 @@ class PatientDocumentController extends Controller
         ]);
 
         $file = $request->file('file');
-        $path = $file->store('patient-documents/' . $patient->id, 'public');
+        $path = $file->store('patient-documents/' . $patient->id, 'local');
 
         $document = $patient->documents()->create([
             'uploaded_by' => auth()->id(),
@@ -67,7 +67,7 @@ class PatientDocumentController extends Controller
     {
         if ($document->patient_id !== $patient->id) abort(403);
 
-        Storage::disk('public')->delete($document->file_path);
+        \App\Support\SecureMedia::delete($document->file_path);
         $document->delete();
 
         AuditLogger::log('document_deleted', $document, [

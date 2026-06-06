@@ -43,8 +43,8 @@ function typeLabel(type) {
 /* Lightbox */
 const lightboxOpen = ref(false);
 const lightboxImage = ref('');
-function openLightbox(path) {
-    lightboxImage.value = '/storage/' + path;
+function openLightbox(url) {
+    lightboxImage.value = url;
     lightboxOpen.value = true;
 }
 function closeLightbox() {
@@ -73,10 +73,10 @@ function closeLightbox() {
                 <!-- Image -->
                 <div
                     class="aspect-[4/3] bg-gray-900 relative cursor-pointer group"
-                    @click="openLightbox(xray.image_path)"
+                    @click="openLightbox(xray.image_url)"
                 >
                     <img
-                        :src="'/storage/' + xray.image_path"
+                        :src="xray.image_url"
                         :alt="typeLabel(xray.type)"
                         class="w-full h-full object-contain"
                     />

@@ -73,4 +73,78 @@ class SecureMediaTest extends TestCase
         $this->assertNull(SecureMedia::url(null));
         $this->assertNull(SecureMedia::url(''));
     }
+
+    public function test_dual_disk_helpers_fall_back_to_legacy_public_disk(): void
+    {
+        Storage::fake('local');
+        Storage::fake('public');
+
+        // A file that has NOT been migrated yet lives only on the public disk.
+        Storage::disk('public')->put('visit-photos/old.jpg', 'LEGACY');
+
+        $this->assertTrue(SecureMedia::exists('visit-photos/old.jpg'));
+        $this->assertSame('public', SecureMedia::diskFor('visit-photos/old.jpg'));
+
+        // Deletion finds it on the public disk.
+        $this->assertTrue(SecureMedia::delete('visit-photos/old.jpg'));
+        $this->assertFalse(SecureMedia::exists('visit-photos/old.jpg'));
+    }
+
+    public function test_dual_disk_prefers_private_when_present_on_both(): void
+    {
+        Storage::fake('local');
+        Storage::fake('public');
+        Storage::disk('public')->put('derma/photos/p.jpg', 'OLD');
+        Storage::disk('local')->put('derma/photos/p.jpg', 'NEW');
+
+        $this->assertSame('local', SecureMedia::diskFor('derma/photos/p.jpg'));
+    }
+
+    public function test_migration_command_moves_public_files_to_private_and_is_idempotent(): void
+    {
+        Storage::fake('local');
+        Storage::fake('public');
+        Storage::disk('public')->put('dental-xrays/a.png', 'XR');
+        Storage::disk('public')->put('patient-documents/3/r.pdf', 'DOC');
+        // A non-PHI prefix must be left untouched.
+        Storage::disk('public')->put('uploads/testimonials/t.jpg', 'PUB');
+
+        $this->artisan('media:migrate-phi')->assertExitCode(0);
+
+        // PHI files now on private, gone from public.
+        $this->assertTrue(Storage::disk('local')->exists('dental-xrays/a.png'));
+        $this->assertTrue(Storage::disk('local')->exists('patient-documents/3/r.pdf'));
+        $this->assertFalse(Storage::disk('public')->exists('dental-xrays/a.png'));
+
+        // Non-PHI untouched.
+        $this->assertTrue(Storage::disk('public')->exists('uploads/testimonials/t.jpg'));
+        $this->assertFalse(Storage::disk('local')->exists('uploads/testimonials/t.jpg'));
+
+        // Re-running is a no-op (idempotent), still exit 0.
+        $this->artisan('media:migrate-phi')->assertExitCode(0);
+        $this->assertTrue(Storage::disk('local')->exists('dental-xrays/a.png'));
+    }
+
+    public function test_dry_run_moves_nothing(): void
+    {
+        Storage::fake('local');
+        Storage::fake('public');
+        Storage::disk('public')->put('visit-photos/v.jpg', 'V');
+
+        $this->artisan('media:migrate-phi --dry-run')->assertExitCode(0);
+
+        $this->assertTrue(Storage::disk('public')->exists('visit-photos/v.jpg'));
+        $this->assertFalse(Storage::disk('local')->exists('visit-photos/v.jpg'));
+    }
+
+    public function test_model_accessor_emits_signed_media_url(): void
+    {
+        $photo = new \App\Models\VisitPhoto(['photo_path' => 'visit-photos/x.jpg']);
+
+        $url = $photo->url;
+        $this->assertNotNull($url);
+        $this->assertStringContainsString('/media', $url);
+        $this->assertStringContainsString('signature=', $url);
+        $this->assertStringContainsString('path=visit-photos', $url);
+    }
 }

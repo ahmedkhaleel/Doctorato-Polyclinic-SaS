@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class PatientInsurance extends Model
 {
@@ -30,7 +30,7 @@ class PatientInsurance extends Model
         'verified_at' => 'datetime',
     ];
 
-    protected $appends = ['is_expired', 'remaining_balance', 'usage_percentage'];
+    protected $appends = ['is_expired', 'remaining_balance', 'usage_percentage', 'card_image_front_url', 'card_image_back_url'];
 
     // ─── Relationships ──────────────────────────────────
 
@@ -71,10 +71,24 @@ class PatientInsurance extends Model
         return Attribute::get(fn () => $this->expiry_date && $this->expiry_date->isPast());
     }
 
+    // Signed, authenticated media URLs (PHI — no longer public /storage links).
+    protected function cardImageFrontUrl(): Attribute
+    {
+        return Attribute::get(fn () => \App\Support\SecureMedia::url($this->card_image_front));
+    }
+
+    protected function cardImageBackUrl(): Attribute
+    {
+        return Attribute::get(fn () => \App\Support\SecureMedia::url($this->card_image_back));
+    }
+
     protected function remainingBalance(): Attribute
     {
         return Attribute::get(function () {
-            if (!$this->max_annual_limit) return null;
+            if (! $this->max_annual_limit) {
+                return null;
+            }
+
             return max(0, $this->max_annual_limit - $this->used_amount);
         });
     }
@@ -82,7 +96,10 @@ class PatientInsurance extends Model
     protected function usagePercentage(): Attribute
     {
         return Attribute::get(function () {
-            if (!$this->max_annual_limit || $this->max_annual_limit <= 0) return 0;
+            if (! $this->max_annual_limit || $this->max_annual_limit <= 0) {
+                return 0;
+            }
+
             return min(100, round(($this->used_amount / $this->max_annual_limit) * 100, 1));
         });
     }
@@ -95,7 +112,7 @@ class PatientInsurance extends Model
     public function calculatePatientShare(float $totalAmount): array
     {
         $plan = $this->plan;
-        if (!$plan) {
+        if (! $plan) {
             return ['covered' => 0, 'patient_share' => $totalAmount, 'copay' => 0];
         }
 

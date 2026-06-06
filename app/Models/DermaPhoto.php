@@ -22,6 +22,21 @@ class DermaPhoto extends Model
         'taken_at' => 'date',
     ];
 
-    public function patient() { return $this->belongsTo(Patient::class); }
-    public function session() { return $this->belongsTo(DermaSession::class, 'session_id'); }
+    protected $appends = ['url'];
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
+    }
+
+    public function session()
+    {
+        return $this->belongsTo(DermaSession::class, 'session_id');
+    }
+
+    // Signed, authenticated media URL (PHI — no longer a public /storage link).
+    public function getUrlAttribute(): ?string
+    {
+        return \App\Support\SecureMedia::url($this->image_path);
+    }
 }

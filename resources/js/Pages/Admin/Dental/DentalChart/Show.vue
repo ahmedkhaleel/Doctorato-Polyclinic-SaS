@@ -780,13 +780,13 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                         <!-- Media Gallery -->
                         <div v-if="entry.media?.length" class="flex flex-wrap gap-2 mt-2">
                             <template v-for="(m, mi) in entry.media" :key="mi">
-                                <a v-if="m.type==='image'" :href="'/storage/'+m.path" target="_blank" class="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 hover:border-slate-300 transition-all hover:shadow-md">
-                                    <img :src="'/storage/'+m.path" :alt="m.original_name" class="w-full h-full object-cover" />
+                                <a v-if="m.type==='image'" :href="m.url" target="_blank" class="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 hover:border-slate-300 transition-all hover:shadow-md">
+                                    <img :src="m.url" :alt="m.original_name" class="w-full h-full object-cover" />
                                 </a>
-                                <a v-else-if="m.type==='video'" :href="'/storage/'+m.path" target="_blank" class="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 bg-gray-900 flex items-center justify-center hover:border-slate-300 transition-all">
+                                <a v-else-if="m.type==='video'" :href="m.url" target="_blank" class="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 bg-gray-900 flex items-center justify-center hover:border-slate-300 transition-all">
                                     <svg class="w-6 h-6 text-white/80" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                                 </a>
-                                <a v-else :href="'/storage/'+m.path" target="_blank" class="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 hover:border-slate-300 transition-all bg-gray-50">
+                                <a v-else :href="m.url" target="_blank" class="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 hover:border-slate-300 transition-all bg-gray-50">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                                     <span class="text-[10px] text-gray-600 max-w-[80px] truncate">{{ m.original_name }}</span>
                                 </a>

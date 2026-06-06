@@ -487,7 +487,7 @@ class BookingController extends Controller
         ]);
 
         foreach ($request->file('consents') as $file) {
-            $path = $file->store("consents/{$booking->id}", 'public');
+            $path = $file->store("consents/{$booking->id}", 'local');
 
             BookingConsent::create([
                 'booking_id' => $booking->id,
@@ -510,7 +510,7 @@ class BookingController extends Controller
             abort(403);
         }
 
-        Storage::disk('public')->delete($consent->file_path);
+        \App\Support\SecureMedia::delete($consent->file_path);
         $consent->delete();
 
         AuditLogger::log('consent_deleted', $booking, [
@@ -649,7 +649,7 @@ class BookingController extends Controller
         DB::transaction(function () use ($booking) {
             // 1. Delete consent files from storage
             foreach ($booking->consents as $consent) {
-                Storage::disk('public')->delete($consent->file_path);
+                \App\Support\SecureMedia::delete($consent->file_path);
             }
             $booking->consents()->delete();
 

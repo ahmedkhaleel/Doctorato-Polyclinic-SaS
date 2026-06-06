@@ -14,6 +14,40 @@ downloadable at a guessable `/storage/...` URL with no auth — a real PHI leak.
 - Tests: `tests/Feature/Security/SecureMediaTest.php` (auth streams; anon 403;
   tampered/unsigned 403; traversal/bad-disk 404). ✅
 
+## Implementation notes (what was actually built — read first)
+- **Approach chosen:** repoint each model's EXISTING URL accessor to a signed URL
+  (`SecureMedia::url($path)`) instead of adding new `*_secure_url` accessors. This
+  auto-secures every display site that already used `photo.url` / `xray.image_url`
+  / `consent.file_url`, minimizing Vue churn. Models updated:
+  `VisitPhoto.url`, `DentalXray.image_url` (+`$appends`), `DermaPhoto.url`,
+  `CosmeticPhoto.url`, `CosmeticConsent.signature_url`, `BookingConsent.file_url`,
+  `PatientDocument.file_url`, `DentalComparison.before/after_image_url`,
+  `PatientInsurance.card_image_front/back_url`, and `DentalChartEntry.media[]`
+  (each item gets a signed `url`, `path` preserved for delete/migrate).
+- **Dual-disk transition helpers** live in `SecureMedia`: `diskFor/exists/delete/
+  path/download` check the private disk first, then fall back to the legacy public
+  disk — so reads AND deletes work before and after migration. All
+  `Storage::disk('public')->{delete,exists,download}` calls on PHI columns were
+  routed through these.
+- **Scope decision — deferred (follow-up, NOT in this change):**
+  - **Patient profile photos** (`patients.photo`, `uploads/patients`,
+    `patient-photos`): rendered as avatars across ~37 list views; 60-min signed-URL
+    expiry would break long-open lists. Lower clinical sensitivity than the files
+    above. Left on the public disk.
+  - **Chat attachments** (`uploads/messages`): lower sensitivity; left on public.
+  - **Non-PHI** (doctor photos, public marketing gallery, testimonials, sliders,
+    logos, insurance-company logos, expense receipts) intentionally stay public.
+- **Latent bug fixed:** treatment-plan consent PDFs/signatures were already written
+  to the `local` disk but the Doctor/Admin download controllers read from `public`
+  (download would 404). Now read via `SecureMedia` (local + public fallback).
+- **Migration command:** `php artisan media:migrate-phi [--dry-run] [--keep-public]`
+  (`app/Console/Commands/MigratePhiMedia.php`) — idempotent move of the prefixes
+  below from `storage/app/public/<prefix>` → `storage/app/private/<prefix>`.
+- **Tests:** `tests/Feature/Security/SecureMediaTest.php` (10 ✅) covers signed/auth
+  serving, dual-disk fallback, migration command (incl. idempotency + dry-run +
+  non-PHI untouched), and a model accessor emitting a signed URL. Full suite green
+  (1504 tests).
+
 ## Phase 1 — Switch uploads to the private (`local`) disk
 For each upload site, change `->store(..., 'public')` / `Storage::disk('public')`
 → `'local'` (keep the same path prefix). Sites (controller@line → path → column):
@@ -53,11 +87,18 @@ before Phase 3.
 - Existing download controllers (PatientDocument::download etc.) read the
   `local` disk (with public fallback during transition).
 
-## Phase 4 — Verify on staging, then deploy
-- Tests green (Phase 0 done; add per-model accessor + ownership tests in P2).
-- On **staging**: confirm doctors/patients still SEE x-rays/photos (signed URLs),
-  and that a logged-out direct `/storage/<migrated>` hit 404s.
-- Then merge `security/s1-media-serving` → main.
+## Phase 4 — Verify on staging, then deploy  ← NEXT (NOT done; needs staging)
+Phases 1–3 are implemented on the branch (uploads → `local`, accessors signed,
+display sites converted, migration command + tests). Remaining:
+1. Deploy branch to **staging** (or pull it there). Run `npm run build` (new Vue).
+2. `php artisan media:migrate-phi --dry-run` → review counts.
+3. `php artisan media:migrate-phi` → move existing files.
+4. Verify: doctors/patients still SEE x-rays/photos/comparisons/documents (signed
+   URLs render), consent + document downloads work, and a logged-out direct
+   `/storage/dental-xrays/<file>` now 404s.
+5. Only then merge `security/s1-media-serving` → main.
+- Note: `public/build/manifest.json` must be rebuilt + committed (no `npm` on the
+  cPanel host) — the converted Vue pages need a fresh build before merge.
 
 ## Notes
 - Signed + authenticated session = anonymous enumeration is closed (the reported

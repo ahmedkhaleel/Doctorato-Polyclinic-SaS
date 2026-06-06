@@ -59,7 +59,7 @@ class CosmeticConsentController extends Controller
         }
 
         if ($request->hasFile('signature')) {
-            $data['signature_path'] = $request->file('signature')->store('cosmetic/signatures', 'public');
+            $data['signature_path'] = $request->file('signature')->store('cosmetic/signatures', 'local');
         }
         unset($data['signature']);
 
@@ -80,8 +80,8 @@ class CosmeticConsentController extends Controller
 
     public function destroy(CosmeticConsent $consent)
     {
-        if ($consent->signature_path && Storage::disk('public')->exists($consent->signature_path)) {
-            Storage::disk('public')->delete($consent->signature_path);
+        if ($consent->signature_path && \App\Support\SecureMedia::exists($consent->signature_path)) {
+            \App\Support\SecureMedia::delete($consent->signature_path);
         }
         $consent->delete();
         return back()->with('success', 'تم الحذف');

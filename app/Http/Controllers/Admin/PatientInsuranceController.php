@@ -122,7 +122,7 @@ class PatientInsuranceController extends Controller
 
         foreach (['card_image_front', 'card_image_back'] as $field) {
             if ($request->hasFile($field)) {
-                $data[$field] = $request->file($field)->store('insurance-cards', 'public');
+                $data[$field] = $request->file($field)->store('insurance-cards', 'local');
             }
         }
 
@@ -138,9 +138,9 @@ class PatientInsuranceController extends Controller
         foreach (['card_image_front', 'card_image_back'] as $field) {
             if ($request->hasFile($field)) {
                 if ($insurance->$field) {
-                    Storage::disk('public')->delete($insurance->$field);
+                    \App\Support\SecureMedia::delete($insurance->$field);
                 }
-                $data[$field] = $request->file($field)->store('insurance-cards', 'public');
+                $data[$field] = $request->file($field)->store('insurance-cards', 'local');
             }
         }
 

@@ -104,7 +104,7 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
                             <td class="px-5 py-3 hidden lg:table-cell text-slate-600">{{ fmt(c.signed_at) }}</td>
                             <td class="px-5 py-3 hidden lg:table-cell text-slate-600">{{ c.witnessed_by || '-' }}</td>
                             <td class="px-5 py-3 text-end space-x-2 rtl:space-x-reverse">
-                                <a v-if="c.signature_path" :href="`/storage/${c.signature_path}`" target="_blank" class="text-[#C4A265] hover:text-[#8B7043] text-xs font-bold">{{ t('View', 'عرض') }}</a>
+                                <a v-if="c.signature_path" :href="c.signature_url" target="_blank" class="text-[#C4A265] hover:text-[#8B7043] text-xs font-bold">{{ t('View', 'عرض') }}</a>
                                 <button @click="remove(c)" class="text-red-600 hover:text-red-800 text-xs font-bold">{{ t('Delete', 'حذف') }}</button>
                             </td>
                         </tr>

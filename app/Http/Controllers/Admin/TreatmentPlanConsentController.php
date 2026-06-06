@@ -94,8 +94,9 @@ class TreatmentPlanConsentController extends Controller
      */
     public function downloadPdf(TreatmentPlanConsent $consent)
     {
-        if ($consent->pdf_path && Storage::disk('public')->exists($consent->pdf_path)) {
-            return response()->download(Storage::disk('public')->path($consent->pdf_path));
+        // PDF lives on the private disk (SecureMedia falls back to public during transition).
+        if ($consent->pdf_path && \App\Support\SecureMedia::exists($consent->pdf_path)) {
+            return \App\Support\SecureMedia::download($consent->pdf_path);
         }
 
         // Generate PDF on-the-fly if not stored

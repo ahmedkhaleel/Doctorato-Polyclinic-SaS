@@ -47,7 +47,7 @@ class DoctorDentalXrayController extends BaseDoctorController
         $data['doctor_id'] = $doctorId;
 
         if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('dental-xrays', 'public');
+            $data['image_path'] = $request->file('image')->store('dental-xrays', 'local');
         }
         unset($data['image']);
 

@@ -62,8 +62,10 @@ class DoctorTreatmentPlanConsentController extends BaseDoctorController
             abort(403);
         }
 
-        if ($consent->pdf_path && Storage::disk('public')->exists($consent->pdf_path)) {
-            return response()->download(Storage::disk('public')->path($consent->pdf_path));
+        // PDF is written to the private disk (see PatientConsentController::generateConsentPdf);
+        // SecureMedia::download also falls back to the legacy public disk during transition.
+        if ($consent->pdf_path && \App\Support\SecureMedia::exists($consent->pdf_path)) {
+            return \App\Support\SecureMedia::download($consent->pdf_path);
         }
 
         $consent->load(['treatmentPlan.patient', 'treatmentPlan.doctor', 'treatmentPlan.treatments']);

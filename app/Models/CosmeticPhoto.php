@@ -22,7 +22,26 @@ class CosmeticPhoto extends Model
         'taken_at' => 'date',
     ];
 
-    public function patient() { return $this->belongsTo(Patient::class); }
-    public function procedure() { return $this->belongsTo(CosmeticProcedure::class, 'procedure_id'); }
-    public function session() { return $this->belongsTo(CosmeticSession::class, 'session_id'); }
+    protected $appends = ['url'];
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
+    }
+
+    public function procedure()
+    {
+        return $this->belongsTo(CosmeticProcedure::class, 'procedure_id');
+    }
+
+    public function session()
+    {
+        return $this->belongsTo(CosmeticSession::class, 'session_id');
+    }
+
+    // Signed, authenticated media URL (PHI — no longer a public /storage link).
+    public function getUrlAttribute(): ?string
+    {
+        return \App\Support\SecureMedia::url($this->image_path);
+    }
 }

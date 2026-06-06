@@ -61,7 +61,7 @@ class DentalXrayController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('dental-xrays', 'public');
+            $data['image_path'] = $request->file('image')->store('dental-xrays', 'local');
         }
         unset($data['image']);
 
@@ -87,7 +87,7 @@ class DentalXrayController extends Controller
     {
         AuditLogger::log('deleted', $xray);
         if ($xray->image_path) {
-            \Storage::disk('public')->delete($xray->image_path);
+            \App\Support\SecureMedia::delete($xray->image_path);
         }
         $xray->delete();
 

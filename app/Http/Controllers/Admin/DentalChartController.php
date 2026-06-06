@@ -138,7 +138,7 @@ class DentalChartController extends Controller
                 $type = in_array($ext, ['mp4', 'mov']) ? 'video'
                     : (in_array($ext, ['pdf', 'doc', 'docx']) ? 'document' : 'image');
 
-                $path = $file->store('uploads/dental/entries/' . $patient->id, 'public');
+                $path = $file->store('uploads/dental/entries/' . $patient->id, 'local');
                 $media[] = [
                     'type' => $type,
                     'path' => $path,
@@ -183,7 +183,7 @@ class DentalChartController extends Controller
         // Delete media files
         if ($entry->media) {
             foreach ($entry->media as $m) {
-                \Storage::disk('public')->delete($m['path'] ?? '');
+                \App\Support\SecureMedia::delete($m['path'] ?? '');
             }
         }
 

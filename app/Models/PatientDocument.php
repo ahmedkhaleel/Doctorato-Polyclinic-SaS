@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class PatientDocument extends Model
 {
@@ -57,9 +57,10 @@ class PatientDocument extends Model
 
     // ─── Accessors ──────────────────────────────────────
 
+    // Signed, authenticated media URL (PHI — no longer a public /storage link).
     protected function fileUrl(): Attribute
     {
-        return Attribute::get(fn () => $this->file_path ? '/storage/' . $this->file_path : null);
+        return Attribute::get(fn () => \App\Support\SecureMedia::url($this->file_path));
     }
 
     protected function isExpired(): Attribute

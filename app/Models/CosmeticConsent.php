@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use App\Models\Concerns\BelongsToBranch;
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\LogsActivity;
 
 class CosmeticConsent extends Model
 {
@@ -22,8 +22,31 @@ class CosmeticConsent extends Model
         'signed_at' => 'datetime',
     ];
 
-    public function patient() { return $this->belongsTo(Patient::class); }
-    public function procedure() { return $this->belongsTo(CosmeticProcedure::class, 'procedure_id'); }
-    public function template() { return $this->belongsTo(CosmeticConsentTemplate::class, 'template_id'); }
-    public function session() { return $this->belongsTo(CosmeticSession::class, 'session_id'); }
+    protected $appends = ['signature_url'];
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
+    }
+
+    public function procedure()
+    {
+        return $this->belongsTo(CosmeticProcedure::class, 'procedure_id');
+    }
+
+    public function template()
+    {
+        return $this->belongsTo(CosmeticConsentTemplate::class, 'template_id');
+    }
+
+    public function session()
+    {
+        return $this->belongsTo(CosmeticSession::class, 'session_id');
+    }
+
+    // Signed, authenticated media URL (PHI — no longer a public /storage link).
+    public function getSignatureUrlAttribute(): ?string
+    {
+        return \App\Support\SecureMedia::url($this->signature_path);
+    }
 }

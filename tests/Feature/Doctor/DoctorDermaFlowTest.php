@@ -103,7 +103,8 @@ class DoctorDermaFlowTest extends TestCase
     #[Test]
     public function uploading_a_before_photo_stores_a_derma_photo(): void
     {
-        Storage::fake('public');
+        // S1: PHI photos now land on the private `local` disk, served via signed URLs.
+        Storage::fake('local');
         $patient = Patient::create(['full_name' => 'Pic', 'phone' => '0104']);
 
         $this->actingAs($this->doctorUser)
@@ -116,7 +117,9 @@ class DoctorDermaFlowTest extends TestCase
         $photo = \App\Models\DermaPhoto::where('patient_id', $patient->id)->first();
         $this->assertNotNull($photo);
         $this->assertSame('before', $photo->category);
-        Storage::disk('public')->assertExists($photo->image_path);
+        Storage::disk('local')->assertExists($photo->image_path);
+        // And the model exposes a signed media URL, not a public /storage path.
+        $this->assertStringContainsString('/media', $photo->url);
     }
 
     #[Test]
