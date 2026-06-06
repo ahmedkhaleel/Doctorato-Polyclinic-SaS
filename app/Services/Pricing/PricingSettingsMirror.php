@@ -47,9 +47,10 @@ class PricingSettingsMirror
             'followup_window_days' => 'followup_window_days',
         ],
         'pediatric' => [
-            'consultant_fee' => 'pediatric_consultant_fee',
-            'specialist_fee' => 'pediatric_specialist_fee',
-            'consultation_fee' => 'pediatric_consultant_fee',
+            // Single consultation fee (the pediatric editor's key) drives all three.
+            'consultant_fee' => 'pediatric_consultation_fee',
+            'specialist_fee' => 'pediatric_consultation_fee',
+            'consultation_fee' => 'pediatric_consultation_fee',
             'followup_fee' => 'pediatric_followup_fee',
             'followup_window_days' => 'followup_window_days',
         ],

@@ -59,9 +59,14 @@ class PricingResolver
                 'window' => 'followup_window_days',
             ],
             'pediatric' => [
-                'consultant' => 'pediatric_consultant_fee',
-                'specialist' => 'pediatric_specialist_fee',
-                'base' => 'pediatric_consultant_fee',
+                // The pediatric settings editor saves a SINGLE `pediatric_consultation_fee`
+                // (no consultant/specialist split) — so all three read that key. This
+                // reconciles a pre-existing mismatch where the resolver read
+                // `pediatric_consultant_fee`/`_specialist_fee` (which the editor never
+                // wrote → pediatric resolved to 0). Now the admin's entered fee applies.
+                'consultant' => 'pediatric_consultation_fee',
+                'specialist' => 'pediatric_consultation_fee',
+                'base' => 'pediatric_consultation_fee',
                 'followup' => 'pediatric_followup_fee',
                 'window' => 'followup_window_days',
             ],
