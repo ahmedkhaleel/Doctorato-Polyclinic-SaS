@@ -1,0 +1,175 @@
+# ADR-001: Unify the pricing source of truth (P5-4)
+
+**Status:** Proposed (design only — NOT implemented; no production change)
+**Date:** 2026-06-06
+**Deciders:** Owner (info@markeza-group.com) + engineering
+**Supersedes/affects:** `app/Services/Pricing/PricingResolver.php`, settings write paths
+
+> ⚠️ This is a **design + staged-migration plan** for review. Nothing here has
+> been applied. P5-4 touches **live revenue** (fees feed booking, billing, and
+> doctor commission), so it must roll out behind verification on staging first.
+
+---
+
+## 1. Context
+
+A medical module's consultation pricing (consultant fee, specialist fee, base
+fee, follow-up fee, follow-up window) lives in **two different stores** today.
+`PricingResolver::source()` hides this split from callers, but the data and the
+**write paths** remain divergent:
+
+| Module | Driver | Where fees are stored (keys) |
+|---|---|---|
+| derma / dermatology | `settings` (global `Setting`) | `dermatology_consultant_fee`, `dermatology_specialist_fee`, `default_dermatology_fee`, `followup_fee`, `followup_window_days` |
+| cosmetic | `settings` | `cosmetic_consultation_fee` (×3), `followup_fee`, `followup_window_days` |
+| dental | `settings` | `dental_consultant_fee`, `dental_specialist_fee`, `followup_fee`, `followup_window_days` |
+| pediatric | `settings` | `pediatric_consultant_fee`, `pediatric_specialist_fee`, `pediatric_followup_fee`, `followup_window_days` |
+| obgyn / psychiatry / neurology | `module` (`module_settings`) | `consultant_fee`, `specialist_fee`, `consultation_fee`, `followup_fee`, `followup_window_days` |
+
+Per-doctor overrides are **separate** (columns on `doctors`, e.g.
+`dermatology_fee`, `psychiatry_consultation_fee`) and are **out of scope** here
+— they already work and stay as-is.
+
+### Write paths (who edits the legacy `Setting` fee keys)
+- `app/Http/Controllers/Admin/SettingController.php` (global settings page → `Admin/Settings/Index.vue`)
+- `app/Http/Controllers/Admin/AdminPediatricController.php` (→ `Admin/Pediatric/Settings.vue`)
+- Doctor + booking controllers read/seed defaults (`DoctorController`, `BookingController`, `SecretaryBookingController`, `LeadController`).
+
+`module_settings` fees (obgyn/psych/neuro) are edited via `SettingController` too
+(module settings pages).
+
+### Forces / problems
+1. **Two stores, two editors** → drift risk: a value can be changed in one place
+   and silently ignored by the resolver path that reads the other.
+2. **Shared keys** (`followup_fee`, `followup_window_days`) are *global* for the
+   legacy modules — changing the derma follow-up fee also changes dental's.
+   `module_settings` already gives obgyn/psych/neuro **per-module** follow-up
+   values; the legacy modules cannot have distinct ones today.
+3. New modules must remember which store to use — cognitive cost + bug surface.
+
+---
+
+## 2. Decision (proposed)
+
+Make **`module_settings` the single source of truth** for all six medical
+modules' consultation pricing. `PricingResolver::source()` collapses to one
+`module` driver for every module; the legacy global `Setting` fee keys are
+**migrated into `module_settings`** and then retired.
+
+Benefits: one store, per-module follow-up values for everyone, one editor, no
+drift, simpler mental model, branch-override support everywhere (module_settings
+already supports `branch_id`).
+
+---
+
+## 3. Options considered
+
+### Option A — Do nothing (keep the split, resolver hides it)
+| Dimension | Assessment |
+|---|---|
+| Complexity | None |
+| Risk | None now, ongoing drift risk + per-module follow-up impossible for legacy |
+| Cost | Zero |
+
+**Pros:** zero risk today. **Cons:** the drift bug and shared-follow-up
+limitation persist; every new module re-learns the split.
+
+### Option B — Unify onto `module_settings` (proposed)
+| Dimension | Assessment |
+|---|---|
+| Complexity | Medium (read + write + data migration must move together) |
+| Risk | **High if done in one shot** on live revenue; **Low** with expand/contract |
+| Cost | ~1–2 days incl. staging verification |
+
+**Pros:** single source, per-module follow-up everywhere, branch overrides,
+simpler. **Cons:** must migrate read path, write path, AND data atomically (or
+via expand/contract) or fees mis-resolve.
+
+### Option C — Unify onto global `Setting`
+Rejected: `Setting` has no per-module/per-branch structure for fees; would lose
+the per-module follow-up capability `module_settings` already provides.
+
+**Chosen: Option B, via the expand/contract migration in §4.**
+
+---
+
+## 4. Staged migration plan (expand → migrate → contract)
+
+> Each phase is independently shippable, reversible, and verified on **staging**
+> before production. No phase changes a fee value — only where it is read/written.
+
+### Phase 0 — Safety net (no behaviour change)
+- Add a **characterization test**: for every module × doctor_type × follow-up
+  combination, snapshot `PricingResolver::consultationFee()` + `feesFor()` to a
+  fixture. This locks current resolved prices so any later phase that changes a
+  number fails loudly.
+- Add a `pricing:audit` artisan command that prints the resolved fee table for
+  all modules (run on prod read-only before/after to compare).
+
+### Phase 1 — EXPAND: backfill `module_settings` from legacy `Setting`
+- Idempotent migration/command copies each legacy module's current values into
+  `module_settings` keys (`consultant_fee`, `specialist_fee`, `consultation_fee`,
+  `followup_fee`, `followup_window_days`), per module:
+  - derma → from `dermatology_*` + shared `followup_*`
+  - cosmetic → from `cosmetic_consultation_fee` + shared `followup_*`
+  - dental → from `dental_*` + shared `followup_*`
+  - pediatric → from `pediatric_*` (+ `pediatric_followup_fee`)
+- **Resolver still reads the legacy store** (no read change yet). This phase only
+  *populates* the new store. 100% safe; reversible (delete the new rows).
+
+### Phase 2 — Switch the READ path
+- `PricingResolver::source()` returns the `module` driver for ALL modules.
+- Run the Phase-0 characterization test: resolved prices must be **identical**
+  (because Phase 1 backfilled the same numbers). If any differ → the backfill
+  was wrong; fix before proceeding.
+- Ship to staging, run `pricing:audit`, eyeball a few bookings/invoices.
+
+### Phase 3 — Switch the WRITE path (editors)
+- Point `SettingController` + `AdminPediatricController` (and the matching Vue
+  settings pages) to write the per-module `module_settings` keys instead of the
+  legacy `Setting` keys. Now one editor → one store the resolver reads.
+- Keep the legacy keys **dual-written for one release** (write both) as a belt-
+  and-braces rollback path, OR skip if Phase-2 verification is clean.
+
+### Phase 4 — CONTRACT: retire legacy keys
+- After ≥1 production cycle with no pricing incidents, remove the legacy
+  `Setting` fee keys + the `settings` branch of `source()`. Leave a data
+  migration that deletes the orphaned keys (idempotent).
+
+### Rollback
+- Phase 1: delete backfilled rows (no-op for reads).
+- Phase 2: revert `source()` to the split (one-line revert) — legacy store still
+  intact and still written (until Phase 3).
+- Phase 3: if dual-write kept, revert resolver/editor; data still in both stores.
+- Each phase is a separate PR + deploy; `pricing:audit` diff is the gate.
+
+---
+
+## 5. Acceptance criteria (per phase)
+- Phase 0: characterization test green; `pricing:audit` output captured from prod.
+- Phase 1: every module has `module_settings` fee rows equal to its current
+  resolved legacy values; full suite green.
+- Phase 2: characterization snapshot **unchanged**; staging bookings price
+  identically; full suite green.
+- Phase 3: editing a fee in the admin UI changes the resolved price (end-to-end
+  test: edit → book → invoice reflects new fee); no legacy-only write remains.
+- Phase 4: no code path references the legacy fee keys; suite green; `pricing:audit`
+  identical to the pre-migration capture.
+
+## 6. Consequences
+- **Easier:** one store, per-module follow-up fees for all, branch overrides
+  everywhere, one settings editor, trivial to add a new module's pricing.
+- **Harder (short term):** a 4-PR sequence with staging verification each time.
+- **Revisit:** if per-branch pricing demand grows, `module_settings.branch_id`
+  already supports it — surface it in the editor at that point.
+
+## 7. Action items (when approved — NOT yet started)
+1. [ ] Phase 0: characterization test + `pricing:audit` command.
+2. [ ] Phase 1: idempotent backfill migration/command (+ test).
+3. [ ] Phase 2: flip `source()` to `module`; verify snapshot identical.
+4. [ ] Phase 3: repoint settings write paths + Vue pages; end-to-end edit test.
+5. [ ] Phase 4: retire legacy keys after a clean production cycle.
+
+> **Recommendation:** approve Phases 0–1 first (zero behaviour change, fully
+> reversible). Treat Phase 2 (read flip) as the real go/no-go gate, decided only
+> after the Phase-0 snapshot proves the backfill is exact on a prod data copy.
