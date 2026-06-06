@@ -394,6 +394,7 @@ const navGroups = [
             { labelEn: 'Branch Comparison', labelAr: 'مقارنة الفروع', href: '/admin/reports/branch-comparison', icon: 'chartUp', permission: 'reports.view' },
             { labelEn: 'Revenue Analytics', labelAr: 'تحليل الإيرادات', href: '/admin/reports/revenue-analytics', icon: 'chartUp', permission: 'reports.view' },
             { labelEn: 'Queue Analytics',   labelAr: 'تحليل الانتظار',  href: '/admin/reports/queue-analytics',   icon: 'queue',   permission: 'reports.view' },
+            { labelEn: 'Clinical Outcomes', labelAr: 'المخرجات السريرية', href: '/admin/reports/outcomes',        icon: 'chartUp', permission: 'reports.view' },
             { labelEn: 'Doctor KPIs',      labelAr: 'أداء الأطباء',    href: '/admin/reports/doctor-kpi',        icon: 'user',    permission: 'reports.view', moduleKey: 'hr' },
             { labelEn: 'Staff Performance', labelAr: 'أداء الموظفين', href: '/admin/reports/staff-performance', icon: 'users',   permission: 'reports.view', moduleKey: 'hr' },
             { labelEn: 'Financial Report', labelAr: 'التقرير المالي', href: '/admin/reports/financial',          icon: 'receipt', permission: 'reports.view' },

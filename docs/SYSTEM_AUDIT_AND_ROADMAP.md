@@ -181,7 +181,7 @@
 | P2‑2a | **توقيع موافقات إلكتروني للمريض** | ✅ **موجود** — أسنان: `Patient/Dental/Consent/Sign.vue`؛ تجميل: `PatientCosmeticConsentController::sign` (توقيع canvas + `signed_at` + تخزين خاص بعد S1). |
 | P2‑3 | **استهلاك مخزون علاجات الأسنان** | ✅ **موجود** — `DentalTreatmentService::consumeInventory()` عند الإكمال (idempotent عبر `supply_transaction_id`) + `reverseInventory()` عند الإلغاء/التراجع. |
 | الجزئي | **تذكيرات المتابعة لكل التخصصات** | ✅ **مغطّى إلى حدّ كبير** — أوامر: `SendObgynReminders`, `SendPediatricVaccinationReminders`, `ProcessDentalFollowups`, `SendRecallReminders`, `SendFollowUpReminders` + `checkFollowUpEligibility` واعٍ بالموديول. |
-| P2‑2b | **طبقة مخرجات/جودة موحّدة (Outcomes)** | 🟡 **الفجوة الحقيقية الوحيدة المتبقّية في P2** — لوحة جودة سريرية مجمّعة عبر التخصصات (تتداخل مع P5). ميزة جديدة فعلية، أكبر، اختيارية. |
+| P2‑2b | **طبقة مخرجات/جودة موحّدة (Outcomes)** | ✅ **منشور** — `OutcomeService` + `/admin/reports/outcomes` (لوحة + تصدير CSV): الأسنان (نسبة إكمال)، الجلدية (استهلاك الباقات)، الأطفال (تغطية التطعيم)، النساء (نسبة المواليد الأحياء/القيصرية/متوسط الوزن)، النفسي/العصبي (تحسّن PHQ‑9/المقاييس + مخاطر نشطة). دفاعي لكل موديول + بوّابة `reports.view`. |
 
 ### المرحلة P3 — التطبيب عن بُعد الكامل (أسبوعان) 🟠
 | ID | البند | الملفات | معيار القبول | جهد |
