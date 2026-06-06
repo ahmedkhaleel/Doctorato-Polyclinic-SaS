@@ -634,9 +634,12 @@ class Patient extends Model
 
     // ─── Accessors ──────────────────────────────────────
 
+    // Signed, authenticated media URL (PII — no longer a public /storage link).
+    // Uses the longer avatar TTL so it survives long-open list views; full URLs
+    // (externally-hosted photos) pass through untouched.
     protected function photoUrl(): Attribute
     {
-        return Attribute::get(fn () => $this->photo ? '/storage/'.$this->photo : null);
+        return Attribute::get(fn () => \App\Support\SecureMedia::avatar($this->photo));
     }
 
     protected function age(): Attribute

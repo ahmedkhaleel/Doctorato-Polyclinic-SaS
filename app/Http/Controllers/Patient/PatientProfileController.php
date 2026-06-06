@@ -7,7 +7,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
@@ -104,14 +103,14 @@ class PatientProfileController extends BasePatientController
         $patient = $this->patient($request);
         $oldPath = $patient->photo;
 
-        $path = $request->file('photo')->store('patient-photos', 'public');
+        $path = $request->file('photo')->store('patient-photos', 'local');
 
         $patient->update(['photo' => $path]);
 
         // Best-effort cleanup of the previous file.
         if ($oldPath) {
             try {
-                Storage::disk('public')->delete($oldPath);
+                \App\Support\SecureMedia::delete($oldPath);
             } catch (\Throwable $e) { /* swallow — log fallback below */
             }
         }
@@ -132,7 +131,7 @@ class PatientProfileController extends BasePatientController
 
         $patient->update(['photo' => null]);
         try {
-            Storage::disk('public')->delete($oldPath);
+            \App\Support\SecureMedia::delete($oldPath);
         } catch (\Throwable $e) {
         }
 

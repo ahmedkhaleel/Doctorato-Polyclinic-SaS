@@ -55,6 +55,7 @@ class ChatController extends Controller
                     'receiver_id' => $message->receiver_id,
                     'body' => $message->body,
                     'attachment_path' => $message->attachment_path,
+                    'attachment_url' => \App\Support\SecureMedia::url($message->attachment_path),
                     'attachment_name' => $message->attachment_name,
                     'read_at' => null,
                     'created_at' => $message->created_at->toISOString(),

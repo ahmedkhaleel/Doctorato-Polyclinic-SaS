@@ -147,4 +147,40 @@ class SecureMediaTest extends TestCase
         $this->assertStringContainsString('signature=', $url);
         $this->assertStringContainsString('path=visit-photos', $url);
     }
+
+    public function test_patient_photo_url_is_signed_with_longer_avatar_expiry(): void
+    {
+        $patient = new \App\Models\Patient(['photo' => 'uploads/patients/p.jpg']);
+
+        $url = $patient->photo_url;
+        $this->assertNotNull($url);
+        $this->assertStringContainsString('/media', $url);
+        $this->assertStringContainsString('signature=', $url);
+
+        // Avatar expiry is the longer window, not the default 60-min one.
+        parse_str(parse_url($url, PHP_URL_QUERY), $q);
+        $expires = (int) ($q['expires'] ?? 0);
+        $this->assertGreaterThan(
+            now()->addMinutes(SecureMedia::TTL_MINUTES + 5)->timestamp,
+            $expires,
+            'Patient avatar URL should use the longer avatar TTL.'
+        );
+    }
+
+    public function test_external_http_photo_passes_through_unsigned(): void
+    {
+        $url = SecureMedia::avatar('https://cdn.example.com/face.jpg');
+        $this->assertSame('https://cdn.example.com/face.jpg', $url);
+
+        $patient = new \App\Models\Patient(['photo' => 'https://cdn.example.com/face.jpg']);
+        $this->assertSame('https://cdn.example.com/face.jpg', $patient->photo_url);
+    }
+
+    public function test_chat_attachment_helper_signs_path(): void
+    {
+        $url = SecureMedia::url('uploads/messages/file.pdf');
+        $this->assertNotNull($url);
+        $this->assertStringContainsString('/media', $url);
+        $this->assertStringContainsString('path=uploads', $url);
+    }
 }

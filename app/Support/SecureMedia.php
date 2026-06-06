@@ -21,6 +21,13 @@ class SecureMedia
     /** Default link lifetime — long enough for a page session, short enough to limit leakage. */
     public const TTL_MINUTES = 60;
 
+    /**
+     * Longer lifetime for avatars/thumbnails that appear in lists which may stay
+     * open for hours (patient avatars, chat). 24h keeps the image from breaking
+     * on a long-open page; a fresh URL is still minted on every page load.
+     */
+    public const AVATAR_TTL_MINUTES = 1440;
+
     /** Private disk new PHI uploads land on. */
     public const PRIVATE_DISK = 'local';
 
@@ -33,11 +40,22 @@ class SecureMedia
             return null;
         }
 
+        // Externally-hosted images (full URLs) pass through untouched.
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+
         return URL::temporarySignedRoute(
             'media.show',
             now()->addMinutes($ttlMinutes ?? self::TTL_MINUTES),
             ['disk' => $disk, 'path' => $path],
         );
+    }
+
+    /** Signed URL with the longer avatar/thumbnail lifetime (see AVATAR_TTL_MINUTES). */
+    public static function avatar(?string $path, string $disk = self::PRIVATE_DISK): ?string
+    {
+        return self::url($path, $disk, self::AVATAR_TTL_MINUTES);
     }
 
     /**

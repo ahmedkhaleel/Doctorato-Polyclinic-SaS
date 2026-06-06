@@ -59,7 +59,7 @@ const prescriptions = computed(() => props.patient?.prescriptions || []);
                 <div class="flex items-center gap-4">
                     <div v-if="patient.photo" class="w-14 h-14 rounded-2xl overflow-hidden ring-2 ring-teal-100 flex-shrink-0">
                         <img
-                            :src="patient.photo.startsWith('http') ? patient.photo : `/storage/${patient.photo}`"
+                            :src="patient.photo_url"
                             :alt="patient.full_name"
                             class="w-full h-full object-cover"
                         />

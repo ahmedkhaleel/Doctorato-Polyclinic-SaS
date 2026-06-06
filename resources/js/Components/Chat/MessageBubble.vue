@@ -55,15 +55,15 @@ function openImage(path) {
                     <!-- Image preview -->
                     <img
                         v-if="isImage"
-                        :src="`/storage/${message.attachment_path}`"
+                        :src="message.attachment_url"
                         :alt="message.attachment_name"
                         class="rounded-lg max-w-full max-h-48 object-cover cursor-pointer"
-                        @click="openImage(message.attachment_path)"
+                        @click="openImage(message.attachment_url)"
                     />
                     <!-- File download -->
                     <a
                         v-else
-                        :href="`/storage/${message.attachment_path}`"
+                        :href="message.attachment_url"
                         target="_blank"
                         class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-colors"
                         :class="isMine ? 'bg-white/20 text-white hover:bg-white/30' : 'bg-gray-50 text-gray-700 hover:bg-gray-100'"

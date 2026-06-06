@@ -89,7 +89,7 @@ class PatientController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('uploads/patients', 'public');
+            $data['photo'] = $request->file('photo')->store('uploads/patients', 'local');
         }
 
         $patient = new Patient($data);
@@ -465,7 +465,7 @@ class PatientController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('uploads/patients', 'public');
+            $data['photo'] = $request->file('photo')->store('uploads/patients', 'local');
         }
 
         $patient->update($data);

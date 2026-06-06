@@ -58,7 +58,7 @@ function confirmDeletePatient() {
 
 function getPatientPhoto(patient) {
     if (!patient.photo) return null;
-    return patient.photo.startsWith('http') ? patient.photo : `/storage/${patient.photo}`;
+    return patient.photo_url;
 }
 
 function getInitials(name) {

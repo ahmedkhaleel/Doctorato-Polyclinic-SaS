@@ -77,7 +77,7 @@ class SecretaryPatientController extends BaseSecretaryController
         ]);
 
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('uploads/patients', 'public');
+            $data['photo'] = $request->file('photo')->store('uploads/patients', 'local');
         }
 
         $patient = new Patient($data);
@@ -280,7 +280,7 @@ class SecretaryPatientController extends BaseSecretaryController
         ]);
 
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('uploads/patients', 'public');
+            $data['photo'] = $request->file('photo')->store('uploads/patients', 'local');
         }
 
         $patient->update($data);

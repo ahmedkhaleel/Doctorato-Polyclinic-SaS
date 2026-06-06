@@ -256,7 +256,7 @@ function submit() {
 
                     <div v-if="patient.photo" class="flex items-center gap-3 mb-4">
                         <img
-                            :src="patient.photo.startsWith('http') ? patient.photo : `/storage/${patient.photo}`"
+                            :src="patient.photo_url"
                             class="w-16 h-16 rounded-xl object-cover ring-2 ring-teal-100"
                             alt="Current photo"
                         />
