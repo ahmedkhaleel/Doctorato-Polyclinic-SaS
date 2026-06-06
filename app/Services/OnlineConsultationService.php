@@ -15,8 +15,7 @@ class OnlineConsultationService
 {
     public function __construct(
         private AgoraService $agora,
-    ) {
-    }
+    ) {}
 
     public function createConsultation(array $data): OnlineConsultation
     {
@@ -69,38 +68,38 @@ class OnlineConsultationService
         }
 
         $invoice = new Invoice([
-            'invoice_number'  => Invoice::generateInvoiceNumber(),
-            'invoice_date'    => now()->toDateString(),
-            'patient_id'      => $consultation->patient_id,
-            'visit_id'        => $consultation->visit_id,
-            'module'          => $consultation->module,
-            'subtotal'        => (float) $consultation->fee,
+            'invoice_number' => Invoice::generateInvoiceNumber(),
+            'invoice_date' => now()->toDateString(),
+            'patient_id' => $consultation->patient_id,
+            'visit_id' => $consultation->visit_id,
+            'module' => $consultation->module,
+            'subtotal' => (float) $consultation->fee,
             'discount_amount' => 0,
-            'tax_amount'      => 0,
-            'total'           => (float) $consultation->fee,
+            'tax_amount' => 0,
+            'total' => (float) $consultation->fee,
         ]);
         $invoice->paid_amount = 0;
         $invoice->status = 'unpaid';
         $invoice->save();
 
         InvoiceItem::create([
-            'invoice_id'     => $invoice->id,
+            'invoice_id' => $invoice->id,
             'description_en' => 'Online consultation',
             'description_ar' => 'استشارة أونلاين',
-            'quantity'       => 1,
-            'unit_price'     => (float) $consultation->fee,
-            'discount'       => 0,
-            'total'          => (float) $consultation->fee,
+            'quantity' => 1,
+            'unit_price' => (float) $consultation->fee,
+            'discount' => 0,
+            'total' => (float) $consultation->fee,
         ]);
 
         Payment::create([
-            'invoice_id'        => $invoice->id,
-            'patient_id'        => $consultation->patient_id,
+            'invoice_id' => $invoice->id,
+            'patient_id' => $consultation->patient_id,
             'payment_method_id' => PaymentMethod::firstOrCreate(['name_en' => 'Online Payment'], ['name_ar' => 'دفع أونلاين', 'is_active' => true])->id,
-            'amount'            => (float) $consultation->fee,
-            'payment_date'      => now()->toDateString(),
-            'reference_number'  => $gatewayRef,
-            'notes'             => 'Telemedicine consultation ' . $consultation->consultation_number,
+            'amount' => (float) $consultation->fee,
+            'payment_date' => now()->toDateString(),
+            'reference_number' => $gatewayRef,
+            'notes' => 'Telemedicine consultation '.$consultation->consultation_number,
         ]);
 
         $invoice->recalculateStatus();
@@ -117,11 +116,10 @@ class OnlineConsultationService
         ]);
     }
 
-
     public function markParticipantJoined(OnlineConsultation $consultation, string $role): void
     {
         $field = $role === 'doctor' ? 'doctor_joined_at' : 'patient_joined_at';
-        if (!$consultation->$field) {
+        if (! $consultation->$field) {
             $consultation->update([$field => now()]);
             try {
                 event(new \App\Events\OnlineConsultation\ParticipantJoined($consultation, $role));
@@ -131,7 +129,7 @@ class OnlineConsultationService
         }
 
         if ($consultation->doctor_joined_at && $consultation->patient_joined_at
-            && !$consultation->session_started_at) {
+            && ! $consultation->session_started_at) {
             $consultation->update([
                 'session_started_at' => now(),
                 'status' => OnlineConsultation::STATUS_IN_PROGRESS,
@@ -149,7 +147,7 @@ class OnlineConsultationService
      */
     public function completeSession(OnlineConsultation $consultation, array $sessionData = []): Visit
     {
-        return DB::transaction(function () use ($consultation, $sessionData) {
+        $visit = DB::transaction(function () use ($consultation, $sessionData) {
             $endedAt = now();
             $duration = $consultation->session_started_at
                 ? $endedAt->diffInSeconds($consultation->session_started_at)
@@ -188,13 +186,13 @@ class OnlineConsultationService
             // in the derma session log and the patient's portal timeline.
             if ($consultation->module === 'derma') {
                 \App\Models\DermaSession::create([
-                    'patient_id'   => $consultation->patient_id,
-                    'doctor_id'    => $consultation->doctor_id,
-                    'visit_id'     => $visit->id,
+                    'patient_id' => $consultation->patient_id,
+                    'doctor_id' => $consultation->doctor_id,
+                    'visit_id' => $visit->id,
                     'session_type' => 'other',
-                    'cost'         => 0,
+                    'cost' => 0,
                     'completed_at' => $endedAt,
-                    'notes'        => $consultation->diagnosis ?: $consultation->doctor_notes,
+                    'notes' => $consultation->diagnosis ?: $consultation->doctor_notes,
                 ]);
             }
 
@@ -206,6 +204,20 @@ class OnlineConsultationService
 
             return $visit;
         });
+
+        // P3-3: route the telemedicine visit through the SAME post-visit pipeline
+        // as an in-clinic visit (summary email, completion SMS, loyalty), so the
+        // patient receives a consultation summary after the call. Fired after
+        // commit; listeners guard on the patient's notification preferences.
+        try {
+            event(new \App\Events\VisitCompleted($visit->fresh() ?? $visit));
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('VisitCompleted dispatch failed (online consultation)', [
+                'visit_id' => $visit->id, 'error' => $e->getMessage(),
+            ]);
+        }
+
+        return $visit;
     }
 
     public function handleMissedSession(OnlineConsultation $consultation): void
@@ -215,11 +227,11 @@ class OnlineConsultationService
         }
 
         $missed = null;
-        if (!$consultation->doctor_joined_at && $consultation->patient_joined_at) {
+        if (! $consultation->doctor_joined_at && $consultation->patient_joined_at) {
             $missed = OnlineConsultation::STATUS_MISSED_DOCTOR;
-        } elseif ($consultation->doctor_joined_at && !$consultation->patient_joined_at) {
+        } elseif ($consultation->doctor_joined_at && ! $consultation->patient_joined_at) {
             $missed = OnlineConsultation::STATUS_MISSED_PATIENT;
-        } elseif (!$consultation->doctor_joined_at && !$consultation->patient_joined_at) {
+        } elseif (! $consultation->doctor_joined_at && ! $consultation->patient_joined_at) {
             $missed = OnlineConsultation::STATUS_MISSED_PATIENT; // both missed = blame patient
         }
 
