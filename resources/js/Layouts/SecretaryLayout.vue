@@ -116,6 +116,13 @@ const navGroups = [
         ],
     },
     {
+        key: 'derma', titleEn: 'Dermatology', titleAr: 'الجلدية والتجميل',
+        moduleKey: 'derma',
+        items: [
+            { labelEn: 'Front Desk', labelAr: 'مكتب الاستقبال', href: '/secretary/derma/overview', icon: 'calendar' },
+        ],
+    },
+    {
         key: 'psychiatry', titleEn: 'Psychiatry', titleAr: 'الطب النفسي',
         moduleKey: 'psychiatry',
         items: [
