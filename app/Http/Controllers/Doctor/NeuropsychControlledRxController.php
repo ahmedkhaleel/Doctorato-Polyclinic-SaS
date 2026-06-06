@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Models\ControlledPrescription;
+use App\Models\MedicalDataAccessLog;
 use App\Models\NeuropsychEncounter;
 use App\Models\Patient;
 use App\Services\AuditLogger;
@@ -36,11 +37,24 @@ class NeuropsychControlledRxController extends BaseDoctorController
     {
         $module = $this->module($request);
 
+        $prescriptions = ControlledPrescription::where('module', $module)
+            ->where('doctor_id', $this->doctorId($request))
+            ->with('patient:id,full_name')->latest()->paginate(20)->withQueryString();
+
+        // Audit: viewing controlled-substance prescriptions is sensitive access.
+        foreach (collect($prescriptions->items())->pluck('patient_id')->filter()->unique()->all() as $pid) {
+            MedicalDataAccessLog::record(
+                (int) $pid,
+                MedicalDataAccessLog::ACCESS_VIEW,
+                MedicalDataAccessLog::CATEGORY_SENSITIVE,
+                null,
+                "Viewed {$module} controlled-substance prescriptions",
+            );
+        }
+
         return Inertia::render('Doctor/Neuropsych/ControlledRx', [
             'module' => $module,
-            'prescriptions' => ControlledPrescription::where('module', $module)
-                ->where('doctor_id', $this->doctorId($request))
-                ->with('patient:id,full_name')->latest()->paginate(20)->withQueryString(),
+            'prescriptions' => $prescriptions,
             'patients' => Patient::active()->orderBy('full_name')->limit(500)->get(['id', 'full_name']),
             'gateway' => $this->gateways->active()->code(),
         ]);

@@ -79,6 +79,21 @@ class DataIntegrityCheckCommand extends Command
             // Columns may differ; not fatal.
         }
 
+        // ── 3b. Overpaid invoices (paid_amount > total) ──────
+        // A reconciliation drift signature: a payment was double-counted (e.g.
+        // a manual payment plus a gateway callback for the same charge). Should
+        // never happen given current idempotency guards; this catches regressions.
+        $overpaid = Invoice::whereColumn('paid_amount', '>', DB::raw('total + 0.01'))
+            ->limit(50)->pluck('id')->toArray();
+        if (! empty($overpaid)) {
+            $findings[] = [
+                'check' => 'invoice_overpaid',
+                'count' => count($overpaid),
+                'detail' => 'Invoices whose paid_amount exceeds total (possible double-counted payment)',
+                'ids' => $overpaid,
+            ];
+        }
+
         // ── 4. Online-enabled doctors with no online schedule ─
         $badDoctors = Doctor::onlineEnabled()
             ->whereDoesntHave('schedules', fn ($q) => $q

@@ -113,4 +113,38 @@ class AdminScreensPhaseCTest extends TestCase
         $this->assertContains($this->actingAs($this->admin)->get('/admin/psychiatry/risk')->status(), [403, 302]);
         $this->assertContains($this->actingAs($this->admin)->get('/admin/psychiatry/controlled')->status(), [403, 302]);
     }
+
+    public function test_viewing_risk_register_writes_a_sensitive_access_log(): void
+    {
+        RiskAssessment::create([
+            'patient_id' => $this->patient->id, 'doctor_id' => $this->doctor->id, 'type' => 'suicide', 'tool' => 'c-ssrs',
+            'answers' => [], 'risk_level' => 'high', 'safety_plan' => 'Plan', 'is_active' => true, 'assessed_at' => now(),
+        ]);
+
+        $this->actingAs($this->admin)->get('/admin/psychiatry/risk')->assertOk();
+
+        // The sensitive read is provable in the medical access audit trail.
+        $this->assertDatabaseHas('medical_data_access_logs', [
+            'user_id' => $this->admin->id,
+            'patient_id' => $this->patient->id,
+            'access_type' => 'view_medical',
+            'data_category' => 'sensitive_medical',
+        ]);
+    }
+
+    public function test_viewing_controlled_log_writes_a_sensitive_access_log(): void
+    {
+        ControlledPrescription::create([
+            'patient_id' => $this->patient->id, 'doctor_id' => $this->doctor->id, 'module' => 'psychiatry',
+            'drug' => 'Methylphenidate', 'schedule' => 'II', 'quantity' => '30 tabs', 'status' => 'draft', 'gateway' => 'internal',
+        ]);
+
+        $this->actingAs($this->admin)->get('/admin/psychiatry/controlled')->assertOk();
+
+        $this->assertDatabaseHas('medical_data_access_logs', [
+            'user_id' => $this->admin->id,
+            'patient_id' => $this->patient->id,
+            'data_category' => 'sensitive_medical',
+        ]);
+    }
 }
