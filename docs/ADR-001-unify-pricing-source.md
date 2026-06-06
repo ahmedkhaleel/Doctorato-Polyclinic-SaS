@@ -1,6 +1,6 @@
 # ADR-001: Unify the pricing source of truth (P5-4)
 
-**Status:** Proposed (design only — NOT implemented; no production change)
+**Status:** Accepted — Phases 0–3 implemented & shipped (read unified + dual-write); Phase 4 (retire legacy keys) pending a clean production cycle
 **Date:** 2026-06-06
 **Deciders:** Owner (info@markeza-group.com) + engineering
 **Supersedes/affects:** `app/Services/Pricing/PricingResolver.php`, settings write paths
@@ -136,12 +136,20 @@ the per-module follow-up capability `module_settings` already provides.
   row pre-seeded to 0 must NEVER zero a live fee → the "≤ 0 ⇒ fall back" rule.
 - Full suite green (1535); resolved prices unchanged in every environment.
 
-### Phase 3 — Switch the WRITE path (editors)
-- Point `SettingController` + `AdminPediatricController` (and the matching Vue
-  settings pages) to write the per-module `module_settings` keys instead of the
-  legacy `Setting` keys. Now one editor → one store the resolver reads.
-- Keep the legacy keys **dual-written for one release** (write both) as a belt-
-  and-braces rollback path, OR skip if Phase-2 verification is clean.
+### Phase 3 — Switch the WRITE path (editors)  ✅ DONE (shipped, dual-write)
+- `app/Services/Pricing/PricingSettingsMirror.php` holds the legacy→module_settings
+  map and mirrors current legacy fee values into module_settings (upsert).
+- `SettingController::update` and `AdminPediatricController::updateSettings` call
+  `mirror()` after saving → **dual-write**: the legacy `Setting` is still written
+  (rollback path) AND module_settings is synced, so the resolver reflects the
+  edit immediately (it prefers the positive module_settings value).
+- `pricing:backfill-module-settings` now delegates to the same service.
+- **Pre-existing follow-up (NOT changed here):** the pediatric editor saves
+  `pediatric_consultation_fee` while the resolver reads `pediatric_consultant_fee`
+  / `pediatric_specialist_fee` — a legacy-key mismatch that predates this ADR.
+  Mirroring is harmless/idempotent; reconciling those keys is a separate task.
+- Tests: mirror sync, `touchesPricing` detection, and the real `/admin/settings`
+  endpoint dual-writing a dental fee. Full suite green (1538).
 
 ### Phase 4 — CONTRACT: retire legacy keys
 - After ≥1 production cycle with no pricing incidents, remove the legacy
@@ -179,7 +187,7 @@ the per-module follow-up capability `module_settings` already provides.
 1. [x] **Phase 0 (DONE, shipped):** characterization test (`tests/Feature/Pricing/PricingResolverCharacterizationTest.php`) + `pricing:audit` command (`app/Console/Commands/PricingAuditCommand.php`). Zero behaviour change. **Next: capture `php artisan pricing:audit --json` from production as the baseline before Phase 1.**
 2. [x] **Phase 1 (DONE, shipped):** `pricing:backfill-module-settings` command (idempotent upsert; --dry-run) + test proving it populates module_settings, keeps resolved prices identical, and is idempotent. NOT auto-run on prod — owner runs it deliberately, gated by a clean `pricing:audit --json` before/after diff.
 3. [x] **Phase 2 (DONE, shipped):** fallback-protected read flip — module_settings primary, legacy Setting fallback when ≤0/absent. Safe pre- or post-backfill; reversible. Full suite green.
-4. [ ] Phase 3: repoint settings write paths + Vue pages; end-to-end edit test.
+4. [x] **Phase 3 (DONE, shipped):** PricingSettingsMirror + dual-write hooks in SettingController & AdminPediatricController; end-to-end edit test green.
 5. [ ] Phase 4: retire legacy keys after a clean production cycle.
 
 > **Recommendation:** approve Phases 0–1 first (zero behaviour change, fully

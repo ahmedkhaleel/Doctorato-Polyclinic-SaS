@@ -701,6 +701,14 @@ class AdminPediatricController extends Controller
             Setting::set($key, $value);
         }
 
+        // ADR-001 Phase 3 (dual-write): mirror legacy pediatric fees into
+        // module_settings so the resolver stays in sync. NOTE: this editor saves
+        // `pediatric_consultation_fee` while PricingResolver reads
+        // `pediatric_consultant_fee`/`pediatric_specialist_fee` — a PRE-EXISTING
+        // legacy-key mismatch flagged in ADR-001 §4 as a separate follow-up; the
+        // mirror is harmless/idempotent and does not change that behaviour.
+        app(\App\Services\Pricing\PricingSettingsMirror::class)->mirror();
+
         return redirect()->back()->with('success', 'Pediatric settings updated successfully');
     }
 }
