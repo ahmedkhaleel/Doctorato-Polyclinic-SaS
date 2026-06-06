@@ -251,6 +251,12 @@ Route::middleware(['secretary.auth', 'branch.context'])->group(function () {
             ->name('secretary.derma.overview');
     });
 
+    // ─── Telemedicine (front-desk: scheduling + payment chase only) ─────
+    Route::prefix('telemedicine')->middleware('module:telemedicine')->group(function () {
+        Route::get('/overview', [\App\Http\Controllers\Secretary\SecretaryTelemedicineController::class, 'index'])
+            ->name('secretary.telemedicine.overview');
+    });
+
     // ─── Psychiatry & Neurology (front-desk: admin overview only) ───────
     // STRICTLY administrative — appointments/roster/billing; NO clinical content
     // and NO view_sensitive surface (that stays in the doctor portal).
