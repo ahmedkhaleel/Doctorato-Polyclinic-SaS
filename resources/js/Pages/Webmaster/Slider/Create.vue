@@ -145,7 +145,7 @@ function submit() {
                             :class="imagePreview ? 'border-transparent' : 'border-gray-300 hover:border-gray-400'"
                         >
                             <div v-if="imagePreview" class="aspect-[16/9]">
-                                <img :src="imagePreview" class="w-full h-full object-cover" />
+                                <img :src="imagePreview" class="w-full h-full object-cover" alt="" />
                                 <button
                                     type="button"
                                     @click="form.image = null; imagePreview = null"

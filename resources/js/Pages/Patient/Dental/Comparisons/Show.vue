@@ -138,24 +138,24 @@ onUnmounted(() => {
             <!-- Side by Side -->
             <div v-else-if="viewMode === 'side'" class="grid grid-cols-2 gap-0.5 bg-gray-200">
                 <div class="relative">
-                    <img :src="comp.before_image_url" class="w-full aspect-[4/3] object-cover" />
+                    <img :src="comp.before_image_url" class="w-full aspect-[4/3] object-cover" alt="" />
                     <div class="absolute bottom-3 left-3"><span class="bg-black/60 text-white text-xs font-bold px-3 py-1.5 rounded-full">{{ isRtl ? 'قبل' : 'BEFORE' }}</span></div>
                 </div>
                 <div class="relative">
-                    <img :src="comp.after_image_url" class="w-full aspect-[4/3] object-cover" />
+                    <img :src="comp.after_image_url" class="w-full aspect-[4/3] object-cover" alt="" />
                     <div class="absolute bottom-3 left-3"><span class="bg-emerald-600/80 text-white text-xs font-bold px-3 py-1.5 rounded-full">{{ isRtl ? 'بعد' : 'AFTER' }}</span></div>
                 </div>
             </div>
 
             <!-- Before Only -->
             <div v-else-if="viewMode === 'before'" class="relative">
-                <img :src="comp.before_image_url" class="w-full aspect-[4/3] object-cover" />
+                <img :src="comp.before_image_url" class="w-full aspect-[4/3] object-cover" alt="" />
                 <div class="absolute bottom-3 left-3"><span class="bg-black/60 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">{{ isRtl ? 'قبل' : 'BEFORE' }}</span></div>
             </div>
 
             <!-- After Only -->
             <div v-else class="relative">
-                <img :src="comp.after_image_url" class="w-full aspect-[4/3] object-cover" />
+                <img :src="comp.after_image_url" class="w-full aspect-[4/3] object-cover" alt="" />
                 <div class="absolute bottom-3 left-3"><span class="bg-emerald-600/80 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">{{ isRtl ? 'بعد' : 'AFTER' }}</span></div>
             </div>
         </div>

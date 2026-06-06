@@ -77,10 +77,10 @@ const availableCategories = computed(() => {
                 <div class="relative aspect-[16/9] overflow-hidden bg-gray-100">
                     <div class="absolute inset-0 flex">
                         <div class="w-1/2 h-full overflow-hidden">
-                            <img :src="comp.before_image_url" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <img :src="comp.before_image_url" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="" />
                         </div>
                         <div class="w-1/2 h-full overflow-hidden border-s-2 border-white">
-                            <img :src="comp.after_image_url" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <img :src="comp.after_image_url" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="" />
                         </div>
                     </div>
 

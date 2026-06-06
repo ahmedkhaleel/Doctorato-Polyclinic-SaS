@@ -218,7 +218,7 @@ const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url
                     <form @submit.prevent="updateProfile" class="p-4 sm:p-6 space-y-5">
                         <!-- Photo indicator -->
                         <div v-if="photoPreview" class="flex items-center gap-3 p-3 bg-amber-50 rounded-xl border border-amber-200">
-                            <img :src="photoPreview" class="w-10 h-10 rounded-lg object-cover" />
+                            <img :src="photoPreview" class="w-10 h-10 rounded-lg object-cover" alt="" />
                             <div class="flex-1">
                                 <p class="text-sm font-medium text-amber-800">{{ isRtl ? 'صورة جديدة محددة' : 'New photo selected' }}</p>
                                 <p class="text-xs text-amber-600">{{ isRtl ? 'سيتم رفعها عند حفظ الملف' : 'Will be uploaded when you save' }}</p>

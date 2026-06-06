@@ -118,10 +118,10 @@ function formatDate(date) {
                 <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
                     <div class="absolute inset-0 flex">
                         <div class="w-1/2 h-full overflow-hidden">
-                            <img :src="comp.before_image_url" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <img :src="comp.before_image_url" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="" />
                         </div>
                         <div class="w-1/2 h-full overflow-hidden border-s-2 border-white">
-                            <img :src="comp.after_image_url" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <img :src="comp.after_image_url" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="" />
                         </div>
                     </div>
                     <div class="absolute top-2 left-2 z-10"><span class="bg-black/60 text-white text-[10px] font-bold px-2 py-0.5 rounded-full backdrop-blur-sm">{{ isRtl ? 'قبل' : 'BEFORE' }}</span></div>

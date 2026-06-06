@@ -65,7 +65,7 @@ function formatTime(t) {
                 <div class="rounded-2xl border border-[#C4A265]/20 bg-gradient-to-br from-[#1B365D]/5 to-[#C4A265]/5 p-5 space-y-3">
                     <div class="flex items-center gap-3 pb-3 border-b border-[#C4A265]/20">
                         <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center overflow-hidden border border-[#C4A265]/30">
-                            <img v-if="consultation.doctor?.photo" :src="`/storage/${consultation.doctor.photo}`" class="w-full h-full object-cover" />
+                            <img v-if="consultation.doctor?.photo" :src="`/storage/${consultation.doctor.photo}`" class="w-full h-full object-cover" alt="" />
                             <span v-else class="font-bold text-[#1B365D]">{{ ($localized(consultation.doctor, 'name') || 'D').charAt(0) }}</span>
                         </div>
                         <div>

@@ -1002,7 +1002,7 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                 <div v-if="mediaPreview.length" class="flex flex-wrap gap-2 mt-3">
                     <div v-for="(p, pi) in mediaPreview" :key="pi" class="relative group">
                         <div class="w-20 h-20 rounded-lg border border-gray-200 overflow-hidden">
-                            <img v-if="p.type==='image'" :src="p.url" class="w-full h-full object-cover" />
+                            <img v-if="p.type==='image'" :src="p.url" class="w-full h-full object-cover" alt="" />
                             <div v-else-if="p.type==='video'" class="w-full h-full bg-gray-900 flex items-center justify-center"><svg class="w-6 h-6 text-white/80" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg></div>
                             <div v-else class="w-full h-full bg-gray-50 flex flex-col items-center justify-center p-1">
                                 <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>

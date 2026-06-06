@@ -184,7 +184,7 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
                         </div>
                         <div class="p-6">
                             <div v-if="imagePreview" class="relative inline-block mb-4">
-                                <img :src="imagePreview" class="w-32 h-32 rounded-xl object-cover border-2 border-gray-100 shadow-sm" />
+                                <img :src="imagePreview" class="w-32 h-32 rounded-xl object-cover border-2 border-gray-100 shadow-sm" alt="" />
                                 <button type="button" @click="removeImage" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600 transition-colors shadow-md" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
@@ -245,7 +245,7 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
                         <div class="p-6">
                             <div class="rounded-xl border border-gray-100 p-4 space-y-3">
                                 <div v-if="imagePreview" class="w-full h-24 rounded-lg overflow-hidden bg-gray-50">
-                                    <img :src="imagePreview" class="w-full h-full object-cover" />
+                                    <img :src="imagePreview" class="w-full h-full object-cover" alt="" />
                                 </div>
                                 <div v-else class="w-full h-24 rounded-lg bg-gray-50 flex items-center justify-center">
                                     <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0v10l-8 4-8-4V7m16 0l-8 4m0 10V11m0 0L4 7" /></svg>

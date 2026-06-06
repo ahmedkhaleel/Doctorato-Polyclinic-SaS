@@ -124,14 +124,14 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                 <div>
                     <p class="text-[11px] font-bold text-gray-500 uppercase mb-2">{{ isRtl ? 'قبل' : 'Before' }}</p>
                     <div class="grid grid-cols-2 gap-2">
-                        <img v-for="(g, i) in beforeAfter.before" :key="'b'+i" :src="g.url" class="pd-photo" loading="lazy" />
+                        <img v-for="(g, i) in beforeAfter.before" :key="'b'+i" :src="g.url" class="pd-photo" loading="lazy" alt="" />
                         <p v-if="!beforeAfter.before.length" class="text-xs text-gray-300 col-span-2">—</p>
                     </div>
                 </div>
                 <div>
                     <p class="text-[11px] font-bold text-gray-500 uppercase mb-2">{{ isRtl ? 'بعد' : 'After' }}</p>
                     <div class="grid grid-cols-2 gap-2">
-                        <img v-for="(g, i) in beforeAfter.after" :key="'a'+i" :src="g.url" class="pd-photo" loading="lazy" />
+                        <img v-for="(g, i) in beforeAfter.after" :key="'a'+i" :src="g.url" class="pd-photo" loading="lazy" alt="" />
                         <p v-if="!beforeAfter.after.length" class="text-xs text-gray-300 col-span-2">—</p>
                     </div>
                 </div>
@@ -139,7 +139,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
             <div v-if="beforeAfter.progress.length">
                 <p class="text-[11px] font-bold text-gray-500 uppercase mb-2">{{ isRtl ? 'مراحل التقدّم' : 'Progress' }}</p>
                 <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                    <img v-for="(g, i) in beforeAfter.progress" :key="'p'+i" :src="g.url" class="pd-photo" loading="lazy" />
+                    <img v-for="(g, i) in beforeAfter.progress" :key="'p'+i" :src="g.url" class="pd-photo" loading="lazy" alt="" />
                 </div>
             </div>
         </section>

@@ -88,14 +88,14 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                     <div>
                         <p class="cmp-col-label">{{ isRtl ? 'قبل' : 'Before' }}</p>
                         <div class="grid grid-cols-2 gap-2">
-                            <figure v-for="ph in g.before" :key="ph.id"><img :src="ph.url" class="cmp-thumb" /><figcaption class="cmp-cap">{{ fmtDate(ph.date) }}</figcaption></figure>
+                            <figure v-for="ph in g.before" :key="ph.id"><img :src="ph.url" class="cmp-thumb" alt="" /><figcaption class="cmp-cap">{{ fmtDate(ph.date) }}</figcaption></figure>
                             <p v-if="!g.before.length" class="text-xs text-gray-300 col-span-2">—</p>
                         </div>
                     </div>
                     <div>
                         <p class="cmp-col-label">{{ isRtl ? 'بعد' : 'After' }}</p>
                         <div class="grid grid-cols-2 gap-2">
-                            <figure v-for="ph in g.after" :key="ph.id"><img :src="ph.url" class="cmp-thumb" /><figcaption class="cmp-cap">{{ fmtDate(ph.date) }}</figcaption></figure>
+                            <figure v-for="ph in g.after" :key="ph.id"><img :src="ph.url" class="cmp-thumb" alt="" /><figcaption class="cmp-cap">{{ fmtDate(ph.date) }}</figcaption></figure>
                             <p v-if="!g.after.length" class="text-xs text-gray-300 col-span-2">—</p>
                         </div>
                     </div>
@@ -105,7 +105,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                 <div v-if="g.progress.length" class="mt-4 pt-3 border-t border-gray-50">
                     <p class="cmp-col-label">{{ isRtl ? 'مراحل التقدّم' : 'Progress' }}</p>
                     <div class="flex gap-2 overflow-x-auto pb-1">
-                        <figure v-for="ph in g.progress" :key="ph.id" class="flex-shrink-0 w-24"><img :src="ph.url" class="cmp-thumb" /><figcaption class="cmp-cap">{{ fmtDate(ph.date) }}</figcaption></figure>
+                        <figure v-for="ph in g.progress" :key="ph.id" class="flex-shrink-0 w-24"><img :src="ph.url" class="cmp-thumb" alt="" /><figcaption class="cmp-cap">{{ fmtDate(ph.date) }}</figcaption></figure>
                     </div>
                 </div>
             </div>
