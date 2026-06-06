@@ -2,6 +2,7 @@
 import { router, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import UiEmptyState from '@/Components/Ui/EmptyState.vue';
 
 defineOptions({ layout: AdminLayout });
 
@@ -76,8 +77,10 @@ const hint = (m) => isRtl.value ? m.hint_ar : m.hint_en;
                 </div>
             </section>
         </div>
-        <div v-else class="bg-white rounded-2xl border border-gray-100 shadow-sm px-5 py-16 text-center">
-            <p class="text-sm text-gray-400">{{ isRtl ? 'لا بيانات مخرجات بعد (فعّل تخصصاً وأكمل بعض الزيارات).' : 'No outcome data yet (enable a specialty and complete some visits).' }}</p>
+        <div v-else class="bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <UiEmptyState icon="chart"
+                :title="isRtl ? 'لا بيانات مخرجات بعد' : 'No outcome data yet'"
+                :description="isRtl ? 'فعّل تخصصاً وأكمل بعض الزيارات لتظهر المؤشرات.' : 'Enable a specialty and complete some visits to populate indicators.'" />
         </div>
     </div>
 </template>
