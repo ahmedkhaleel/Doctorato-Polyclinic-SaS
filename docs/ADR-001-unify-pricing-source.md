@@ -106,6 +106,12 @@ the per-module follow-up capability `module_settings` already provides.
 - Add a `pricing:audit` artisan command that prints the resolved fee table for
   all modules (run on prod read-only before/after to compare).
 
+> **Implementation note (found during Phase 1):** `ModuleManager::setSetting()`
+> issues an UPDATE-only query — it no-ops when the (module,key) row doesn't exist.
+> Legacy modules have no `module_settings` fee rows yet, so the backfill (and the
+> Phase-3 write path) must **upsert** (`updateOrInsert`). The backfill command
+> does this; Phase 3 must either fix `setSetting` to upsert or seed rows first.
+
 ### Phase 1 — EXPAND: backfill `module_settings` from legacy `Setting`
 - Idempotent migration/command copies each legacy module's current values into
   `module_settings` keys (`consultant_fee`, `specialist_fee`, `consultation_fee`,
@@ -165,7 +171,7 @@ the per-module follow-up capability `module_settings` already provides.
 
 ## 7. Action items
 1. [x] **Phase 0 (DONE, shipped):** characterization test (`tests/Feature/Pricing/PricingResolverCharacterizationTest.php`) + `pricing:audit` command (`app/Console/Commands/PricingAuditCommand.php`). Zero behaviour change. **Next: capture `php artisan pricing:audit --json` from production as the baseline before Phase 1.**
-2. [ ] Phase 1: idempotent backfill migration/command (+ test).
+2. [x] **Phase 1 (DONE, shipped):** `pricing:backfill-module-settings` command (idempotent upsert; --dry-run) + test proving it populates module_settings, keeps resolved prices identical, and is idempotent. NOT auto-run on prod — owner runs it deliberately, gated by a clean `pricing:audit --json` before/after diff.
 3. [ ] Phase 2: flip `source()` to `module`; verify snapshot identical.
 4. [ ] Phase 3: repoint settings write paths + Vue pages; end-to-end edit test.
 5. [ ] Phase 4: retire legacy keys after a clean production cycle.
