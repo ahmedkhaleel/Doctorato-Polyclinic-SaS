@@ -2,6 +2,7 @@
 import { router, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
+import UiEmptyState from '@/Components/Ui/EmptyState.vue';
 
 defineOptions({ layout: SecretaryLayout });
 
@@ -107,7 +108,7 @@ function docName(d) { return d ? (isRtl.value ? (d.name_ar || d.name_en) : (d.na
                     </tbody>
                 </table>
             </div>
-            <div v-else class="px-5 py-10 text-center"><p class="text-sm text-gray-400">{{ isRtl ? 'لا استشارات قادمة' : 'No upcoming consultations' }}</p></div>
+            <UiEmptyState v-else icon="calendar" :title="isRtl ? 'لا استشارات قادمة' : 'No upcoming consultations'" />
         </section>
     </div>
 </template>

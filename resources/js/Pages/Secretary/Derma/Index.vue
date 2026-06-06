@@ -2,6 +2,7 @@
 import { router, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
+import UiEmptyState from '@/Components/Ui/EmptyState.vue';
 
 defineOptions({ layout: SecretaryLayout });
 
@@ -83,7 +84,7 @@ function pkgName(p) { return p ? (isRtl.value ? (p.name_ar || p.name_en) : (p.na
                     </div>
                 </div>
             </div>
-            <div v-else class="px-5 py-10 text-center"><p class="text-sm text-gray-400">{{ isRtl ? 'لا مواعيد قادمة' : 'No upcoming appointments' }}</p></div>
+            <UiEmptyState v-else icon="calendar" :title="isRtl ? 'لا مواعيد قادمة' : 'No upcoming appointments'" />
         </section>
 
         <!-- Active packages -->
@@ -145,7 +146,7 @@ function pkgName(p) { return p ? (isRtl.value ? (p.name_ar || p.name_en) : (p.na
                     </tbody>
                 </table>
             </div>
-            <div v-else class="px-5 py-10 text-center"><p class="text-sm text-gray-400">{{ isRtl ? 'لا مرضى بعد' : 'No patients yet' }}</p></div>
+            <UiEmptyState v-else icon="users" :title="isRtl ? 'لا مرضى بعد' : 'No patients yet'" />
         </section>
     </div>
 </template>
