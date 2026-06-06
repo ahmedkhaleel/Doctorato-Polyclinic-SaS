@@ -145,12 +145,33 @@ composer deploy              # git pull + composer install --no-dev + migrate + 
 | `php artisan data:integrity-check --alert` | Auto Mondays 05:00. Scans for orphans/drift/stuck rows. |
 | `php artisan telemedicine:cleanup-stuck` | Auto hourly :10. Frees slots abandoned at checkout. |
 | `php artisan patients:link-users`        | On-demand. Creates portal User accounts for Patient rows missing a `user_id`. Patient must "Forgot password" to claim. |
+| `php artisan media:migrate-phi [--dry-run] [--keep-public]` | Auto on deploy + on-demand. Moves sensitive PHI files (x-rays, photos, documents, consents, insurance cards, patient photos, chat) from the public disk to the private disk. Idempotent; serving has a public-disk fallback so it never breaks display. (S1) |
+| `php artisan pricing:audit [--json]`     | On-demand, READ-ONLY. Prints the resolved consultation pricing for every medical module. Run before/after any pricing change and diff. (ADR-001) |
+| `php artisan pricing:backfill-module-settings [--dry-run]` | On-demand. Copies legacy `Setting` fees into `module_settings` (idempotent upsert). Read path is unchanged; verify with `pricing:audit --json` before/after. (ADR-001 Phase 1) |
+
+**Pricing source (ADR-001):** `module_settings` is now the primary store for all
+medical-module consultation fees, with a fallback to the legacy global `Setting`
+keys when a value is absent or ≤ 0 (so no zero-pricing risk). Editors dual-write
+(legacy + mirrored). See `docs/ADR-001-unify-pricing-source.md`. The
+`module_pricing_unset` finding in `data:integrity-check` flags any enabled module
+that resolves to a 0 fee.
 
 Human-facing admin pages:
 
 - `/admin/diagnostics` — System/Telemedicine/Scheduler cards + log tail + Export JSON button
 - `/admin/settings/telemedicine` — Readiness banner + per-blocker diagnostics
+- `/admin/reports/outcomes` — cross-specialty clinical-quality / outcomes dashboard (+ CSV export)
+- `/admin/doctors/{id}/service-rates` — per-doctor per-service commission rates (+ bulk apply)
+- `/secretary/{psychiatry,neurology,derma,telemedicine}/overview` — front-desk (admin-only, no clinical data)
 - `GET /health` — JSON for uptime monitors (200/503)
+
+### Owner / server pending actions (not code — require server or business input)
+- **`APP_ENV=production` + `APP_DEBUG=false`** in `.env` (security; turns off debug traces).
+- **Payment gateway keys** (Paymob/Stripe) via `/admin/settings/telemedicine` — unblocks
+  telemedicine revenue and makes `/health` green.
+- **Confirm pediatric fee:** run `pricing:audit`; if `pediatric` is 0, set
+  `pediatric_consultation_fee` in `/admin/pediatric/settings`.
+- **ADR-001 Phase 4** (retire legacy fee keys): only after a clean soak + go-ahead.
 
 ---
 
