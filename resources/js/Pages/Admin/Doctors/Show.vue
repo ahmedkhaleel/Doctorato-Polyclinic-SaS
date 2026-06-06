@@ -296,6 +296,17 @@ onMounted(() => {
                             <svg class="w-4 h-4 transition-transform group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                             {{ $t('a_edit_doctor') }}
                         </Link>
+
+                        <!-- Service commission rates (P5-3) -->
+                        <Link
+                            v-if="can('doctors.update')"
+                            :href="`/admin/doctors/${doctor.id}/service-rates`"
+                            :title="isRtl ? 'نسب عمولة الخدمات' : 'Service commission rates'"
+                            class="inline-flex items-center gap-2 px-4 md:px-6 py-3 rounded-xl text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50 transition"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V6m0 12v-2m9-4a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            {{ isRtl ? 'نسب العمولة' : 'Commission Rates' }}
+                        </Link>
                     </div>
                 </div>
             </div>

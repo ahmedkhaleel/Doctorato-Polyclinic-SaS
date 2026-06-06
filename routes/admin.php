@@ -215,6 +215,9 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
     Route::post('/doctors/{doctor}', [DoctorController::class, 'update'])->name('admin.doctors.update')->middleware('permission:doctors.update');
     Route::post('/doctors/{doctor}/delete', [DoctorController::class, 'destroy'])->name('admin.doctors.destroy')->middleware('permission:doctors.delete');
     Route::post('/doctors/{doctor}/create-user', [DoctorController::class, 'createUserAccount'])->name('admin.doctors.createUser')->middleware('permission:doctors.update');
+    Route::get('/doctors/{doctor}/service-rates', [\App\Http\Controllers\Admin\DoctorServiceRateController::class, 'index'])->name('admin.doctors.service-rates')->middleware('permission:doctors.update');
+    Route::post('/doctors/{doctor}/service-rates', [\App\Http\Controllers\Admin\DoctorServiceRateController::class, 'update'])->name('admin.doctors.service-rates.update')->middleware('permission:doctors.update');
+    Route::post('/doctors/{doctor}/service-rates/bulk', [\App\Http\Controllers\Admin\DoctorServiceRateController::class, 'bulkApply'])->name('admin.doctors.service-rates.bulk')->middleware('permission:doctors.update');
 
     // ─── Gallery ───────────────────────────────────────────
     Route::get('/gallery', [GalleryController::class, 'index'])->name('admin.gallery.index')->middleware('permission:gallery.view');
