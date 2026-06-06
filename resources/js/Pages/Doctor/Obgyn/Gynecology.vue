@@ -31,16 +31,23 @@ function papBadge(r) { return r === 'normal' ? 'bg-emerald-100 text-emerald-700'
 
 <template>
     <div class="space-y-6" :dir="isRtl ? 'rtl' : 'ltr'">
-        <div class="flex items-center justify-between flex-wrap gap-3">
-            <div class="flex items-center gap-3">
-                <span class="w-2 h-8 rounded-full" :style="{ background: ACCENT }"></span>
-                <h1 class="text-xl font-bold text-gray-800">{{ isRtl ? 'أمراض النساء' : 'Gynecology' }}</h1>
+        <!-- Header band (consistent with the other specialty pages) -->
+        <header class="relative overflow-hidden rounded-3xl px-6 py-7 md:px-8 text-white shadow-lg"
+                style="background: linear-gradient(115deg,#1B365D 0%,#7a2950 55%,#DB2777 130%)">
+            <div class="absolute -top-16 ltr:-right-10 rtl:-left-10 w-56 h-56 rounded-full blur-2xl opacity-30" style="background:#C4A265"></div>
+            <div class="absolute inset-0 opacity-[0.07]" style="background-image:radial-gradient(circle at 1px 1px,#fff 1px,transparent 0);background-size:22px 22px"></div>
+            <div class="relative z-10 flex items-end justify-between flex-wrap gap-4">
+                <div>
+                    <p class="text-white/60 text-xs font-semibold tracking-wider uppercase">{{ isRtl ? 'النساء والتوليد' : 'OB / GYN' }}</p>
+                    <h1 class="text-2xl md:text-3xl font-extrabold mt-1.5">{{ isRtl ? 'أمراض النساء' : 'Gynecology' }}</h1>
+                    <p class="text-white/70 mt-2 text-sm max-w-md">{{ isRtl ? 'مسحات عنق الرحم ووسائل منع الحمل والمتابعة.' : 'Pap smears, contraception and follow-up.' }}</p>
+                </div>
+                <div class="flex gap-2">
+                    <button @click="modal = 'pap'" class="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 backdrop-blur px-4 py-2.5 rounded-xl text-sm font-semibold transition">+ {{ isRtl ? 'مسحة عنق الرحم' : 'Pap Smear' }}</button>
+                    <button @click="modal = 'contra'" class="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 backdrop-blur px-4 py-2.5 rounded-xl text-sm font-semibold transition">+ {{ isRtl ? 'منع الحمل' : 'Contraception' }}</button>
+                </div>
             </div>
-            <div class="flex gap-2">
-                <button @click="modal = 'pap'" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-white" :style="{ background: ACCENT }">+ {{ isRtl ? 'مسحة عنق الرحم' : 'Pap Smear' }}</button>
-                <button @click="modal = 'contra'" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-white" style="background:#1B365D">+ {{ isRtl ? 'منع الحمل' : 'Contraception' }}</button>
-            </div>
-        </div>
+        </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Pap smears -->
