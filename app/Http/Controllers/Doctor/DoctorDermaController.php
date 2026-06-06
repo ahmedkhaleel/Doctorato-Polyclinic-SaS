@@ -77,6 +77,15 @@ class DoctorDermaController extends BaseDoctorController
                 ->orWhereHas('dermaSessions', fn ($s) => $s->where('doctor_id', $doctorId))
                 ->orWhereHas('cosmeticSessions', fn ($s) => $s->where('doctor_id', $doctorId)))
             ->when($search, fn ($q) => $q->where(fn ($w) => $w->where('full_name', 'like', "%{$search}%")->orWhere('phone', 'like', "%{$search}%")))
+            ->withCount([
+                'dermaSessions as derma_sessions_count' => fn ($s) => $s->where('doctor_id', $doctorId),
+                'cosmeticSessions as cosmetic_sessions_count' => fn ($s) => $s->where('doctor_id', $doctorId),
+            ])
+            ->addSelect(['last_visit_date' => Visit::select('visit_date')
+                ->whereColumn('visits.patient_id', 'patients.id')
+                ->where('doctor_id', $doctorId)->where('module', 'derma')
+                ->latest('visit_date')->limit(1),
+            ])
             ->orderBy('full_name')
             ->paginate(20)->withQueryString()
             ->through(fn ($p) => [
@@ -84,6 +93,9 @@ class DoctorDermaController extends BaseDoctorController
                 'full_name' => $p->full_name,
                 'phone' => $p->phone,
                 'file_number' => $p->file_number,
+                'gender' => $p->gender,
+                'sessions' => (int) ($p->derma_sessions_count ?? 0) + (int) ($p->cosmetic_sessions_count ?? 0),
+                'last_visit' => $p->last_visit_date ? \Illuminate\Support\Carbon::parse($p->last_visit_date)->toDateString() : null,
             ]);
 
         return Inertia::render('Doctor/Derma/Patients/Index', [
@@ -200,8 +212,16 @@ class DoctorDermaController extends BaseDoctorController
             ->latest()
             ->paginate(20)->withQueryString();
 
+        $all = DermaTreatmentPlan::where('doctor_id', $doctorId);
+        $active = (clone $all)->whereColumn('completed_sessions', '<', 'estimated_sessions')->count();
+
         return Inertia::render('Doctor/Derma/TreatmentPlans/Index', [
             'plans' => $plans,
+            'stats' => [
+                'total' => (clone $all)->count(),
+                'active' => $active,
+                'completed' => (clone $all)->whereColumn('completed_sessions', '>=', 'estimated_sessions')->count(),
+            ],
         ]);
     }
 }
