@@ -257,6 +257,12 @@ Route::middleware(['secretary.auth', 'branch.context'])->group(function () {
             ->name('secretary.telemedicine.overview');
     });
 
+    // ─── Physiotherapy (front-desk: admin overview only, NO clinical data) ──
+    Route::prefix('physiotherapy')->middleware('module:physiotherapy')->group(function () {
+        Route::get('/overview', [\App\Http\Controllers\Secretary\SecretaryPhysioController::class, 'index'])
+            ->name('secretary.physiotherapy.overview');
+    });
+
     // ─── Psychiatry & Neurology (front-desk: admin overview only) ───────
     // STRICTLY administrative — appointments/roster/billing; NO clinical content
     // and NO view_sensitive surface (that stays in the doctor portal).

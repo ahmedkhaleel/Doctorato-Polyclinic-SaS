@@ -144,6 +144,13 @@ const navGroups = [
         ],
     },
     {
+        key: 'physiotherapy', titleEn: 'Physiotherapy', titleAr: 'العلاج الطبيعي',
+        moduleKey: 'physiotherapy',
+        items: [
+            { labelEn: 'Front Desk', labelAr: 'مكتب الاستقبال', href: '/secretary/physiotherapy/overview', icon: 'calendar' },
+        ],
+    },
+    {
         key: 'hr', titleEn: 'HR', titleAr: 'الموارد البشرية',
         moduleKey: 'hr',
         items: [

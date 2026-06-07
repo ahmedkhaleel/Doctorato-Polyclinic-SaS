@@ -252,6 +252,18 @@ const navGroups = [
         ],
     },
     {
+        key: 'physiotherapy', titleEn: 'Physiotherapy', titleAr: 'العلاج الطبيعي', moduleKey: 'physiotherapy',
+        color: '#0D9488',
+        featured: true,
+        groupIcon: 'M3 12h4l3 8 4-16 3 8h4',
+        items: [
+            { labelEn: 'Dashboard',  labelAr: 'لوحة التحكم', href: '/admin/physiotherapy',          icon: 'grid',     permission: 'physiotherapy.view' },
+            { labelEn: 'Patients',   labelAr: 'المرضى',      href: '/admin/physiotherapy/patients', icon: 'users',    permission: 'physiotherapy.view' },
+            { labelEn: 'Exercises',  labelAr: 'التمارين',    href: '/admin/physiotherapy/exercises', icon: 'activity', permission: 'physiotherapy.view' },
+            { labelEn: 'Settings',   labelAr: 'الإعدادات',   href: '/admin/physiotherapy/settings', icon: 'cog',      permission: 'physiotherapy.view' },
+        ],
+    },
+    {
         key: 'derma', titleEn: 'Dermatology & Cosmetic', titleAr: 'الجلدية والتجميل', moduleKey: 'derma',
         color: '#1B365D',
         accent: '#C4A265',
@@ -449,6 +461,7 @@ const GROUP_ORDER = [
     'dental',        // الأسنان
     'pediatric',     // طب الأطفال
     'obgyn',         // النساء والتوليد (featured)
+    'physiotherapy', // العلاج الطبيعي (featured)
     'telemedicine',  // الاستشارات الأونلاين (featured)
     'finance',       // المالية
     'insurance',     // التأمينات (featured)
@@ -496,7 +509,7 @@ const filteredGroups = computed(() =>
 const PILLARS = [
     { key: 'overview', titleAr: 'لوحة القيادة', titleEn: 'Overview', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6', groups: ['main'] },
     { key: 'clinic', titleAr: 'العيادة', titleEn: 'Clinic', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4', groups: ['clinic'] },
-    { key: 'specialties', titleAr: 'التخصصات', titleEn: 'Specialties', icon: 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z', groups: ['derma', 'dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology'] },
+    { key: 'specialties', titleAr: 'التخصصات', titleEn: 'Specialties', icon: 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z', groups: ['derma', 'dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology', 'physiotherapy'] },
     { key: 'finance', titleAr: 'المالية', titleEn: 'Finance', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', groups: ['finance', 'insurance'] },
     { key: 'growth', titleAr: 'النمو والتسويق', titleEn: 'Growth', icon: 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6', groups: ['crm', 'telemedicine'] },
     { key: 'inventory', titleAr: 'المخزون', titleEn: 'Inventory', icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4', groups: ['inventory'] },

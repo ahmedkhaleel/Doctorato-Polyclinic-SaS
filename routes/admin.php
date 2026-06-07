@@ -997,6 +997,19 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
     Route::get('/obgyn/settings', [\App\Http\Controllers\Admin\AdminObgynController::class, 'settings'])->name('admin.obgyn.settings')->middleware(['module:obgyn', 'permission:obgyn.view']);
     Route::post('/obgyn/settings', [\App\Http\Controllers\Admin\AdminObgynController::class, 'updateSettings'])->name('admin.obgyn.settings.update')->middleware(['module:obgyn', 'permission:obgyn.update']);
 
+    // ─── Physiotherapy admin (PT-5) ──
+    Route::prefix('physiotherapy')->middleware('module:physiotherapy')->group(function () {
+        $pt = \App\Http\Controllers\Admin\AdminPhysioController::class;
+        Route::get('/', [$pt, 'dashboard'])->name('admin.physiotherapy.dashboard')->middleware('permission:physiotherapy.view');
+        Route::get('/patients', [$pt, 'patients'])->name('admin.physiotherapy.patients')->middleware('permission:physiotherapy.view');
+        Route::get('/exercises', [$pt, 'exercises'])->name('admin.physiotherapy.exercises')->middleware('permission:physiotherapy.view');
+        Route::post('/exercises', [$pt, 'storeExercise'])->name('admin.physiotherapy.exercises.store')->middleware('permission:physiotherapy.update');
+        Route::post('/exercises/{exercise}', [$pt, 'updateExercise'])->name('admin.physiotherapy.exercises.update')->middleware('permission:physiotherapy.update');
+        Route::post('/exercises/{exercise}/toggle', [$pt, 'toggleExercise'])->name('admin.physiotherapy.exercises.toggle')->middleware('permission:physiotherapy.update');
+        Route::get('/settings', [$pt, 'settings'])->name('admin.physiotherapy.settings')->middleware('permission:physiotherapy.view');
+        Route::post('/settings', [$pt, 'updateSettings'])->name('admin.physiotherapy.settings.update')->middleware('permission:physiotherapy.update');
+    });
+
     // ─── Psychiatry & Neurology admin (NP7) — shared controller ──
     foreach (['psychiatry', 'neurology'] as $npm) {
         Route::get("/{$npm}", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'dashboard'])->defaults('npModule', $npm)->name("admin.{$npm}.dashboard")->middleware(["module:{$npm}", "permission:{$npm}.view"]);
