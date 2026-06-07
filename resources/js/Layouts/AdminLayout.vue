@@ -530,6 +530,17 @@ function togglePillar(key) {
 }
 function isPillarOpen(key) { return openPillars.value.has(key); }
 
+/* Desktop icon-rail: collapsed sidebar shows pillar icons only. On mobile a
+ * collapsed sidebar is off-screen, so isRail is harmless there. */
+const isRail = computed(() => !sidebarOpen.value);
+function expandTo(pillarKey) {
+    sidebarOpen.value = true;
+    openPillars.value = new Set([pillarKey]);
+}
+function pillarHasActive(pillar) {
+    return pillar.groups.some(g => g.items.some(i => isActive(i.href)));
+}
+
 function isActive(href) {
     if (href === '/admin') return currentUrl.value === '/admin' || currentUrl.value === '/admin/';
     return currentUrl.value.startsWith(href);
@@ -582,15 +593,17 @@ function logout()        { router.post('/admin/logout'); }
         <aside
             :class="[
                 sidebarOpen ? 'translate-x-0' : (isRtl ? 'translate-x-full' : '-translate-x-full'),
+                'lg:translate-x-0',
+                isRail ? 'lg:w-[76px]' : 'lg:w-[275px]',
                 isRtl ? 'right-0' : 'left-0',
             ]"
-            class="fixed inset-y-0 z-40 w-[275px] transition-transform duration-300 ease-in-out flex flex-col admin-sidebar-navy shadow-2xl"
+            class="fixed inset-y-0 z-40 w-[275px] transition-all duration-300 ease-in-out flex flex-col admin-sidebar-navy shadow-2xl"
         >
             <!-- Ambient gold glow accent -->
             <div class="pointer-events-none absolute inset-x-0 top-0 h-40 admin-sidebar-glow"></div>
 
             <!-- Logo -->
-            <div class="relative flex items-center justify-between h-[78px] px-5 border-b border-[#C4A265]/15">
+            <div class="relative flex items-center h-[78px] border-b border-[#C4A265]/15" :class="isRail ? 'lg:justify-center lg:px-0 justify-between px-5' : 'justify-between px-5'">
                 <Link href="/admin" class="flex items-center gap-2.5 group">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg shadow-[#C4A265]/20 group-hover:scale-105 transition-transform">
                         <img
@@ -603,7 +616,7 @@ function logout()        { router.post('/admin/logout'); }
                             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                         </svg>
                     </div>
-                    <div class="flex flex-col leading-tight">
+                    <div class="flex flex-col leading-tight" :class="isRail ? 'lg:hidden' : ''">
                         <span class="text-[15px] font-black text-white tracking-wide">Doctorato</span>
                         <span class="text-[9px] text-[#C4A265]/70 uppercase tracking-[0.2em]">Admin Panel</span>
                     </div>
@@ -613,8 +626,21 @@ function logout()        { router.post('/admin/logout'); }
                 </button>
             </div>
 
+            <!-- Icon rail (desktop collapsed): pillar icons → click expands -->
+            <div v-if="isRail" class="hidden lg:flex flex-1 flex-col items-center gap-1.5 py-3 overflow-y-auto admin-sidebar-scroll">
+                <button
+                    v-for="pillar in pillarGroups" :key="'rail-' + pillar.key"
+                    @click="expandTo(pillar.key)"
+                    class="w-11 h-11 rounded-xl flex items-center justify-center text-white/55 hover:bg-white/[0.08] hover:text-[var(--brand-primary)] transition-all duration-200 relative group/rail"
+                    :title="isRtl ? pillar.titleAr : pillar.titleEn"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="pillar.icon" /></svg>
+                    <span v-if="pillarHasActive(pillar)" class="absolute top-1.5 ltr:right-1.5 rtl:left-1.5 w-1.5 h-1.5 rounded-full bg-[var(--brand-primary)]"></span>
+                </button>
+            </div>
+
             <!-- Navigation Groups -->
-            <nav class="flex-1 overflow-y-auto py-3 px-3 space-y-1.5 admin-sidebar-scroll relative">
+            <nav v-show="!isRail" class="flex-1 overflow-y-auto py-3 px-3 space-y-1.5 admin-sidebar-scroll relative">
               <div v-for="pillar in pillarGroups" :key="'pillar-' + pillar.key" class="adm-pillar">
                 <!-- Pillar header -->
                 <button
@@ -906,7 +932,7 @@ function logout()        { router.post('/admin/logout'); }
 
         <!-- ─── Main Content — padding-based layout (sidebar is fixed, not in flow) ─── -->
         <div
-            :class="sidebarOpen ? (isRtl ? 'lg:pr-[275px]' : 'lg:pl-[275px]') : ''"
+            :class="isRail ? (isRtl ? 'lg:pr-[76px]' : 'lg:pl-[76px]') : (isRtl ? 'lg:pr-[275px]' : 'lg:pl-[275px]')"
             class="min-h-screen flex flex-col transition-[padding] duration-300 ease-in-out"
         >
             <!-- Top Header -->
