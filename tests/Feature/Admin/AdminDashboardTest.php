@@ -62,6 +62,27 @@ class AdminDashboardTest extends TestCase
         );
     }
 
+    // ─── Per-specialty dashboards ──────────────────────
+
+    public function test_admin_specialty_dashboards_load_for_every_module(): void
+    {
+        $this->actingAs($this->admin);
+
+        $dashboards = [
+            'dental' => '/admin/dental',
+            'derma' => '/admin/derma',
+            'pediatric' => '/admin/pediatric',
+            'obgyn' => '/admin/obgyn',
+            'psychiatry' => '/admin/psychiatry',
+            'neurology' => '/admin/neurology',
+        ];
+
+        foreach ($dashboards as $module => $url) {
+            \App\Services\ModuleManager::enable($module);
+            $this->get($url)->assertOk();
+        }
+    }
+
     // ─── Auth Guard ────────────────────────────────────
 
     public function test_unauthenticated_user_redirected_from_dashboard(): void
