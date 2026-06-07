@@ -5,6 +5,7 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
 import { useConfirm } from '@/Composables/useConfirm.js';
+import SpecialtyPanel from '@/Components/Doctor/Visit/SpecialtyPanel.vue';
 
 const { can } = usePermissions();
 const { confirm } = useConfirm();
@@ -24,9 +25,40 @@ const props = defineProps({
     allTeeth: Object,
     treatmentTypes: Object,
     dentalPlans: Array,
+    dermaActivePlan: Object,
+    dermaSessions: Array,
+    obgynPregnancy: Object,
+    obgynLabTests: Array,
+    neuroEncounter: Object,
+    neuroScales: Array,
+    neuroMeds: Array,
+    neuroRisk: Object,
+    neuroCanViewSensitive: Boolean,
 });
 
 const activeTab = ref('details');
+
+// Specialties (other than dental, which has its own bespoke tab) that get the
+// shared per-specialty clinical panel, routed to the admin patient file.
+const SPECIALTY_TABS = {
+    derma: { ar: 'الجلدية', en: 'Dermatology' },
+    obgyn: { ar: 'النساء والتوليد', en: 'OB/GYN' },
+    psychiatry: { ar: 'الطب النفسي', en: 'Psychiatry' },
+    neurology: { ar: 'المخ والأعصاب', en: 'Neurology' },
+};
+const specialtyTab = computed(() => SPECIALTY_TABS[props.visit?.module] || null);
+
+const specialtyExtras = computed(() => ({
+    dermaActivePlan: props.dermaActivePlan,
+    dermaSessions: props.dermaSessions,
+    obgynPregnancy: props.obgynPregnancy,
+    obgynLabTests: props.obgynLabTests,
+    neuroEncounter: props.neuroEncounter,
+    neuroScales: props.neuroScales,
+    neuroMeds: props.neuroMeds,
+    neuroRisk: props.neuroRisk,
+    neuroCanViewSensitive: props.neuroCanViewSensitive,
+}));
 
 const tabs = computed(() => {
     const baseTabs = [
@@ -38,6 +70,8 @@ const tabs = computed(() => {
     ];
     if (props.visit?.module === 'dental') {
         baseTabs.splice(2, 0, { id: 'dental', label: isRtl.value ? 'طب الأسنان' : 'Dental' });
+    } else if (specialtyTab.value) {
+        baseTabs.splice(2, 0, { id: 'specialty', label: isRtl.value ? specialtyTab.value.ar : specialtyTab.value.en });
     }
     return baseTabs;
 });
@@ -626,6 +660,18 @@ function formatDateTime(date) {
                                 </button>
                             </div>
                         </form>
+                    </div>
+
+                    <!-- Specialty Tab (derma / obgyn / psychiatry / neurology) -->
+                    <div v-if="activeTab === 'specialty'">
+                        <SpecialtyPanel
+                            :visit="visit"
+                            :is-rtl="isRtl"
+                            :mounted="true"
+                            context="admin"
+                            :patient-href="`/admin/patients/${visit.patient_id}`"
+                            :extras="specialtyExtras"
+                        />
                     </div>
 
                     <!-- Dental Tab -->

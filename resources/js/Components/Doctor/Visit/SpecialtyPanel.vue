@@ -12,6 +12,11 @@ const props = defineProps({
     visit: { type: Object, required: true },
     isRtl: { type: Boolean, default: true },
     mounted: { type: Boolean, default: false },
+    // 'doctor' (default) uses per-feature doctor routes; 'admin' routes all deep
+    // links to patientHref (the admin patient file) since admin has no per-patient
+    // specialty pages — avoids 404s while still surfacing the read-only data.
+    context: { type: String, default: 'doctor' },
+    patientHref: { type: String, default: null },
     // module-specific payload bag — each panel reads the keys it needs
     extras: { type: Object, default: () => ({}) },
 });
@@ -34,6 +39,8 @@ const current = computed(() => panels[props.visit?.module] || null);
         :visit="visit"
         :is-rtl="isRtl"
         :mounted="mounted"
+        :context="context"
+        :patient-href="patientHref"
         v-bind="extras"
     />
 </template>
