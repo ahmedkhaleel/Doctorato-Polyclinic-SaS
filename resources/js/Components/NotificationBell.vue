@@ -72,7 +72,7 @@ onUnmounted(() => clearInterval(timer));
 
         <!-- Dropdown -->
         <transition enter-active-class="transition duration-150 ease-out" enter-from-class="opacity-0 -translate-y-1" leave-active-class="transition duration-100 ease-in" leave-to-class="opacity-0">
-            <div v-if="open" class="absolute z-50 mt-2 w-80 max-w-[92vw] rounded-2xl bg-white shadow-2xl border border-gray-100 overflow-hidden" :class="rtl ? 'start-0' : 'end-0'" :style="rtl ? 'inset-inline-start:0' : 'inset-inline-end:0'">
+            <div v-if="open" class="absolute z-50 mt-2 w-80 max-w-[calc(100vw-1.5rem)] rounded-2xl bg-white shadow-2xl border border-gray-100 overflow-hidden end-0" style="inset-inline-end:0">
                 <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
                     <span class="font-bold text-gray-900 text-sm">{{ t('الإشعارات', 'Notifications') }}</span>
                     <button v-if="hasUnread" @click="markAll" class="text-xs font-semibold text-[var(--brand-primary,#1B365D)] hover:underline">{{ t('تحديد الكل كمقروء', 'Mark all read') }}</button>

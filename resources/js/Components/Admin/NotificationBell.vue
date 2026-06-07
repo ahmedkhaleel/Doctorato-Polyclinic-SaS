@@ -217,7 +217,8 @@ onUnmounted(() => {
         >
             <div
                 v-if="isOpen"
-                class="absolute right-0 top-full mt-2 w-[400px] max-h-[520px] bg-white rounded-2xl shadow-xl shadow-black/10 border border-gray-200/80 overflow-hidden z-50"
+                class="absolute end-0 top-full mt-2 w-[400px] max-w-[calc(100vw-1.5rem)] max-h-[520px] bg-white rounded-2xl shadow-xl shadow-black/10 border border-gray-200/80 overflow-hidden z-50"
+                style="inset-inline-end:0"
             >
                 <!-- Header -->
                 <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 bg-gray-50/50">
