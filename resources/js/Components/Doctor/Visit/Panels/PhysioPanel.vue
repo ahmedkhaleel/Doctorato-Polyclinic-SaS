@@ -6,8 +6,11 @@
  * grid (StrengthGrid), and the body-map pain points (BodyMap). Read-only; deep
  * links route to the doctor patient file (or the admin patient file in admin context).
  */
-import { computed } from 'vue';
+import { computed, defineAsyncComponent, ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
+// three.js ships in its own lazy chunk — only fetched when the clinician
+// switches the pain map to the 3D view.
+const Body3D = defineAsyncComponent(() => import('@/Components/Charts/Body3D.vue'));
 import ProgressRing from '@/Components/Charts/ProgressRing.vue';
 import TrendLine from '@/Components/Charts/TrendLine.vue';
 import RadialChart from '@/Components/Charts/RadialChart.vue';
@@ -38,6 +41,7 @@ const latestScales = computed(() => {
 
 const ACCENT = '#0D9488';
 const t = (en, ar) => (props.isRtl ? ar : en);
+const painView = ref('2d');
 const isAdmin = computed(() => props.context === 'admin');
 const fileHref = computed(() => (isAdmin.value ? (props.patientHref || '#') : `/doctor/physiotherapy/patients/${props.visit.patient_id}`));
 
@@ -106,10 +110,17 @@ const dateLabel = (d) => (d ? new Date(d).toLocaleDateString(props.isRtl ? 'ar-E
                 <StrengthGrid :items="physioStrength" :is-rtl="isRtl" />
             </div>
 
-            <!-- Pain map -->
+            <!-- Pain map (2D / optional 3D) -->
             <div v-if="physioPainPoints.length" class="bg-white rounded-xl border border-gray-100 p-4">
-                <p class="text-xs font-medium text-gray-600 mb-2">{{ t('Pain Map', 'خريطة الألم') }}</p>
-                <div class="flex justify-center gap-4">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-xs font-medium text-gray-600">{{ t('Pain Map', 'خريطة الألم') }}</p>
+                    <div class="flex gap-1 bg-gray-100 rounded-lg p-0.5">
+                        <button @click="painView = '2d'" class="px-2 py-0.5 rounded text-[11px] font-medium" :class="painView === '2d' ? 'bg-white shadow-sm text-gray-700' : 'text-gray-400'">2D</button>
+                        <button @click="painView = '3d'" class="px-2 py-0.5 rounded text-[11px] font-medium" :class="painView === '3d' ? 'bg-white shadow-sm text-gray-700' : 'text-gray-400'">3D</button>
+                    </div>
+                </div>
+                <Body3D v-if="painView === '3d'" :pain-points="physioPainPoints" :is-rtl="isRtl" :height="260" />
+                <div v-else class="flex justify-center gap-4">
                     <BodyMap v-if="painFront.length" :lesions="painFront" view="front" :accent="'#EF4444'" :is-rtl="isRtl" :height="220" />
                     <BodyMap v-if="painBack.length" :lesions="painBack" view="back" :accent="'#EF4444'" :is-rtl="isRtl" :height="220" />
                 </div>
