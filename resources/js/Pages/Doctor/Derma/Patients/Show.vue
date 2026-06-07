@@ -2,6 +2,7 @@
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import BodyMap from '@/Components/Charts/BodyMap.vue';
 import { useCurrency } from '@/Composables/useCurrency';
 import { useEscapeKey } from '@/Composables/useEscapeKey';
 
@@ -20,8 +21,33 @@ const props = defineProps({
     photos: { type: Array, default: () => [] },
     consents: { type: Array, default: () => [] },
     sessionTypes: { type: Array, default: () => [] },
+    lesions: { type: Array, default: () => [] },
+    lesionTypes: { type: Array, default: () => [] },
     procedures: { type: Array, default: () => [] },
 });
+
+// ── Body lesion map (CV-3) ──
+const bodyView = ref('front');
+const lesionForm = useForm({ view: 'front', x: null, y: null, lesion_type: 'nevus', size_mm: '', note: '' });
+const placing = ref(false);
+function onLesionAdd({ x, y, view }) {
+    lesionForm.x = x; lesionForm.y = y; lesionForm.view = view; placing.value = true;
+}
+function saveLesion() {
+    lesionForm.post(route('doctor.derma.lesions.store', props.patient.id), {
+        preserveScroll: true,
+        onSuccess: () => { placing.value = false; lesionForm.reset('x', 'y', 'size_mm', 'note'); },
+    });
+}
+function deleteLesion(id) {
+    useForm({}).post(route('doctor.derma.lesions.destroy', id), { preserveScroll: true });
+}
+function lesionTypeLabel(t) {
+    const m = isRtl.value
+        ? { nevus: 'وحمة', macule: 'بقعة', papule: 'حطاطة', plaque: 'لويحة', nodule: 'عقدة', patch: 'رقعة', vesicle: 'حويصلة', pustule: 'بثرة', ulcer: 'قرحة', scar: 'ندبة', other: 'أخرى' }
+        : {};
+    return m[t] || t;
+}
 
 const modal = ref(null); // 'derma' | 'cosmetic' | 'photo'
 const close = () => { modal.value = null; };
@@ -91,6 +117,55 @@ function typeLabel(t) {
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         {{ isRtl ? 'رفع صورة' : 'Photo' }}
                     </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Body Lesion Map (CV-3) -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+            <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#8B5CF61A">
+                    <svg class="w-4 h-4" style="color:#8B5CF6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                </div>
+                <h2 class="font-bold text-gray-800">{{ isRtl ? 'خريطة آفات الجسم' : 'Body Lesion Map' }}</h2>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded-full" style="background:#8B5CF61A;color:#8B5CF6">{{ lesions.length }}</span>
+            </div>
+            <div class="grid md:grid-cols-2 gap-5">
+                <div>
+                    <BodyMap :lesions="lesions" v-model:view="bodyView" editable accent="#8B5CF6" :is-rtl="isRtl" :height="300" @add="onLesionAdd" />
+                    <!-- inline add form -->
+                    <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0">
+                        <form v-if="placing" @submit.prevent="saveLesion" class="mt-3 bg-violet-50/60 border border-violet-100 rounded-xl p-3 space-y-2">
+                            <p class="text-[11px] text-violet-700 font-semibold">{{ isRtl ? `موضع جديد (${lesionForm.view === 'front' ? 'أمامي' : 'خلفي'})` : `New point (${lesionForm.view})` }}</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <select v-model="lesionForm.lesion_type" class="doctorato-input w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs">
+                                    <option v-for="t in lesionTypes" :key="t" :value="t">{{ lesionTypeLabel(t) }}</option>
+                                </select>
+                                <input v-model="lesionForm.size_mm" type="number" step="0.1" min="0" :placeholder="isRtl ? 'الحجم (مم)' : 'Size (mm)'" class="doctorato-input w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs" />
+                            </div>
+                            <input v-model="lesionForm.note" type="text" :placeholder="isRtl ? 'ملاحظة (اختياري)' : 'Note (optional)'" class="doctorato-input w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs" />
+                            <div class="flex gap-2">
+                                <button type="submit" :disabled="lesionForm.processing" class="px-3 py-1.5 text-xs font-semibold text-white rounded-lg" style="background:#8B5CF6">{{ isRtl ? 'حفظ' : 'Save' }}</button>
+                                <button type="button" @click="placing = false" class="px-3 py-1.5 text-xs font-medium text-gray-500 bg-gray-100 rounded-lg">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
+                            </div>
+                        </form>
+                    </Transition>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold text-gray-500 uppercase mb-2">{{ isRtl ? 'الآفات المسجّلة' : 'Recorded lesions' }}</h3>
+                    <div v-if="lesions.length" class="space-y-1.5 max-h-[300px] overflow-y-auto">
+                        <div v-for="l in lesions" :key="l.id" class="flex items-center justify-between rounded-lg border border-gray-100 px-3 py-2 text-xs">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <span class="w-2 h-2 rounded-full shrink-0" style="background:#8B5CF6"></span>
+                                <span class="font-semibold text-gray-700">{{ lesionTypeLabel(l.lesion_type) }}</span>
+                                <span class="text-[10px] text-gray-400">{{ l.view === 'front' ? (isRtl ? 'أمامي' : 'front') : (isRtl ? 'خلفي' : 'back') }}<span v-if="l.size_mm"> · {{ l.size_mm }}mm</span></span>
+                            </div>
+                            <button type="button" @click="deleteLesion(l.id)" class="text-gray-300 hover:text-red-500 transition-colors" :aria-label="isRtl ? 'حذف' : 'Delete'" :title="isRtl ? 'حذف' : 'Delete'">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <p v-else class="text-sm text-gray-400 text-center py-8">{{ isRtl ? 'لا آفات مسجّلة — اضغط على الجسم للإضافة' : 'No lesions — tap the body to add' }}</p>
                 </div>
             </div>
         </div>
