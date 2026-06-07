@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import ConfirmModal from '@/Components/Doctor/ConfirmModal.vue';
+import PerioChart from '@/Components/Charts/PerioChart.vue';
 import { useLocale } from '@/Composables/useLocale.js';
 
 defineOptions({ layout: DoctorLayout });
@@ -23,6 +24,8 @@ const props = defineProps({
     isChild: Boolean,
     treatmentTypes: { type: Array, default: () => [] },
     supplies: { type: Array, default: () => [] },
+    perio: { type: Object, default: () => ({}) },
+    perioSummary: { type: Object, default: () => ({}) },
 });
 
 const selectedTooth = ref(null);
@@ -942,6 +945,23 @@ function formatDate(d) {
                 </div>
             </div>
         </Transition>
+
+        <!-- ═══ PERIODONTAL CHART ═══ -->
+        <div class="dental-card-enter bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 mt-6">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6m4 6V5m4 14v-9M5 21h14" /></svg>
+                    </div>
+                    <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'مخطط اللثة (أعماق الجيوب)' : 'Periodontal Chart (pocket depths)' }}</h3>
+                </div>
+                <div v-if="perioSummary && perioSummary.charted_teeth" class="flex items-center gap-2 text-[11px]">
+                    <span class="px-2 py-0.5 rounded-full font-semibold" :class="perioSummary.max_pd >= 6 ? 'bg-red-50 text-red-700 border border-red-200' : perioSummary.max_pd >= 4 ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'">{{ isRtl ? 'أعمق' : 'Max' }} {{ perioSummary.max_pd }}mm</span>
+                    <span class="text-gray-400">{{ isRtl ? `${perioSummary.sites_4plus} موقع ≥٤مم · ${perioSummary.bop_sites} نزف` : `${perioSummary.sites_4plus} sites ≥4mm · ${perioSummary.bop_sites} BoP` }}</span>
+                </div>
+            </div>
+            <PerioChart :teeth="allTeeth" :perio="perio" :patient-id="patient.id" :is-rtl="isRtl" />
+        </div>
     </div>
 
     <!-- ═══ EDIT TOOTH MODAL ═══ -->

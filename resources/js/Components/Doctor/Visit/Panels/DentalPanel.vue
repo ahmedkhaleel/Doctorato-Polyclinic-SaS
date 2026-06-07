@@ -4,10 +4,11 @@
  * Extracted verbatim from Doctor/Visits/Show.vue (Phase 0) to establish the
  * per-specialty panel pattern with NO behavioural change.
  */
+import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { useCurrency } from '@/Composables/useCurrency.js';
 
-defineProps({
+const props = defineProps({
     visit: { type: Object, required: true },
     isRtl: { type: Boolean, default: true },
     mounted: { type: Boolean, default: false },
@@ -15,9 +16,12 @@ defineProps({
     dentalXrays: { type: Array, default: () => [] },
     allTeeth: { type: Object, default: () => ({}) },
     treatmentTypes: { type: Object, default: () => ({}) },
+    perioSummary: { type: Object, default: null },
 });
 
 const { formatCurrency } = useCurrency();
+
+const hasPerio = computed(() => (props.perioSummary?.charted_teeth || 0) > 0);
 </script>
 
 <template>
@@ -67,6 +71,29 @@ const { formatCurrency } = useCurrency();
                 <div v-if="visit.dental_treatments?.length" class="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between text-xs">
                     <span class="text-gray-500">{{ isRtl ? 'إجمالي تكلفة العلاجات' : 'Total Treatment Cost' }}</span>
                     <span class="font-bold text-[#C4A265]">{{ formatCurrency(visit.dental_treatments.reduce((sum, t) => sum + (parseFloat(t.cost) || 0), 0)) }}</span>
+                </div>
+            </div>
+
+            <!-- Periodontal summary -->
+            <div v-if="hasPerio">
+                <h4 class="text-xs font-bold text-gray-500 uppercase mb-2">{{ isRtl ? 'حالة اللثة' : 'Periodontal status' }}</h4>
+                <div class="grid grid-cols-4 gap-2">
+                    <div class="rounded-xl border text-center p-2" :class="perioSummary.max_pd >= 6 ? 'bg-red-50 border-red-200' : perioSummary.max_pd >= 4 ? 'bg-amber-50 border-amber-200' : 'bg-emerald-50 border-emerald-100'">
+                        <p class="text-base font-extrabold" :class="perioSummary.max_pd >= 6 ? 'text-red-700' : perioSummary.max_pd >= 4 ? 'text-amber-700' : 'text-emerald-700'">{{ perioSummary.max_pd }}<span class="text-[10px] font-medium">mm</span></p>
+                        <p class="text-[10px] text-gray-500">{{ isRtl ? 'أعمق جيب' : 'Deepest' }}</p>
+                    </div>
+                    <div class="rounded-xl border border-gray-100 text-center p-2">
+                        <p class="text-base font-extrabold text-[#1B365D]">{{ perioSummary.sites_4plus }}</p>
+                        <p class="text-[10px] text-gray-500">{{ isRtl ? 'مواقع ≥٤مم' : 'Sites ≥4mm' }}</p>
+                    </div>
+                    <div class="rounded-xl border border-gray-100 text-center p-2">
+                        <p class="text-base font-extrabold text-red-600">{{ perioSummary.bop_sites }}</p>
+                        <p class="text-[10px] text-gray-500">{{ isRtl ? 'نزف عند السبر' : 'BoP sites' }}</p>
+                    </div>
+                    <div class="rounded-xl border border-gray-100 text-center p-2">
+                        <p class="text-base font-extrabold text-[#C4A265]">{{ perioSummary.charted_teeth }}</p>
+                        <p class="text-[10px] text-gray-500">{{ isRtl ? 'أسنان مُخطّطة' : 'Charted' }}</p>
+                    </div>
                 </div>
             </div>
 

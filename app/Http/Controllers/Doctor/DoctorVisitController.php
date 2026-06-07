@@ -104,6 +104,7 @@ class DoctorVisitController extends BaseDoctorController
             // Dental risk flags for medical alerts
             $patient = $visit->patient;
             if ($patient) {
+                $extra['perioSummary'] = \App\Models\PerioMeasurement::summaryFor($visit->patient_id);
                 $extra['dentalRiskFlags'] = $patient->getDentalRiskFlags();
                 $extra['dentalMedicalInfo'] = $patient->only([
                     'has_dental_anxiety', 'dental_anxiety_level',

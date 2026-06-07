@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Doctor;
 
+use App\Http\Requests\Dental\UpdateDentalChartRequest;
 use App\Models\DentalChart;
 use App\Models\DentalChartEntry;
 use App\Models\DentalTreatment;
 use App\Models\DentalXray;
 use App\Models\Doctor;
 use App\Models\Patient;
-use App\Http\Requests\Dental\UpdateDentalChartRequest;
 use App\Services\AuditLogger;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -112,7 +113,35 @@ class DoctorDentalChartController extends BaseDoctorController
             'treatmentTypes' => DentalTreatment::TYPES,
             'isChild' => $isChild,
             'supplies' => \App\Models\Supply::orderBy('name_ar')->get(['id', 'name_ar', 'name_en', 'unit', 'quantity']),
+            'perio' => \App\Models\PerioMeasurement::where('patient_id', $patient->id)->get()->keyBy('tooth_number'),
+            'perioSummary' => \App\Models\PerioMeasurement::summaryFor($patient->id),
+            'perioSites' => \App\Models\PerioMeasurement::SITES,
         ]);
+    }
+
+    public function storePerio(Request $request, Patient $patient, int $toothNumber): RedirectResponse
+    {
+        $data = $request->validate([
+            'pd_mb' => 'nullable|integer|min:0|max:15',
+            'pd_b' => 'nullable|integer|min:0|max:15',
+            'pd_db' => 'nullable|integer|min:0|max:15',
+            'pd_ml' => 'nullable|integer|min:0|max:15',
+            'pd_l' => 'nullable|integer|min:0|max:15',
+            'pd_dl' => 'nullable|integer|min:0|max:15',
+            'bop' => 'nullable|array',
+            'bop.*' => 'string|in:'.implode(',', \App\Models\PerioMeasurement::SITES),
+            'mobility' => 'nullable|integer|min:0|max:3',
+        ]);
+
+        \App\Models\PerioMeasurement::updateOrCreate(
+            ['patient_id' => $patient->id, 'tooth_number' => $toothNumber],
+            array_merge($data, [
+                'doctor_id' => $this->doctorId($request),
+                'recorded_at' => now()->toDateString(),
+            ])
+        );
+
+        return back()->with('success', $this->msg('Periodontal chart updated.', 'تم تحديث مخطط اللثة.'));
     }
 
     public function updateTooth(UpdateDentalChartRequest $request, Patient $patient, int $toothNumber)
@@ -150,13 +179,13 @@ class DoctorDentalChartController extends BaseDoctorController
             ];
         }
 
-        if (!empty($records)) {
+        if (! empty($records)) {
             DentalChart::insert($records);
 
             $label = $mode === 'deciduous' ? 'deciduous' : 'adult';
             AuditLogger::log('created', null, [
                 'new' => ['patient_id' => $patient->id, 'teeth_count' => count($records), 'mode' => $label],
-            ], "Initialized {$label} dental chart for patient \"{$patient->full_name}\" (" . count($records) . ' teeth)');
+            ], "Initialized {$label} dental chart for patient \"{$patient->full_name}\" (".count($records).' teeth)');
         }
 
         return redirect()->back()->with('success', $this->msg('Dental chart initialized.', 'تم تهيئة خريطة الأسنان.'));
