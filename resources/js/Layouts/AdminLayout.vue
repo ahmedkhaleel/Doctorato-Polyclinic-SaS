@@ -524,10 +524,9 @@ const pillarGroups = computed(() => {
 });
 
 const openPillars = ref(new Set());
+/* Single-open accordion: opening a pillar closes the others (less scrolling). */
 function togglePillar(key) {
-    const s = new Set(openPillars.value);
-    s.has(key) ? s.delete(key) : s.add(key);
-    openPillars.value = s;
+    openPillars.value = openPillars.value.has(key) ? new Set() : new Set([key]);
 }
 function isPillarOpen(key) { return openPillars.value.has(key); }
 
@@ -539,17 +538,18 @@ function isActive(href) {
 /* Auto-open the group containing the active route — only on mount and route change */
 function autoOpenActiveGroup() {
     const newSet = new Set(openGroups.value);
-    const pillarSet = new Set(openPillars.value);
+    let activePillar = null;
     pillarGroups.value.forEach((pillar) => {
         pillar.groups.forEach((group) => {
             if (group.items.some(item => isActive(item.href))) {
                 newSet.add(group.key);
-                pillarSet.add(pillar.key);
+                activePillar = pillar.key;
             }
         });
     });
     openGroups.value = newSet;
-    openPillars.value = pillarSet;
+    // Single-open: keep only the active pillar expanded (fall back to current).
+    if (activePillar) openPillars.value = new Set([activePillar]);
 }
 
 onMounted(autoOpenActiveGroup);
@@ -643,7 +643,7 @@ function logout()        { router.post('/admin/logout'); }
                 <div v-show="isPillarOpen(pillar.key)" class="mt-1 ltr:pl-1.5 rtl:pr-1.5 space-y-1 adm-pillar-body">
                 <div v-for="(group, gi) in pillar.groups" :key="group.key" class="adm-nav-group" :style="{ '--gi': gi }">
                     <!-- ─── FEATURED GROUP (Telemedicine, etc.) ─── -->
-                    <template v-if="group.featured">
+                    <template v-if="group.featured && pillar.groups.length > 1">
                         <button
                             @click="toggleGroup(group.key)"
                             class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12px] font-bold transition-all duration-300 relative overflow-hidden group/header admin-featured-card"
@@ -675,7 +675,7 @@ function logout()        { router.post('/admin/logout'); }
 
                     <!-- ─── REGULAR GROUP ─── -->
                     <button
-                        v-else
+                        v-else-if="pillar.groups.length > 1"
                         @click="toggleGroup(group.key)"
                         class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-[11px] font-semibold uppercase tracking-[0.1em] transition-all duration-200 group/header"
                         :class="isGroupOpen(group.key) ? 'bg-white/[0.04]' : 'hover:bg-white/[0.02]'"
@@ -713,8 +713,8 @@ function logout()        { router.post('/admin/logout'); }
                     <div
                         class="nav-collapse overflow-hidden transition-all duration-300 ease-in-out"
                         :style="{
-                            maxHeight: isGroupOpen(group.key) ? (group.items.length * 44 + 8) + 'px' : '0px',
-                            opacity: isGroupOpen(group.key) ? 1 : 0,
+                            maxHeight: (pillar.groups.length === 1 || isGroupOpen(group.key)) ? (group.items.length * 44 + 8) + 'px' : '0px',
+                            opacity: (pillar.groups.length === 1 || isGroupOpen(group.key)) ? 1 : 0,
                         }"
                     >
                     <div class="space-y-0.5 pt-1 ltr:pl-2 rtl:pr-2">
