@@ -3,6 +3,7 @@ import { Link, useForm, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import FormErrors from '@/Components/Ui/FormErrors.vue';
+import TrendLine from '@/Components/Charts/TrendLine.vue';
 import { useEscapeKey } from '@/Composables/useEscapeKey';
 
 defineOptions({ layout: DoctorLayout });
@@ -49,6 +50,48 @@ const timeline = computed(() => {
     if (props.delivery) items.push({ type: 'delivery', date: props.delivery.delivery_date, color: '#10B981', title: isRtl.value ? 'الولادة' : 'Delivery', data: props.delivery });
     return items.sort((a, b) => String(b.date).localeCompare(String(a.date)));
 });
+
+// ── ANC trend charts (CV-2) — visualise existing antenatal measurements ──
+const ancSorted = computed(() => [...props.antenatalVisits]
+    .filter(a => a.gestational_age_weeks != null)
+    .sort((a, b) => (Number(a.gestational_age_weeks) || 0) - (Number(b.gestational_age_weeks) || 0)));
+
+const ptsOf = (field) => ancSorted.value
+    .filter(a => a[field] != null && a[field] !== '')
+    .map(a => ({ x: Number(a.gestational_age_weeks), y: Number(a[field]) }));
+
+const bpSeries = computed(() => [
+    { key: 'sys', label: isRtl.value ? 'انقباضي' : 'Systolic', color: '#DB2777', points: ptsOf('bp_systolic') },
+    { key: 'dia', label: isRtl.value ? 'انبساطي' : 'Diastolic', color: '#6366F1', points: ptsOf('bp_diastolic') },
+]);
+const bpThresholds = [
+    { y: 140, label: '140', color: '#EF4444' },
+    { y: 90, label: '90', color: '#F59E0B' },
+];
+
+const fundalPts = computed(() => ptsOf('fundal_height_cm'));
+const fundalSeries = computed(() => [
+    { key: 'fh', label: isRtl.value ? 'ارتفاع القاع' : 'Fundal height', color: '#0D9488', points: fundalPts.value },
+]);
+// Normal corridor: fundal height (cm) ≈ gestational age (weeks) ± 3 (≈20–36w).
+const fundalBand = computed(() => {
+    const xs = fundalPts.value.map(p => p.x);
+    if (xs.length < 1) return [];
+    const lo = Math.min(...xs), hi = Math.max(...xs);
+    return [
+        { x: lo, low: lo - 3, high: lo + 3 },
+        { x: hi, low: hi - 3, high: hi + 3 },
+    ];
+});
+
+const weightSeries = computed(() => [
+    { key: 'wt', label: isRtl.value ? 'الوزن' : 'Weight', color: '#C4A265', points: ptsOf('weight_kg') },
+]);
+
+const hasBp = computed(() => bpSeries.value.some(s => s.points.length >= 2));
+const hasFundal = computed(() => fundalPts.value.length >= 2);
+const hasWeight = computed(() => weightSeries.value[0].points.length >= 2);
+const hasAncCharts = computed(() => hasBp.value || hasFundal.value || hasWeight.value);
 
 // ── Modals ──
 const modal = ref(null); // 'anc' | 'us' | 'lab' | 'delivery'
@@ -120,6 +163,32 @@ function fmtDate(d) { return d ? new Date(d).toLocaleDateString(isRtl.value ? 'a
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                 {{ isRtl ? 'طباعة كرت المتابعة' : 'Print Antenatal Card' }}
             </a>
+        </div>
+
+        <!-- ANC Trend Charts (CV-2) -->
+        <div v-if="hasAncCharts" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+            <div class="flex items-center gap-2 mb-4">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#DB27771A">
+                    <svg class="w-4 h-4" style="color:#DB2777" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6m4 6V5m4 14v-9M5 21h14" /></svg>
+                </div>
+                <h2 class="font-bold text-gray-800">{{ isRtl ? 'مؤشرات المتابعة' : 'Antenatal Trends' }}</h2>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-6">
+                <div v-if="hasBp">
+                    <p class="text-xs font-bold text-gray-500 uppercase mb-1">{{ isRtl ? 'ضغط الدم مقابل عمر الحمل' : 'Blood pressure vs GA' }}</p>
+                    <p class="text-[10px] text-gray-400 mb-2">{{ isRtl ? 'الخطوط المتقطّعة: عتبات ما قبل الارتعاج (140/90)' : 'Dashed: pre-eclampsia thresholds (140/90)' }}</p>
+                    <TrendLine :series="bpSeries" :thresholds="bpThresholds" :is-rtl="isRtl" unit="" :x-label="isRtl ? 'أسبوع' : 'wk'" :height="220" />
+                </div>
+                <div v-if="hasFundal">
+                    <p class="text-xs font-bold text-gray-500 uppercase mb-1">{{ isRtl ? 'ارتفاع قاع الرحم' : 'Fundal height' }}</p>
+                    <p class="text-[10px] text-gray-400 mb-2">{{ isRtl ? 'النطاق الأخضر: المدى الطبيعي (العمر ± ٣ سم)' : 'Green band: normal range (GA ± 3 cm)' }}</p>
+                    <TrendLine :series="fundalSeries" :band="fundalBand" :is-rtl="isRtl" unit=" cm" :x-label="isRtl ? 'أسبوع' : 'wk'" :height="220" />
+                </div>
+                <div v-if="hasWeight" :class="hasBp && hasFundal ? 'lg:col-span-2' : ''">
+                    <p class="text-xs font-bold text-gray-500 uppercase mb-2">{{ isRtl ? 'وزن الأم' : 'Maternal weight' }}</p>
+                    <TrendLine :series="weightSeries" :is-rtl="isRtl" unit=" kg" :x-label="isRtl ? 'أسبوع' : 'wk'" :height="200" />
+                </div>
+            </div>
         </div>
 
         <!-- Timeline -->

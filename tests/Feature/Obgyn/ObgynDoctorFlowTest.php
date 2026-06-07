@@ -119,6 +119,34 @@ class ObgynDoctorFlowTest extends TestCase
     }
 
     #[Test]
+    public function pregnancy_show_exposes_anc_measurements_for_trend_charts(): void
+    {
+        $patient = $this->female();
+        $pregnancy = Pregnancy::create([
+            'patient_id' => $patient->id, 'doctor_id' => $this->doctor->id,
+            'lmp' => '2026-01-01', 'edd' => '2026-10-08', 'status' => 'active',
+        ]);
+        foreach ([[24, 120, 78, 24.5, 66], [28, 145, 95, 29.0, 69]] as [$ga, $sys, $dia, $fh, $wt]) {
+            \App\Models\AntenatalVisit::create([
+                'pregnancy_id' => $pregnancy->id, 'doctor_id' => $this->doctor->id,
+                'visit_date' => '2026-0'.($ga === 24 ? '6' : '7').'-01',
+                'gestational_age_weeks' => $ga, 'bp_systolic' => $sys, 'bp_diastolic' => $dia,
+                'fundal_height_cm' => $fh, 'weight_kg' => $wt,
+            ]);
+        }
+
+        $props = $this->actingAs($this->doctorUser)
+            ->get("/doctor/obgyn/pregnancies/{$pregnancy->id}")->assertOk()
+            ->original->getData()['page']['props'];
+
+        $this->assertCount(2, $props['antenatalVisits']);
+        $a = collect($props['antenatalVisits'])->firstWhere('gestational_age_weeks', 28);
+        $this->assertNotNull($a);
+        $this->assertSame(145, (int) $a['bp_systolic']);
+        $this->assertSame('29.0', (string) $a['fundal_height_cm']);
+    }
+
+    #[Test]
     public function antenatal_card_pdf_renders(): void
     {
         $patient = $this->female();
