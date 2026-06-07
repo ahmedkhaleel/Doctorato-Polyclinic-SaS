@@ -303,6 +303,20 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
         Route::post('/gynecology/contraception', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'storeContraception'])->name('doctor.obgyn.contraception.store');
     });
 
+    // ─── Physiotherapy Module ──────────────────────────────────────
+    Route::prefix('physiotherapy')->middleware('module:physiotherapy')->group(function () {
+        $pt = \App\Http\Controllers\Doctor\DoctorPhysioController::class;
+        Route::get('/', [$pt, 'dashboard'])->name('doctor.physiotherapy.dashboard');
+        Route::get('/patients', [$pt, 'patients'])->name('doctor.physiotherapy.patients.index');
+        Route::get('/patients/{patient}', [$pt, 'patientShow'])->name('doctor.physiotherapy.patients.show');
+        Route::get('/treatment-plans', [$pt, 'treatmentPlans'])->name('doctor.physiotherapy.treatment-plans.index');
+
+        Route::post('/patients/{patient}/assessments', [$pt, 'storeAssessment'])->middleware('permission:physiotherapy.create')->name('doctor.physiotherapy.assessments.store');
+        Route::post('/patients/{patient}/plans', [$pt, 'storePlan'])->middleware('permission:physiotherapy.create')->name('doctor.physiotherapy.plans.store');
+        Route::post('/plans/{plan}/status', [$pt, 'updatePlanStatus'])->middleware('permission:physiotherapy.update')->name('doctor.physiotherapy.plans.status');
+        Route::post('/patients/{patient}/sessions', [$pt, 'storeSession'])->middleware('permission:physiotherapy.create')->name('doctor.physiotherapy.sessions.store');
+    });
+
     // ─── Psychiatry & Neurology (shared NeuropsychEncounterController) ──
     foreach (['psychiatry', 'neurology'] as $npModule) {
         Route::prefix($npModule)->middleware("module:{$npModule}")->group(function () use ($npModule) {

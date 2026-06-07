@@ -87,6 +87,7 @@ class PricingResolver
             'obgyn' => 'obgyn_consultation_fee',
             'psychiatry' => 'psychiatry_consultation_fee',
             'neurology' => 'neurology_consultation_fee',
+            'physiotherapy' => 'physiotherapy_consultation_fee',
             default => null,
         };
     }

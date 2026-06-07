@@ -24,6 +24,7 @@ return [
         'obgyn' => ['label_en' => 'Obstetrics & Gynecology', 'label_ar' => 'النساء والتوليد',     'icon' => 'heart',       'color' => '#DB2777'],
         'psychiatry' => ['label_en' => 'Psychiatry',           'label_ar' => 'الطب النفسي',            'icon' => 'lightbulb',   'color' => '#7C3AED'],
         'neurology' => ['label_en' => 'Neurology',             'label_ar' => 'طب الأعصاب',             'icon' => 'bolt',        'color' => '#0EA5E9'],
+        'physiotherapy' => ['label_en' => 'Physiotherapy',     'label_ar' => 'العلاج الطبيعي',         'icon' => 'activity',    'color' => '#0D9488'],
         'insurance' => ['label_en' => 'Insurance',             'label_ar' => 'التأمين',                'icon' => 'shield',      'color' => '#EC4899'],
         'inventory' => ['label_en' => 'Inventory & Supplies',  'label_ar' => 'المخزون والمستلزمات',    'icon' => 'box',         'color' => '#F97316'],
         'content' => ['label_en' => 'Content & Website',     'label_ar' => 'المحتوى والموقع',        'icon' => 'globe',       'color' => '#6366F1'],
@@ -413,6 +414,12 @@ return [
             'label_ar' => 'طب الأعصاب',
             'group' => 'neurology',
             'actions' => ['view', 'create', 'update', 'delete', 'view_sensitive'],
+        ],
+        'physiotherapy' => [
+            'label_en' => 'Physiotherapy',
+            'label_ar' => 'العلاج الطبيعي',
+            'group' => 'physiotherapy',
+            'actions' => ['view', 'create', 'update', 'delete'],
         ],
 
         // ─── Insurance ─────────────────────────────────────────

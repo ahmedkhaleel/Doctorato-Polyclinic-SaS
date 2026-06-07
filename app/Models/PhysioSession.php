@@ -12,9 +12,9 @@ class PhysioSession extends Model
     use BelongsToBranch;
 
     protected $fillable = [
-        'patient_id', 'doctor_id', 'treatment_plan_id', 'visit_id', 'invoice_id', 'session_number',
-        'session_date', 'soap', 'modalities', 'techniques', 'exercises_done', 'attended',
-        'pain_before', 'pain_after', 'cost', 'completed_at', 'notes',
+        'patient_id', 'doctor_id', 'treatment_plan_id', 'visit_id', 'invoice_id', 'invoice_item_id',
+        'session_number', 'session_date', 'soap', 'modalities', 'techniques', 'exercises_done',
+        'attended', 'pain_before', 'pain_after', 'cost', 'completed_at', 'notes',
     ];
 
     protected $casts = [
@@ -35,5 +35,10 @@ class PhysioSession extends Model
     public function treatmentPlan(): BelongsTo
     {
         return $this->belongsTo(PhysioTreatmentPlan::class, 'treatment_plan_id');
+    }
+
+    public function invoice(): BelongsTo
+    {
+        return $this->belongsTo(Invoice::class);
     }
 }

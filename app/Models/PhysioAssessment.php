@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Concerns\BelongsToBranch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /** A physiotherapy assessment (ICF/ICD-aware). Branch-aware. */
 class PhysioAssessment extends Model
@@ -31,5 +32,20 @@ class PhysioAssessment extends Model
     public function doctor(): BelongsTo
     {
         return $this->belongsTo(Doctor::class);
+    }
+
+    public function romMeasurements(): HasMany
+    {
+        return $this->hasMany(PhysioRomMeasurement::class, 'assessment_id');
+    }
+
+    public function strengthTests(): HasMany
+    {
+        return $this->hasMany(PhysioStrengthTest::class, 'assessment_id');
+    }
+
+    public function painPoints(): HasMany
+    {
+        return $this->hasMany(PhysioPainPoint::class, 'assessment_id');
     }
 }

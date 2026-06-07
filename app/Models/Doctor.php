@@ -42,6 +42,8 @@ class Doctor extends Model
         'obgyn_consultation_fee', 'obgyn_consultation_commission',
         'psychiatry_consultation_fee', 'psychiatry_consultation_commission',
         'neurology_consultation_fee', 'neurology_consultation_commission',
+        'physiotherapy_consultation_fee', 'physiotherapy_consultation_commission',
+        'physiotherapy_session_fee', 'physiotherapy_session_commission',
         'treats_children',
         'clinic_notes',
         // Telemedicine
@@ -69,6 +71,10 @@ class Doctor extends Model
         'pediatric_consultation_fee' => 'decimal:2',
         'obgyn_consultation_fee' => 'decimal:2',
         'obgyn_consultation_commission' => 'decimal:2',
+        'physiotherapy_consultation_fee' => 'decimal:2',
+        'physiotherapy_consultation_commission' => 'decimal:2',
+        'physiotherapy_session_fee' => 'decimal:2',
+        'physiotherapy_session_commission' => 'decimal:2',
         'online_consultation_enabled' => 'boolean',
         'online_consultation_fee' => 'decimal:2',
     ];
