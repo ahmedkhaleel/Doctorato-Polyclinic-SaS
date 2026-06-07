@@ -55,6 +55,29 @@ class AdminSidebarIntegrityTest extends TestCase
         $this->assertSame([], $missing, 'Sidebar links removed vs baseline: '.implode(', ', $missing));
     }
 
+    public function test_every_group_is_mapped_to_a_pillar(): void
+    {
+        $src = file_get_contents(base_path('resources/js/Layouts/AdminLayout.vue'));
+
+        // navGroups keys: { key: 'x', titleEn: '...'
+        preg_match_all("/key:\s*'([a-z]+)',\s*titleEn:/", $src, $gm);
+        $groupKeys = array_values(array_unique($gm[1]));
+
+        // keys referenced inside any PILLAR `groups: [ '...' ]` array
+        preg_match_all('/groups:\s*\[([^\]]+)\]/', $src, $pm);
+        $mapped = [];
+        foreach ($pm[1] as $arr) {
+            if (preg_match_all("/'([a-z]+)'/", $arr, $km)) {
+                $mapped = array_merge($mapped, $km[1]);
+            }
+        }
+        $mapped = array_values(array_unique($mapped));
+
+        $orphans = array_values(array_diff($groupKeys, $mapped));
+
+        $this->assertSame([], $orphans, 'Sidebar groups not assigned to any pillar (would fall into "More"): '.implode(', ', $orphans));
+    }
+
     public function test_every_sidebar_href_resolves_to_a_route(): void
     {
         $router = app('router');
