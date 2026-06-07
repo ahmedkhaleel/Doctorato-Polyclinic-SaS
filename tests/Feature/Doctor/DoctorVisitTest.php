@@ -311,4 +311,25 @@ class DoctorVisitTest extends TestCase
             'data_category' => 'neuropsych_risk',
         ]);
     }
+
+    public function test_neurology_visit_exposes_seizure_and_headache_diaries(): void
+    {
+        $visit = $this->makeVisit('neurology');
+        \App\Models\SeizureDiaryEntry::create([
+            'patient_id' => $this->patient->id, 'occurred_at' => now()->subDays(5),
+            'seizure_type' => 'focal', 'duration_seconds' => 90, 'entered_by' => 'doctor',
+        ]);
+        \App\Models\HeadacheDiaryEntry::create([
+            'patient_id' => $this->patient->id, 'date' => now()->subDays(3)->toDateString(),
+            'intensity' => 7, 'ichd3_type' => 'migraine', 'aura' => true, 'entered_by' => 'doctor',
+        ]);
+
+        $props = $this->actingAs($this->doctorUser)
+            ->get("/doctor/visits/{$visit->id}")->assertOk()
+            ->original->getData()['page']['props'];
+
+        $this->assertNotEmpty($props['neuroSeizures'] ?? []);
+        $this->assertNotEmpty($props['neuroHeadaches'] ?? []);
+        $this->assertSame(7, (int) $props['neuroHeadaches'][0]['intensity']);
+    }
 }

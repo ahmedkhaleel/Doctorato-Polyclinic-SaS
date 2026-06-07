@@ -167,6 +167,13 @@ class VisitController extends Controller
                 ->where('module', $module)->whereNull('stopped_at')->latest('started_at')
                 ->get(['id', 'drug', 'drug_class', 'dose', 'frequency', 'route', 'is_controlled', 'started_at']);
 
+            $extra['neuroSeizures'] = \App\Models\SeizureDiaryEntry::where('patient_id', $visit->patient_id)
+                ->where('occurred_at', '>=', now()->subDays(90))->orderBy('occurred_at')
+                ->get(['id', 'occurred_at', 'seizure_type', 'duration_seconds']);
+            $extra['neuroHeadaches'] = \App\Models\HeadacheDiaryEntry::where('patient_id', $visit->patient_id)
+                ->whereDate('date', '>=', now()->subDays(90)->toDateString())->orderBy('date')
+                ->get(['id', 'date', 'intensity', 'ichd3_type', 'aura']);
+
             $canSensitive = (bool) (auth()->user()?->role?->hasPermission("{$module}.view_sensitive") ?? false);
             $extra['neuroCanViewSensitive'] = $canSensitive;
             if ($canSensitive) {

@@ -34,6 +34,8 @@ const props = defineProps({
     neuroMeds: Array,
     neuroRisk: Object,
     neuroCanViewSensitive: Boolean,
+    neuroSeizures: Array,
+    neuroHeadaches: Array,
 });
 
 const activeTab = ref('details');
@@ -58,6 +60,8 @@ const specialtyExtras = computed(() => ({
     neuroMeds: props.neuroMeds,
     neuroRisk: props.neuroRisk,
     neuroCanViewSensitive: props.neuroCanViewSensitive,
+    neuroSeizures: props.neuroSeizures,
+    neuroHeadaches: props.neuroHeadaches,
 }));
 
 const tabs = computed(() => {
