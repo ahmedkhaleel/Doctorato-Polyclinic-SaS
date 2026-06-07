@@ -134,6 +134,12 @@ Route::middleware('patient.auth')->group(function () {
         Route::get('/obgyn', [\App\Http\Controllers\Patient\PatientObgynController::class, 'overview'])->name('patient.obgyn.overview');
     });
 
+    // ─── Physiotherapy patient pages (PT-4): HEP + adherence self-log ──
+    Route::middleware('module:physiotherapy')->group(function () {
+        Route::get('/physiotherapy', [\App\Http\Controllers\Patient\PatientPhysioController::class, 'overview'])->name('patient.physiotherapy.overview');
+        Route::post('/physiotherapy/adherence', [\App\Http\Controllers\Patient\PatientPhysioController::class, 'logAdherence'])->name('patient.physiotherapy.adherence')->middleware('throttle:60,1');
+    });
+
     // ─── Neuropsych patient pages (NP2 scales + NP5 diaries) ──
     // Shared by psychiatry & neurology: gated so the pages 403/redirect when
     // BOTH modules are disabled (the nav already hides via anyModuleKey).

@@ -156,6 +156,14 @@ const navGroups = computed(() => [
         ],
     },
     {
+        title: isRtl.value ? 'العلاج الطبيعي' : 'Physiotherapy',
+        key: 'physiotherapy',
+        moduleKey: 'physiotherapy',
+        items: [
+            { label: isRtl.value ? 'تماريني المنزلية' : 'My Home Program', href: lp('/physiotherapy'), icon: 'overview' },
+        ],
+    },
+    {
         title: isRtl.value ? 'المالية' : 'Financial',
         key: 'financial',
         items: [

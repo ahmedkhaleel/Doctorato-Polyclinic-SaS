@@ -17,12 +17,17 @@ const props = defineProps({
     sessions: { type: Array, default: () => [] },
     romHistory: { type: Array, default: () => [] },
     romNormatives: { type: Object, default: () => ({}) },
+    exerciseCatalog: { type: Array, default: () => [] },
+    prescriptions: { type: Array, default: () => [] },
 });
 
 const tab = ref('overview');
 const showPlanForm = ref(false);
 const showSessionForm = ref(false);
 const showAssessForm = ref(false);
+const showRxForm = ref(false);
+
+const activePrescriptions = computed(() => props.prescriptions.filter((r) => r.status === 'active'));
 
 const activePlans = computed(() => props.plans.filter((p) => ['planned', 'in_progress'].includes(p.status)));
 const statusColor = (s) => ({ in_progress: '#0D9488', planned: '#6366F1', on_hold: '#D97706', completed: '#059669', cancelled: '#9CA3AF' }[s] || '#6B7280');
@@ -92,6 +97,24 @@ function submitAssess() {
         onSuccess: () => { assessForm.reset(); showAssessForm.value = false; },
     });
 }
+
+// ── HEP prescription ──
+const rxForm = useForm({ exercise_id: '', sets: 3, reps: 10, hold_sec: null, frequency: 'daily', notes: '' });
+function onPickExercise() {
+    const ex = props.exerciseCatalog.find((e) => e.id === Number(rxForm.exercise_id));
+    if (ex) {
+        rxForm.sets = ex.default_sets || rxForm.sets;
+        rxForm.reps = ex.default_reps || rxForm.reps;
+        rxForm.hold_sec = ex.default_hold_sec || null;
+    }
+}
+function submitRx() {
+    rxForm.post(route('doctor.physiotherapy.exercises.store', props.patient.id), { preserveScroll: true, onSuccess: () => { rxForm.reset(); showRxForm.value = false; } });
+}
+function stopRx(rx) {
+    useForm({}).post(route('doctor.physiotherapy.exercises.stop', rx.id), { preserveScroll: true });
+}
+const exName = (ex) => (ex ? (isRtl.value ? ex.name_ar : ex.name_en) : '');
 </script>
 
 <template>
@@ -107,6 +130,7 @@ function submitAssess() {
                 <button @click="showAssessForm = !showAssessForm; tab = 'assessments'" class="px-4 py-2 rounded-xl text-sm font-semibold text-white" :style="{ backgroundColor: ACCENT }">+ {{ t('Assessment', 'تقييم') }}</button>
                 <button @click="showSessionForm = !showSessionForm" class="px-4 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">+ {{ t('Session', 'جلسة') }}</button>
                 <button @click="showPlanForm = !showPlanForm" class="px-4 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">+ {{ t('Plan', 'خطة') }}</button>
+                <button @click="showRxForm = !showRxForm" class="px-4 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">+ {{ t('Exercise', 'تمرين') }}</button>
             </div>
         </div>
 
@@ -149,6 +173,47 @@ function submitAssess() {
                 <button type="submit" :disabled="sessionForm.processing" class="px-5 py-2 rounded-xl text-sm font-semibold text-white" :style="{ backgroundColor: ACCENT }">{{ t('Save', 'حفظ') }}</button>
             </div>
         </form>
+
+        <!-- Prescribe exercise form -->
+        <form v-if="showRxForm" @submit.prevent="submitRx" class="bg-white rounded-2xl p-5 shadow-sm border border-teal-100 space-y-3">
+            <h3 class="font-semibold text-gray-800">{{ t('Prescribe Home Exercise', 'وصف تمرين منزلي') }}</h3>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                <select v-model="rxForm.exercise_id" @change="onPickExercise" class="form-in md:col-span-2" required>
+                    <option value="">{{ t('Select exercise…', 'اختر تمريناً…') }}</option>
+                    <option v-for="ex in exerciseCatalog" :key="ex.id" :value="ex.id">{{ exName(ex) }} ({{ ex.region }})</option>
+                </select>
+                <input v-model.number="rxForm.sets" type="number" min="1" :placeholder="t('Sets', 'مجموعات')" class="form-in" />
+                <input v-model.number="rxForm.reps" type="number" min="1" :placeholder="t('Reps', 'تكرارات')" class="form-in" />
+                <input v-model.number="rxForm.hold_sec" type="number" min="0" :placeholder="t('Hold s', 'ثبات ث')" class="form-in" />
+                <input v-model="rxForm.frequency" :placeholder="t('Frequency', 'التكرار')" class="form-in" />
+                <input v-model="rxForm.notes" :placeholder="t('Notes', 'ملاحظات')" class="form-in md:col-span-4" />
+            </div>
+            <div class="flex justify-end gap-2">
+                <button type="button" @click="showRxForm = false" class="px-4 py-2 text-sm text-gray-500">{{ t('Cancel', 'إلغاء') }}</button>
+                <button type="submit" :disabled="rxForm.processing" class="px-5 py-2 rounded-xl text-sm font-semibold text-white" :style="{ backgroundColor: ACCENT }">{{ t('Prescribe', 'وصف') }}</button>
+            </div>
+        </form>
+
+        <!-- HEP list -->
+        <div v-if="activePrescriptions.length" class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+            <h2 class="font-semibold text-gray-800 mb-3">{{ t('Home Exercise Program', 'برنامج التمارين المنزلية') }}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div v-for="rx in activePrescriptions" :key="rx.id" class="flex items-center gap-3 p-3 rounded-xl border border-gray-100">
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-800">{{ exName(rx.exercise) }}</p>
+                        <p class="text-xs text-gray-500">
+                            <span v-if="rx.sets">{{ rx.sets }}×{{ rx.reps }}</span>
+                            <span v-if="rx.hold_sec"> · {{ rx.hold_sec }}s</span>
+                            <span v-if="rx.frequency"> · {{ rx.frequency }}</span>
+                        </p>
+                    </div>
+                    <span class="text-[11px] px-2 py-1 rounded-full bg-teal-50 text-teal-600 font-medium">{{ rx.adherence_14d }}/14</span>
+                    <button @click="stopRx(rx)" class="text-gray-300 hover:text-red-500" :title="t('Stop', 'إيقاف')">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <!-- Tabs -->
         <div class="flex gap-1 bg-gray-100 rounded-xl p-1 w-fit">

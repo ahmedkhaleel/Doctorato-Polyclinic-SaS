@@ -131,6 +131,27 @@ class DoctorPhysioController extends BaseDoctorController
             ->orderBy('recorded_at')
             ->get(['joint', 'motion', 'side', 'arom', 'prom', 'normal_ref', 'recorded_at']);
 
+        // Home-exercise-program: the shared catalog + this patient's prescriptions
+        // (with a 14-day adherence count for the progress chip).
+        $catalog = \App\Models\Exercise::where('is_active', true)
+            ->orderBy('region')->orderBy('name_en')
+            ->get(['id', 'name_ar', 'name_en', 'region', 'default_sets', 'default_reps', 'default_hold_sec']);
+
+        $prescriptions = \App\Models\PhysioExercisePrescription::where('patient_id', $patient->id)
+            ->with('exercise:id,name_ar,name_en,region')
+            ->latest('prescribed_at')
+            ->get()
+            ->map(fn ($rx) => array_merge(
+                $rx->only(['id', 'exercise_id', 'sets', 'reps', 'hold_sec', 'frequency', 'resistance', 'status', 'prescribed_at', 'notes']),
+                [
+                    'exercise' => $rx->exercise,
+                    'adherence_14d' => \App\Models\HepAdherenceLog::where('prescription_id', $rx->id)
+                        ->where('done', true)
+                        ->where('log_date', '>=', now()->subDays(14)->toDateString())
+                        ->count(),
+                ]
+            ));
+
         return Inertia::render('Doctor/Physiotherapy/Patients/Show', [
             'patient' => $patient->only(['id', 'full_name', 'phone', 'file_number', 'photo', 'date_of_birth', 'gender']),
             'assessments' => $assessments,
@@ -138,7 +159,48 @@ class DoctorPhysioController extends BaseDoctorController
             'sessions' => $sessions,
             'romHistory' => $romHistory,
             'romNormatives' => RomNormatives::NORMS,
+            'exerciseCatalog' => $catalog,
+            'prescriptions' => $prescriptions,
         ]);
+    }
+
+    /** Prescribe an exercise from the shared catalog (part of the HEP). */
+    public function prescribeExercise(Request $request, Patient $patient): RedirectResponse
+    {
+        $doctorId = $this->doctorId($request);
+
+        $data = $request->validate([
+            'exercise_id' => 'required|integer|exists:exercises,id',
+            'treatment_plan_id' => 'nullable|integer|exists:physio_treatment_plans,id',
+            'sets' => 'nullable|integer|min:1|max:20',
+            'reps' => 'nullable|integer|min:1|max:100',
+            'hold_sec' => 'nullable|integer|min:0|max:600',
+            'frequency' => 'nullable|string|max:40',
+            'resistance' => 'nullable|string|max:60',
+            'notes' => 'nullable|string|max:500',
+        ]);
+
+        $rx = \App\Models\PhysioExercisePrescription::create(array_merge($data, [
+            'patient_id' => $patient->id,
+            'doctor_id' => $doctorId,
+            'status' => 'active',
+            'prescribed_at' => now()->toDateString(),
+        ]));
+
+        AuditLogger::log('created', $rx, ['patient_id' => $patient->id], 'Prescribed home exercise');
+
+        return back()->with('success', $this->msg('Exercise prescribed.', 'تم وصف التمرين.'));
+    }
+
+    /** Retire a prescription (soft stop — kept for history). */
+    public function removeExercise(Request $request, \App\Models\PhysioExercisePrescription $prescription): RedirectResponse
+    {
+        $this->authorizeDoctor($request, $prescription);
+
+        $prescription->update(['status' => 'stopped']);
+        AuditLogger::log('updated', $prescription, ['status' => 'stopped'], 'Stopped home exercise');
+
+        return back()->with('success', $this->msg('Exercise stopped.', 'تم إيقاف التمرين.'));
     }
 
     /** Record an assessment + its ROM, MMT and pain-map rows in one transaction. */
