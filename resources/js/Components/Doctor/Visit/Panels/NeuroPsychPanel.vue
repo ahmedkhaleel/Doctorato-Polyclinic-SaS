@@ -9,6 +9,7 @@ import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import CalendarHeatmap from '@/Components/Charts/CalendarHeatmap.vue';
 import TrendLine from '@/Components/Charts/TrendLine.vue';
+import Sparkline from '@/Components/Charts/Sparkline.vue';
 
 const props = defineProps({
     visit: { type: Object, required: true },
@@ -71,26 +72,24 @@ const riskElevated = computed(() => ['moderate', 'high'].includes(props.neuroRis
 
 const latestScale = computed(() => (props.neuroScales || [])[0] || null);
 
-// Trend series for the dominant scale_key (oldest → newest), for the sparkline.
-const trend = computed(() => {
-    const all = props.neuroScales || [];
-    if (!all.length) return null;
-    const key = latestScale.value?.scale_key;
-    const series = all.filter(s => s.scale_key === key && s.score != null)
-        .slice().reverse(); // newest-first → oldest-first
-    if (series.length < 2) return null;
-    const scores = series.map(s => Number(s.score));
-    const max = Math.max(...scores, 1);
-    const min = Math.min(...scores, 0);
-    const span = max - min || 1;
-    const w = 120, h = 32;
-    const pts = scores.map((v, i) => {
-        const x = (i / (scores.length - 1)) * w;
-        const y = h - ((v - min) / span) * h;
-        return `${x.toFixed(1)},${y.toFixed(1)}`;
-    });
-    return { key, points: pts.join(' '), last: scores[scores.length - 1], first: scores[0], improving: scores[scores.length - 1] < scores[0] };
+// Measurement-based-care (MBC) trends — one faceted mini-trend per scale_key,
+// each on its own scale (oldest → newest). Lower score = improving (PHQ-9/GAD-7…).
+const scaleTrends = computed(() => {
+    const byKey = {};
+    for (const s of [...(props.neuroScales || [])].reverse()) { // oldest → newest
+        if (s.score == null) continue;
+        (byKey[s.scale_key] ||= []).push(s);
+    }
+    return Object.entries(byKey).map(([key, arr]) => ({
+        key,
+        label: scaleLabel(key),
+        values: arr.map(s => Number(s.score)),
+        latest: arr[arr.length - 1],
+        first: arr[0],
+        improving: Number(arr[arr.length - 1].score) < Number(arr[0].score),
+    }));
 });
+const hasScaleTrends = computed(() => scaleTrends.value.length > 0);
 
 const activeMeds = computed(() => props.neuroMeds || []);
 
@@ -169,19 +168,25 @@ const hasContent = computed(() => props.neuroEncounter || (props.neuroScales || 
                     </div>
                 </div>
 
-                <!-- Scale trend sparkline -->
-                <div v-if="trend" class="rounded-xl border border-gray-100 p-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <h4 class="text-xs font-bold text-gray-500 uppercase">{{ scaleLabel(trend.key) }} {{ isRtl ? 'الاتجاه' : 'trend' }}</h4>
-                        <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full" :class="trend.improving ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200'">
-                            {{ trend.first }} → {{ trend.last }} · {{ trend.improving ? (isRtl ? 'تحسّن' : 'improving') : (isRtl ? 'يحتاج متابعة' : 'watch') }}
-                        </span>
-                    </div>
-                    <svg viewBox="0 0 120 32" class="w-full h-10" preserveAspectRatio="none">
-                        <polyline :points="trend.points" fill="none" :stroke="ACCENT" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <div class="text-right">
+                <!-- Measurement-based-care: faceted per-scale trends (CV-5) -->
+                <div v-if="hasScaleTrends" class="rounded-xl border border-gray-100 p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-xs font-bold text-gray-500 uppercase">{{ isRtl ? 'مقاييس القياس المنتظم' : 'Measurement-based care' }}</h4>
                         <Link :href="scalesHref" class="text-[11px] font-medium" :style="`color:${ACCENT}`">{{ isRtl ? 'كل المقاييس' : 'All scales' }}</Link>
+                    </div>
+                    <div class="grid sm:grid-cols-2 gap-x-5 gap-y-2.5">
+                        <div v-for="t in scaleTrends" :key="t.key" class="flex items-center gap-3">
+                            <div class="min-w-0 w-20 shrink-0">
+                                <p class="text-xs font-bold text-gray-700">{{ t.label }}</p>
+                                <p class="text-[10px]" :class="t.improving ? 'text-emerald-600' : 'text-amber-600'">
+                                    {{ t.first.score }} → {{ t.latest.score }}<span v-if="t.values.length > 1"> · {{ t.improving ? (isRtl ? 'تحسّن' : '↓') : (isRtl ? 'متابعة' : '↑') }}</span>
+                                </p>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <Sparkline :values="t.values" :color="ACCENT" :width="140" :height="28" fill />
+                            </div>
+                            <span class="text-[9px] font-semibold px-1.5 py-0.5 rounded-full border shrink-0" :class="sevStyle(t.latest.severity)">{{ t.latest.severity || '—' }}</span>
+                        </div>
                     </div>
                 </div>
 
