@@ -36,6 +36,8 @@ const props = defineProps({
     neuroMeds: Array,
     neuroRisk: Object,
     neuroCanViewSensitive: Boolean,
+    neuroSeizures: Array,
+    neuroHeadaches: Array,
     latestVitals: Object,
     vitalsAlerts: Array,
     vitalsHistory: Array,
@@ -59,6 +61,8 @@ const specialtyExtras = computed(() => ({
     neuroMeds: props.neuroMeds,
     neuroRisk: props.neuroRisk,
     neuroCanViewSensitive: props.neuroCanViewSensitive,
+    neuroSeizures: props.neuroSeizures,
+    neuroHeadaches: props.neuroHeadaches,
 }));
 
 const mounted = ref(false);

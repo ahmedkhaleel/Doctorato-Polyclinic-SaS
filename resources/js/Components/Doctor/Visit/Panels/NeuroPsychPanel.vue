@@ -7,6 +7,8 @@
  */
 import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import CalendarHeatmap from '@/Components/Charts/CalendarHeatmap.vue';
+import TrendLine from '@/Components/Charts/TrendLine.vue';
 
 const props = defineProps({
     visit: { type: Object, required: true },
@@ -19,7 +21,19 @@ const props = defineProps({
     neuroMeds: { type: Array, default: () => [] },
     neuroRisk: { type: Object, default: null },
     neuroCanViewSensitive: { type: Boolean, default: false },
+    neuroSeizures: { type: Array, default: () => [] },
+    neuroHeadaches: { type: Array, default: () => [] },
 });
+
+const seizureEvents = computed(() => (props.neuroSeizures || []).map(s => ({ date: String(s.occurred_at).slice(0, 10) })));
+const headacheSeries = computed(() => [{
+    key: 'ha', label: props.isRtl ? 'شدّة الصداع' : 'Headache intensity', color: '#0D9488',
+    points: (props.neuroHeadaches || [])
+        .filter(h => h.intensity != null)
+        .map((h, i) => ({ x: i + 1, y: Number(h.intensity) })),
+}]);
+const hasSeizures = computed(() => seizureEvents.value.length > 0);
+const hasHeadaches = computed(() => headacheSeries.value[0].points.length >= 2);
 
 const module = computed(() => props.visit?.module);
 const isPsych = computed(() => module.value === 'psychiatry');
@@ -85,7 +99,7 @@ function fmtDate(d) {
     return new Date(d).toLocaleDateString(props.isRtl ? 'ar-EG' : 'en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
-const hasContent = computed(() => props.neuroEncounter || (props.neuroScales || []).length || activeMeds.value.length || props.neuroRisk);
+const hasContent = computed(() => props.neuroEncounter || (props.neuroScales || []).length || activeMeds.value.length || props.neuroRisk || hasSeizures.value || hasHeadaches.value);
 </script>
 
 <template>
@@ -185,6 +199,18 @@ const hasContent = computed(() => props.neuroEncounter || (props.neuroScales || 
                         <div v-if="neuroEncounter.mse"><p class="text-[10px] font-bold text-gray-400 uppercase">{{ isRtl ? 'الفحص النفسي (MSE)' : 'MSE' }}</p><p class="text-gray-700 whitespace-pre-wrap">{{ neuroEncounter.mse }}</p></div>
                         <div v-if="neuroEncounter.assessment"><p class="text-[10px] font-bold text-gray-400 uppercase">A</p><p class="text-gray-700 whitespace-pre-wrap">{{ neuroEncounter.assessment }}</p></div>
                         <div v-if="neuroEncounter.plan"><p class="text-[10px] font-bold text-gray-400 uppercase">P</p><p class="text-gray-700 whitespace-pre-wrap">{{ neuroEncounter.plan }}</p></div>
+                    </div>
+                </div>
+
+                <!-- Symptom diaries (CV-4) -->
+                <div v-if="hasSeizures || hasHeadaches" class="grid sm:grid-cols-2 gap-4">
+                    <div v-if="hasSeizures">
+                        <h4 class="text-xs font-bold text-gray-500 uppercase mb-2">{{ isRtl ? 'نشاط النوبات (٩٠ يومًا)' : 'Seizure activity (90d)' }}</h4>
+                        <CalendarHeatmap :events="seizureEvents" :weeks="13" color="#4F46E5" :is-rtl="isRtl" />
+                    </div>
+                    <div v-if="hasHeadaches">
+                        <h4 class="text-xs font-bold text-gray-500 uppercase mb-2">{{ isRtl ? 'شدّة الصداع' : 'Headache intensity' }}</h4>
+                        <TrendLine :series="headacheSeries" :is-rtl="isRtl" :y-min="0" :y-max="10" :height="160" :x-label="isRtl ? 'نوبة' : '#'" />
                     </div>
                 </div>
 
