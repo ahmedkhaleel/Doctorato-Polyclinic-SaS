@@ -59,6 +59,19 @@ Patient routes are the only ones under a `{locale}` prefix — see the
 - **Module sidebar filtering** — Layout sidebars filter sections via a
   `moduleKey` field matching `modules.value[key]?.enabled === true`.
 
+- **Admin sidebar = pillars → groups → items** (`AdminLayout.vue`): the flat
+  groups are folded into ~9 collapsible **pillars** (`PILLARS` const → `pillarGroups`
+  computed). Each pillar lists the group `key`s it contains; an unmapped group
+  still shows under a "More" pillar (never lost). `autoOpenActiveGroup` opens both
+  the active pillar and its group. **To add a page:** add an item `{labelEn,
+  labelAr, href, icon, permission, moduleKey?}` to the right `navGroups` group; if
+  you add a whole new group, also add its key to `GROUP_ORDER` and to a pillar's
+  `groups`. Guarded by `AdminSidebarIntegrityTest` + `tests/fixtures/
+  admin_sidebar_hrefs.txt` — every href must stay present and resolve to a GET
+  route; regenerate the baseline only when intentionally adding pages
+  (`grep -oE "href: '[^']+'" … | sed … | sort -u > the fixture`). Plan:
+  `docs/ADMIN_SIDEBAR_REORG_PLAN.md`.
+
 - **Week convention** — `day_of_week`: `0=Saturday, 1=Sunday, …, 6=Friday`.
   Different from Carbon's `dayOfWeek` (0=Sun). Use the map in
   `OnlineSlotGeneratorService::carbonToSystemDay()` to translate.
