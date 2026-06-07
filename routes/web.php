@@ -53,6 +53,24 @@ Route::get('/manifest.webmanifest', function () {
                 'type' => 'image/png',
                 'purpose' => 'any',
             ],
+            [
+                'src' => '/images/logo/icon-192.png',
+                'sizes' => '192x192',
+                'type' => 'image/png',
+                'purpose' => 'any',
+            ],
+            [
+                'src' => '/images/logo/icon-512.png',
+                'sizes' => '512x512',
+                'type' => 'image/png',
+                'purpose' => 'any',
+            ],
+            [
+                'src' => '/images/logo/icon-maskable-512.png',
+                'sizes' => '512x512',
+                'type' => 'image/png',
+                'purpose' => 'maskable',
+            ],
         ],
     ], 200, [
         'Content-Type' => 'application/manifest+json; charset=utf-8',
