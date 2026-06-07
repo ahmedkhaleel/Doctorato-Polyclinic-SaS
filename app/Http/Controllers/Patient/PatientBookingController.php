@@ -117,7 +117,7 @@ class PatientBookingController extends BasePatientController
         $patient = $this->patient($request);
 
         $data = $request->validate([
-            'booking_type' => 'required|in:dermatology_consultation,cosmetic_consultation,service,dental_consultation,dental_service,pediatric_consultation,pediatric_service,obgyn_consultation,obgyn_service,psychiatry_consultation,psychiatry_service,neurology_consultation,neurology_service',
+            'booking_type' => 'required|in:dermatology_consultation,cosmetic_consultation,service,dental_consultation,dental_service,pediatric_consultation,pediatric_service,obgyn_consultation,obgyn_service,psychiatry_consultation,psychiatry_service,neurology_consultation,neurology_service,physiotherapy_consultation,physiotherapy_session',
             'module' => 'nullable|string|in:derma,dental,pediatric,obgyn,psychiatry,neurology',
             'service_id' => 'nullable|exists:services,id',
             'doctor_id' => 'nullable|exists:doctors,id',

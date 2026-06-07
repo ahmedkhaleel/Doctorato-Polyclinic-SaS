@@ -51,7 +51,7 @@ class BookingRequest extends FormRequest
             'phone' => ['required', 'string', 'max:20'],
             'email' => ['nullable', 'email', 'max:255'],
             'module' => ['nullable', 'string', 'in:derma,dental,pediatric,obgyn,psychiatry,neurology'],
-            'booking_type' => ['required', 'in:dermatology_consultation,cosmetic_consultation,service,dental_consultation,pediatric_consultation,pediatric_service,obgyn_consultation,obgyn_service,psychiatry_consultation,psychiatry_service,neurology_consultation,neurology_service,package_bundle'],
+            'booking_type' => ['required', 'in:dermatology_consultation,cosmetic_consultation,service,dental_consultation,pediatric_consultation,pediatric_service,obgyn_consultation,obgyn_service,psychiatry_consultation,psychiatry_service,neurology_consultation,neurology_service,physiotherapy_consultation,physiotherapy_session,package_bundle'],
             'service_id' => ['nullable', 'required_if:booking_type,service', 'exists:services,id'],
             'doctor_id' => ['nullable', 'exists:doctors,id'],
             'preferred_date' => ['nullable', 'date', 'after_or_equal:today'],

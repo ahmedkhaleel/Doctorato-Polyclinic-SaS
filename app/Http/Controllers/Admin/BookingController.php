@@ -100,7 +100,7 @@ class BookingController extends Controller
         $services = Service::active()->bookable()->orderBy('display_order')
             ->get(['id', 'name_ar', 'name_en', 'price', 'price_after_discount', 'default_sessions', 'session_duration_minutes', 'category_id', 'module']);
         $doctors = Doctor::active()->orderBy('display_order')
-            ->get(['id', 'name_ar', 'name_en', 'doctor_type', 'dermatology_fee', 'cosmetic_fee', 'module', 'dental_consultation_fee', 'dental_service_fee', 'obgyn_consultation_fee', 'psychiatry_consultation_fee', 'neurology_consultation_fee']);
+            ->get(['id', 'name_ar', 'name_en', 'doctor_type', 'dermatology_fee', 'cosmetic_fee', 'module', 'dental_consultation_fee', 'dental_service_fee', 'obgyn_consultation_fee', 'psychiatry_consultation_fee', 'neurology_consultation_fee', 'physiotherapy_consultation_fee']);
         $doctorSchedules = DoctorSchedule::active()
             ->get(['doctor_id', 'day_of_week', 'start_time', 'end_time']);
 
@@ -122,7 +122,9 @@ class BookingController extends Controller
             'obgynConsultationFee' => (float) \App\Services\ModuleManager::getSetting('obgyn', 'consultation_fee', 0),
             'psychiatryConsultationFee' => (float) \App\Services\ModuleManager::getSetting('psychiatry', 'consultation_fee', 0),
             'neurologyConsultationFee' => (float) \App\Services\ModuleManager::getSetting('neurology', 'consultation_fee', 0),
-            'specialtyFees' => collect(['derma', 'dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology'])
+            'physiotherapyConsultationFee' => (float) \App\Services\ModuleManager::getSetting('physiotherapy', 'consultation_fee', 0),
+            'physiotherapySessionFee' => (float) \App\Services\ModuleManager::getSetting('physiotherapy', 'session_fee', 0),
+            'specialtyFees' => collect(['derma', 'dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology', 'physiotherapy'])
                 ->mapWithKeys(fn ($m) => [$m => app(\App\Services\Pricing\PricingResolver::class)->feesFor($m)])->all(),
             'followupFee' => (float) Setting::get('followup_fee', 0),
             'followupWindowDays' => (int) Setting::get('followup_window_days', 15),
@@ -180,7 +182,7 @@ class BookingController extends Controller
 
         // Doctors and schedules are needed for unconfirmed (confirm form) and retouch form
         $doctors = Doctor::active()->orderBy('display_order')
-            ->get(['id', 'name_ar', 'name_en', 'doctor_type', 'module', 'dermatology_fee', 'cosmetic_fee', 'dental_consultation_fee', 'dental_service_fee', 'obgyn_consultation_fee', 'psychiatry_consultation_fee', 'neurology_consultation_fee']);
+            ->get(['id', 'name_ar', 'name_en', 'doctor_type', 'module', 'dermatology_fee', 'cosmetic_fee', 'dental_consultation_fee', 'dental_service_fee', 'obgyn_consultation_fee', 'psychiatry_consultation_fee', 'neurology_consultation_fee', 'physiotherapy_consultation_fee']);
         $doctorSchedules = DoctorSchedule::active()
             ->get(['doctor_id', 'day_of_week', 'start_time', 'end_time']);
 

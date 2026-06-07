@@ -82,7 +82,7 @@ class SecretaryBookingController extends BaseSecretaryController
         $services = Service::active()->bookable()->orderBy('display_order')
             ->get(['id', 'name_ar', 'name_en', 'price', 'price_after_discount', 'default_sessions', 'session_duration_minutes', 'category_id', 'module']);
         $doctors = Doctor::active()->orderBy('display_order')
-            ->get(['id', 'name_ar', 'name_en', 'doctor_type', 'dermatology_fee', 'cosmetic_fee', 'module', 'dental_consultation_fee', 'dental_service_fee', 'obgyn_consultation_fee', 'psychiatry_consultation_fee', 'neurology_consultation_fee']);
+            ->get(['id', 'name_ar', 'name_en', 'doctor_type', 'dermatology_fee', 'cosmetic_fee', 'module', 'dental_consultation_fee', 'dental_service_fee', 'obgyn_consultation_fee', 'psychiatry_consultation_fee', 'neurology_consultation_fee', 'physiotherapy_consultation_fee']);
         $doctorSchedules = DoctorSchedule::active()
             ->get(['doctor_id', 'day_of_week', 'start_time', 'end_time']);
 
@@ -173,7 +173,7 @@ class SecretaryBookingController extends BaseSecretaryController
 
         // Doctors and schedules are needed for both unconfirmed (confirm form) and retouch form
         $doctors = Doctor::active()->orderBy('display_order')
-            ->get(['id', 'name_ar', 'name_en', 'doctor_type', 'module', 'dermatology_fee', 'cosmetic_fee', 'dental_consultation_fee', 'dental_service_fee', 'obgyn_consultation_fee', 'psychiatry_consultation_fee', 'neurology_consultation_fee']);
+            ->get(['id', 'name_ar', 'name_en', 'doctor_type', 'module', 'dermatology_fee', 'cosmetic_fee', 'dental_consultation_fee', 'dental_service_fee', 'obgyn_consultation_fee', 'psychiatry_consultation_fee', 'neurology_consultation_fee', 'physiotherapy_consultation_fee']);
         $doctorSchedules = DoctorSchedule::active()
             ->get(['doctor_id', 'day_of_week', 'start_time', 'end_time']);
 

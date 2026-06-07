@@ -354,10 +354,16 @@ class BookingWorkflowService
             'obgyn_consultation' => 'obgyn',
             'psychiatry_consultation' => 'psychiatry',
             'neurology_consultation' => 'neurology',
+            'physiotherapy_consultation' => 'physiotherapy',
         ];
         if (isset($consultationTypes[$bookingType])) {
             $visitType = 'consultation';
             $consultationType = $consultationTypes[$bookingType];
+        }
+        // A physiotherapy treatment session keeps visit_type=session but carries
+        // the module consultation_type so fee/commission resolution still applies.
+        if ($bookingType === 'physiotherapy_session') {
+            $consultationType = 'physiotherapy';
         }
 
         foreach ($todayAppointments as $appointment) {
@@ -448,6 +454,8 @@ class BookingWorkflowService
                     'obgyn_consultation' => 'OB/GYN Consultation',
                     'psychiatry_consultation' => 'Psychiatry Consultation',
                     'neurology_consultation' => 'Neurology Consultation',
+                    'physiotherapy_consultation' => 'Physiotherapy Assessment',
+                    'physiotherapy_session' => 'Physiotherapy Session',
                     default => 'Cosmetic Consultation',
                 };
                 $descAr = match ($booking->booking_type) {
@@ -457,6 +465,8 @@ class BookingWorkflowService
                     'obgyn_consultation' => 'كشف نساء وتوليد',
                     'psychiatry_consultation' => 'كشف نفسية',
                     'neurology_consultation' => 'كشف أعصاب',
+                    'physiotherapy_consultation' => 'تقييم علاج طبيعي',
+                    'physiotherapy_session' => 'جلسة علاج طبيعي',
                     default => 'كشف تجميل',
                 };
             }
@@ -698,10 +708,16 @@ class BookingWorkflowService
             'obgyn_consultation' => 'obgyn',
             'psychiatry_consultation' => 'psychiatry',
             'neurology_consultation' => 'neurology',
+            'physiotherapy_consultation' => 'physiotherapy',
         ];
         if (isset($consultationTypes[$bookingType])) {
             $visitType = 'consultation';
             $consultationType = $consultationTypes[$bookingType];
+        }
+        // A physiotherapy treatment session keeps visit_type=session but carries
+        // the module consultation_type so fee/commission resolution still applies.
+        if ($bookingType === 'physiotherapy_session') {
+            $consultationType = 'physiotherapy';
         }
 
         if ($appointment->is_retouch) {
@@ -802,7 +818,7 @@ class BookingWorkflowService
 
         // Non-derma medical specialties that own services/doctors and can be
         // inferred from the first service's doctor or service.
-        $inferable = ['dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology'];
+        $inferable = ['dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology', 'physiotherapy'];
 
         $firstService = $data['services'][0] ?? null;
         if ($firstService) {
@@ -836,6 +852,7 @@ class BookingWorkflowService
             'obgyn_consultation', 'obgyn_service' => 'obgyn',
             'psychiatry_consultation', 'psychiatry_service' => 'psychiatry',
             'neurology_consultation', 'neurology_service' => 'neurology',
+            'physiotherapy_consultation', 'physiotherapy_session' => 'physiotherapy',
             'dermatology_consultation', 'cosmetic_consultation' => 'derma',
             default => null,
         };

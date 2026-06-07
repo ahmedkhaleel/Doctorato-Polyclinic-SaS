@@ -477,7 +477,7 @@ class LeadController extends Controller
         // Validate optional booking data
         $data = $request->validate([
             'create_booking' => 'nullable|boolean',
-            'booking_type' => 'required_if:create_booking,true|nullable|in:dermatology_consultation,cosmetic_consultation,dental_consultation,pediatric_consultation,pediatric_service,obgyn_consultation,obgyn_service,service,package_bundle',
+            'booking_type' => 'required_if:create_booking,true|nullable|in:dermatology_consultation,cosmetic_consultation,dental_consultation,pediatric_consultation,pediatric_service,obgyn_consultation,obgyn_service,physiotherapy_consultation,physiotherapy_session,service,package_bundle',
             'service_id' => 'nullable|exists:services,id',
             'doctor_id' => 'nullable|exists:doctors,id',
             'appointment_date' => 'required_if:create_booking,true|nullable|date|after_or_equal:today',
@@ -505,6 +505,7 @@ class LeadController extends Controller
                     'obgyn' => 'obgyn_consultation',
                     'psychiatry' => 'psychiatry_consultation',
                     'neurology' => 'neurology_consultation',
+                    'physiotherapy' => 'physiotherapy_consultation',
                     default => 'dermatology_consultation',
                 };
             }
@@ -542,6 +543,9 @@ class LeadController extends Controller
                 $unitPrice = (float) \App\Models\Setting::get($feeKey, $unitPrice);
             } elseif ($data['booking_type'] === 'obgyn_consultation') {
                 $unitPrice = (float) \App\Models\Setting::get('obgyn_consultation_fee', $unitPrice);
+            } elseif (in_array($data['booking_type'], ['physiotherapy_consultation', 'physiotherapy_session'], true)) {
+                $key = $data['booking_type'] === 'physiotherapy_session' ? 'session_fee' : 'consultation_fee';
+                $unitPrice = (float) \App\Services\ModuleManager::getSetting('physiotherapy', $key, $unitPrice);
             }
 
             $bookingData = [

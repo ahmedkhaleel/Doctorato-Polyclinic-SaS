@@ -34,6 +34,8 @@ const props = defineProps({
     obgynConsultationFee: { type: Number, default: 0 },
     psychiatryConsultationFee: { type: Number, default: 0 },
     neurologyConsultationFee: { type: Number, default: 0 },
+    physiotherapyConsultationFee: { type: Number, default: 0 },
+    physiotherapySessionFee: { type: Number, default: 0 },
     specialtyFees: { type: Object, default: () => ({}) },
 });
 
@@ -136,6 +138,7 @@ const isPediatricEnabled = computed(() => moduleEnabled('pediatric'));
 const isObgynEnabled = computed(() => moduleEnabled('obgyn'));
 const isPsychiatryEnabled = computed(() => moduleEnabled('psychiatry'));
 const isNeurologyEnabled = computed(() => moduleEnabled('neurology'));
+const isPhysiotherapyEnabled = computed(() => moduleEnabled('physiotherapy'));
 const isTelemedicineEnabled = computed(() => modules.value?.telemedicine?.enabled === true);
 
 const isConsultation = computed(() => bookingType.value.endsWith('_consultation'));
@@ -147,7 +150,7 @@ const isDental = computed(() =>
 // Module that owns the chosen booking_type (prefix-based; derma is the default).
 const currentModule = computed(() => {
     const t = bookingType.value;
-    for (const m of ['dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology']) {
+    for (const m of ['dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology', 'physiotherapy']) {
         if (t.startsWith(m)) return m;
     }
     return 'derma';
@@ -195,6 +198,8 @@ function getConsultationFeeForDoctor(doctorId) {
     if (bookingType.value === 'obgyn_consultation') return specialtyConsultationFee('obgyn', doctor);
     if (bookingType.value === 'psychiatry_consultation') return specialtyConsultationFee('psychiatry', doctor);
     if (bookingType.value === 'neurology_consultation') return specialtyConsultationFee('neurology', doctor);
+    if (bookingType.value === 'physiotherapy_consultation') return specialtyConsultationFee('physiotherapy', doctor) || (props.physiotherapyConsultationFee || 0);
+    if (bookingType.value === 'physiotherapy_session') return props.physiotherapySessionFee || 0;
     return 0;
 }
 
@@ -233,6 +238,10 @@ watch(bookingType, (newType) => {
         serviceRows[0].unit_price = newType === 'obgyn_consultation' ? (props.obgynConsultationFee || 0)
             : newType === 'psychiatry_consultation' ? (props.psychiatryConsultationFee || 0)
             : (props.neurologyConsultationFee || 0);
+    } else if (newType === 'physiotherapy_consultation' || newType === 'physiotherapy_session') {
+        serviceRows[0].sessions_count = 1;
+        serviceRows[0].service_id = '';
+        serviceRows[0].unit_price = newType === 'physiotherapy_session' ? (props.physiotherapySessionFee || 0) : (props.physiotherapyConsultationFee || 0);
     } else if (['pediatric_service', 'obgyn_service', 'psychiatry_service', 'neurology_service'].includes(newType)) {
         serviceRows[0].sessions_count = 1;
         serviceRows[0].service_id = '';
@@ -841,6 +850,38 @@ function getServiceLabel(id) {
                             </div>
                             <p class="booking-type-title">{{ isRtl ? 'كشف أعصاب' : 'Neurology Consultation' }}</p>
                             <p class="booking-type-sub">{{ isRtl ? 'فحص واستشارة عصبية' : 'Neurological consultation' }}</p>
+                            <span class="booking-type-check" aria-hidden="true">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </span>
+                        </button>
+
+                        <!-- Physiotherapy assessment -->
+                        <button v-if="isPhysiotherapyEnabled" type="button"
+                            @click="bookingType = 'physiotherapy_consultation'"
+                            :class="['booking-type-card group theme-teal', bookingType === 'physiotherapy_consultation' ? 'is-active' : '']">
+                            <div class="booking-type-icon">
+                                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h4l3 8 4-16 3 8h4"/>
+                                </svg>
+                            </div>
+                            <p class="booking-type-title">{{ isRtl ? 'تقييم علاج طبيعي' : 'Physiotherapy Assessment' }}</p>
+                            <p class="booking-type-sub">{{ isRtl ? 'تقييم أولي وخطة' : 'Initial assessment & plan' }}</p>
+                            <span class="booking-type-check" aria-hidden="true">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </span>
+                        </button>
+
+                        <!-- Physiotherapy session -->
+                        <button v-if="isPhysiotherapyEnabled" type="button"
+                            @click="bookingType = 'physiotherapy_session'"
+                            :class="['booking-type-card group theme-teal', bookingType === 'physiotherapy_session' ? 'is-active' : '']">
+                            <div class="booking-type-icon">
+                                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <p class="booking-type-title">{{ isRtl ? 'جلسة علاج طبيعي' : 'Physiotherapy Session' }}</p>
+                            <p class="booking-type-sub">{{ isRtl ? 'جلسة علاجية' : 'Treatment session' }}</p>
                             <span class="booking-type-check" aria-hidden="true">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                             </span>
@@ -1776,6 +1817,16 @@ function getServiceLabel(id) {
     --theme-icon-color: #0369A1;
     --theme-active-icon-from: #0EA5E9;
     --theme-active-icon-to: #0369A1;
+}
+
+.booking-type-card.theme-teal {
+    --theme-accent: #0D9488;
+    --theme-bg: rgba(13, 148, 136, 0.05);
+    --theme-icon-bg-from: rgba(13, 148, 136, 0.12);
+    --theme-icon-bg-to: rgba(13, 148, 136, 0.04);
+    --theme-icon-color: #0F766E;
+    --theme-active-icon-from: #0D9488;
+    --theme-active-icon-to: #0F766E;
 }
 
 .booking-type-icon {
