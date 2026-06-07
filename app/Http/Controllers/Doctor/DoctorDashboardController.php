@@ -346,6 +346,7 @@ class DoctorDashboardController extends BaseDoctorController
             'pendingFollowups' => $pendingFollowups,
             'todayMedicalAlerts' => $todayMedicalAlerts,
             'reviewsSnapshot' => $reviewsSnapshot,
+            'worklistCounts' => app(\App\Services\DoctorWorklistService::class)->counts($doctorId),
         ]);
     }
 }

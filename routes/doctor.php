@@ -113,6 +113,9 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
     // ─── Patient Favorites ──────────────────────────────────
     Route::post('/patients/{patient}/favorite/toggle', [DoctorFavoritePatientController::class, 'toggle'])->name('doctor.patients.favorite.toggle');
 
+    // ─── My Worklist (actionable items needing the doctor) ──
+    Route::get('/worklist', [\App\Http\Controllers\Doctor\DoctorWorklistController::class, 'index'])->name('doctor.worklist');
+
     // ─── My Visits ──────────────────────────────────────────
     Route::get('/visits', [DoctorVisitController::class, 'index'])->name('doctor.visits.index');
     Route::get('/visits/{visit}', [DoctorVisitController::class, 'show'])->name('doctor.visits.show');
