@@ -18,7 +18,9 @@ class DoctorDentalChartTest extends TestCase
     use RefreshDatabase;
 
     private User $doctorUser;
+
     private Doctor $doctor;
+
     private Patient $patient;
 
     protected function setUp(): void
@@ -148,5 +150,44 @@ class DoctorDentalChartTest extends TestCase
 
         $count = DentalChart::where('patient_id', $this->patient->id)->count();
         $this->assertEquals(count(DentalChart::ALL_TEETH), $count);
+    }
+
+    public function test_perio_chart_upserts_and_summarises(): void
+    {
+        $this->actingAs($this->doctorUser)
+            ->post("/doctor/dental/chart/{$this->patient->id}/perio/11", [
+                'pd_mb' => 3, 'pd_b' => 6, 'pd_db' => 4, 'pd_ml' => 2, 'pd_l' => 3, 'pd_dl' => 2,
+                'bop' => ['pd_b'], 'mobility' => 1,
+            ])->assertRedirect();
+
+        $this->assertDatabaseHas('perio_measurements', [
+            'patient_id' => $this->patient->id, 'tooth_number' => 11, 'pd_b' => 6, 'mobility' => 1,
+        ]);
+
+        // Re-charting the same tooth upserts (no duplicate row).
+        $this->actingAs($this->doctorUser)
+            ->post("/doctor/dental/chart/{$this->patient->id}/perio/11", [
+                'pd_mb' => 2, 'pd_b' => 3, 'pd_db' => 2, 'pd_ml' => 2, 'pd_l' => 2, 'pd_dl' => 2, 'bop' => [],
+            ])->assertRedirect();
+        $this->assertSame(1, \App\Models\PerioMeasurement::where('patient_id', $this->patient->id)->count());
+
+        $summary = \App\Models\PerioMeasurement::summaryFor($this->patient->id);
+        $this->assertSame(1, $summary['charted_teeth']);
+        $this->assertSame(3, $summary['max_pd']);
+        $this->assertSame(0, $summary['sites_4plus']);
+
+        $props = $this->actingAs($this->doctorUser)
+            ->get("/doctor/dental/chart/{$this->patient->id}")->assertOk()
+            ->original->getData()['page']['props'];
+        $this->assertArrayHasKey('perio', $props);
+        $this->assertSame(3, $props['perioSummary']['max_pd']);
+    }
+
+    public function test_perio_validates_pocket_depth_range(): void
+    {
+        $this->actingAs($this->doctorUser)
+            ->post("/doctor/dental/chart/{$this->patient->id}/perio/11", [
+                'pd_b' => 99, 'mobility' => 7,
+            ])->assertSessionHasErrors(['pd_b', 'mobility']);
     }
 }

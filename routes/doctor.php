@@ -178,6 +178,7 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
         Route::get('/chart/{patient}', [DoctorDentalChartController::class, 'show'])->name('doctor.dental.chart.show');
         Route::post('/chart/{patient}/tooth/{toothNumber}', [DoctorDentalChartController::class, 'updateTooth'])->name('doctor.dental.chart.updateTooth');
         Route::post('/chart/{patient}/initialize', [DoctorDentalChartController::class, 'initializeChart'])->name('doctor.dental.chart.initialize');
+        Route::post('/chart/{patient}/perio/{toothNumber}', [DoctorDentalChartController::class, 'storePerio'])->name('doctor.dental.chart.perio');
 
         // Treatment Plans
         Route::get('/treatment-plans', [DoctorDentalTreatmentPlanController::class, 'index'])->name('doctor.dental.treatment-plans.index');
