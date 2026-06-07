@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import PediatricGrowthChart from '@/Components/PediatricGrowthChart.vue';
+import VisitProgressStepper from '@/Components/Doctor/Visit/VisitProgressStepper.vue';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -281,6 +282,11 @@ function severityColor(severity) {
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Visit lifecycle stepper -->
+        <div class="mb-6">
+            <VisitProgressStepper :status="visit.status" :is-rtl="isRtl" :started-at="visit.started_at" :completed-at="visit.completed_at" :mounted="mounted" />
         </div>
 
         <!-- Allergy Alert Bar -->
