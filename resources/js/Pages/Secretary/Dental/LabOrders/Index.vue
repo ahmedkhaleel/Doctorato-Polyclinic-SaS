@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
+import DeskHeader from '@/Components/Secretary/DeskHeader.vue';
 
 defineOptions({ layout: SecretaryLayout });
 
@@ -89,16 +90,16 @@ const itemTypeLabels = computed(() => ({
 <template>
     <div>
         <!-- Header -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'طلبات المختبر' : 'Lab Orders' }}</h1>
-                <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'متابعة طلبات مختبر الأسنان' : 'Track dental lab orders' }}</p>
-            </div>
-            <Link href="/secretary/dental" class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-all">
-                <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                {{ isRtl ? 'رجوع' : 'Back' }}
-            </Link>
-        </div>
+        <DeskHeader accent="#C4A265" class="mb-6"
+            :title="isRtl ? 'طلبات المختبر' : 'Lab Orders'"
+            :subtitle="isRtl ? 'متابعة طلبات مختبر الأسنان' : 'Track dental lab orders'">
+            <template #actions>
+                <Link href="/secretary/dental" class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-[#1B365D] bg-white/95 rounded-xl hover:bg-white transition-all">
+                    <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                    {{ isRtl ? 'رجوع' : 'Back' }}
+                </Link>
+            </template>
+        </DeskHeader>
 
         <!-- Stats Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">

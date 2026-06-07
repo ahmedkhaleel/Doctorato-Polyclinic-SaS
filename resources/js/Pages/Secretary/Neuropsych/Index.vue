@@ -3,6 +3,7 @@ import { router, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 import UiEmptyState from '@/Components/Ui/EmptyState.vue';
+import DeskHeader from '@/Components/Secretary/DeskHeader.vue';
 
 defineOptions({ layout: SecretaryLayout });
 
@@ -49,21 +50,18 @@ function docName(d) {
 <template>
     <div class="space-y-5" :dir="isRtl ? 'rtl' : 'ltr'">
         <!-- Header -->
-        <div class="flex items-center justify-between flex-wrap gap-3">
-            <div class="flex items-center gap-3">
-                <span class="w-2 h-8 rounded-full" :style="{ background: ACCENT }"></span>
-                <div>
-                    <h1 class="text-xl font-bold text-gray-800">{{ moduleTitle }} — {{ isRtl ? 'مكتب الاستقبال' : 'Front Desk' }}</h1>
-                    <p class="text-xs text-gray-400 mt-0.5">{{ isRtl ? 'مواعيد وفوترة فقط — لا تظهر البيانات السريرية هنا' : 'Appointments & billing only — no clinical data shown here' }}</p>
-                </div>
-            </div>
-            <a :href="`/secretary/bookings/create?module=${module}`"
-               class="inline-flex items-center gap-2 text-white px-4 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-90 transition"
-               :style="{ background: ACCENT }">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                {{ isRtl ? 'حجز موعد' : 'Book Appointment' }}
-            </a>
-        </div>
+        <DeskHeader
+            :accent="ACCENT"
+            :title="`${moduleTitle} — ${isRtl ? 'مكتب الاستقبال' : 'Front Desk'}`"
+            :subtitle="isRtl ? 'مواعيد وفوترة فقط — لا تظهر البيانات السريرية هنا' : 'Appointments & billing only — no clinical data shown here'">
+            <template #actions>
+                <a :href="`/secretary/bookings/create?module=${module}`"
+                   class="inline-flex items-center gap-2 bg-white/95 text-[#1B365D] px-4 py-2.5 rounded-xl font-semibold shadow-sm hover:bg-white transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    {{ isRtl ? 'حجز موعد' : 'Book Appointment' }}
+                </a>
+            </template>
+        </DeskHeader>
 
         <!-- Search -->
         <div class="flex items-center gap-2">

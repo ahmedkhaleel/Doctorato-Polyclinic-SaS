@@ -2,6 +2,7 @@
 import { router, useForm, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
+import DeskHeader from '@/Components/Secretary/DeskHeader.vue';
 import { useEscapeKey } from '@/Composables/useEscapeKey';
 
 defineOptions({ layout: SecretaryLayout });
@@ -49,16 +50,14 @@ function dueLabel(d) {
 
 <template>
     <div class="space-y-4" :dir="isRtl ? 'rtl' : 'ltr'">
-            <div class="flex items-center justify-between flex-wrap gap-3">
-                <div class="flex items-center gap-3">
-                    <span class="w-2 h-8 rounded-full" :style="{ background: ACCENT }"></span>
-                    <h1 class="text-xl font-bold text-gray-800">{{ isRtl ? 'ملفات الحمل' : 'Pregnancy Files' }}</h1>
-                </div>
-                <button @click="showModal = true" class="inline-flex items-center gap-2 text-white px-4 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-90 transition" :style="{ background: ACCENT }">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    {{ isRtl ? 'فتح ملف حمل' : 'Open Pregnancy' }}
-                </button>
-            </div>
+            <DeskHeader :accent="ACCENT" :title="isRtl ? 'ملفات الحمل' : 'Pregnancy Files'">
+                <template #actions>
+                    <button @click="showModal = true" class="inline-flex items-center gap-2 bg-white/95 text-[#1B365D] px-4 py-2.5 rounded-xl font-semibold shadow-sm hover:bg-white transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        {{ isRtl ? 'فتح ملف حمل' : 'Open Pregnancy' }}
+                    </button>
+                </template>
+            </DeskHeader>
 
             <div class="flex items-center gap-2 flex-wrap">
                 <input v-model="search" @keyup.enter="apply" type="text" :placeholder="isRtl ? 'بحث باسم المريضة أو الهاتف…' : 'Search…'"

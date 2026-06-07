@@ -3,6 +3,7 @@ import { router, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 import UiEmptyState from '@/Components/Ui/EmptyState.vue';
+import DeskHeader from '@/Components/Secretary/DeskHeader.vue';
 
 defineOptions({ layout: SecretaryLayout });
 
@@ -42,13 +43,10 @@ function docName(d) { return d ? (isRtl.value ? (d.name_ar || d.name_en) : (d.na
 <template>
     <div class="space-y-5" :dir="isRtl ? 'rtl' : 'ltr'">
         <!-- Header -->
-        <div class="flex items-center gap-3">
-            <span class="w-2 h-8 rounded-full" :style="{ background: ACCENT }"></span>
-            <div>
-                <h1 class="text-xl font-bold text-gray-800">{{ isRtl ? 'التطبيب عن بُعد — مكتب الاستقبال' : 'Telemedicine — Front Desk' }}</h1>
-                <p class="text-xs text-gray-400 mt-0.5">{{ isRtl ? 'جدولة ومتابعة الدفع — لا تُفتح غرفة الفيديو ولا تظهر الملاحظات السريرية' : 'Scheduling & payment follow-up — no video room or clinical notes' }}</p>
-            </div>
-        </div>
+        <DeskHeader
+            :accent="ACCENT"
+            :title="isRtl ? 'التطبيب عن بُعد — مكتب الاستقبال' : 'Telemedicine — Front Desk'"
+            :subtitle="isRtl ? 'جدولة ومتابعة الدفع — لا تُفتح غرفة الفيديو ولا تظهر الملاحظات السريرية' : 'Scheduling & payment follow-up — no video room or clinical notes'" />
 
         <!-- Search -->
         <div class="flex items-center gap-2">
