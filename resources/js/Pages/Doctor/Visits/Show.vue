@@ -40,6 +40,12 @@ const props = defineProps({
     neuroCanViewSensitive: Boolean,
     neuroSeizures: Array,
     neuroHeadaches: Array,
+    physioActivePlan: Object,
+    physioSessions: Array,
+    physioRom: Array,
+    physioStrength: Array,
+    physioPainPoints: Array,
+    physioAssessment: Object,
     latestVitals: Object,
     vitalsAlerts: Array,
     vitalsHistory: Array,
@@ -67,6 +73,12 @@ const specialtyExtras = computed(() => ({
     neuroCanViewSensitive: props.neuroCanViewSensitive,
     neuroSeizures: props.neuroSeizures,
     neuroHeadaches: props.neuroHeadaches,
+    physioActivePlan: props.physioActivePlan,
+    physioSessions: props.physioSessions,
+    physioRom: props.physioRom,
+    physioStrength: props.physioStrength,
+    physioPainPoints: props.physioPainPoints,
+    physioAssessment: props.physioAssessment,
 }));
 
 const mounted = ref(false);

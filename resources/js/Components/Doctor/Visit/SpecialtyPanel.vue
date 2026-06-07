@@ -27,6 +27,7 @@ const panels = {
     obgyn: defineAsyncComponent(() => import('./Panels/ObgynPanel.vue')),
     psychiatry: defineAsyncComponent(() => import('./Panels/NeuroPsychPanel.vue')),
     neurology: defineAsyncComponent(() => import('./Panels/NeuroPsychPanel.vue')),
+    physiotherapy: defineAsyncComponent(() => import('./Panels/PhysioPanel.vue')),
 };
 
 const current = computed(() => panels[props.visit?.module] || null);

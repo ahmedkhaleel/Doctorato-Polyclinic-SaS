@@ -37,6 +37,12 @@ const props = defineProps({
     neuroCanViewSensitive: Boolean,
     neuroSeizures: Array,
     neuroHeadaches: Array,
+    physioActivePlan: Object,
+    physioSessions: Array,
+    physioRom: Array,
+    physioStrength: Array,
+    physioPainPoints: Array,
+    physioAssessment: Object,
 });
 
 const activeTab = ref('details');
@@ -48,6 +54,7 @@ const SPECIALTY_TABS = {
     obgyn: { ar: 'النساء والتوليد', en: 'OB/GYN' },
     psychiatry: { ar: 'الطب النفسي', en: 'Psychiatry' },
     neurology: { ar: 'المخ والأعصاب', en: 'Neurology' },
+    physiotherapy: { ar: 'العلاج الطبيعي', en: 'Physiotherapy' },
 };
 const specialtyTab = computed(() => SPECIALTY_TABS[props.visit?.module] || null);
 
@@ -64,6 +71,12 @@ const specialtyExtras = computed(() => ({
     neuroCanViewSensitive: props.neuroCanViewSensitive,
     neuroSeizures: props.neuroSeizures,
     neuroHeadaches: props.neuroHeadaches,
+    physioActivePlan: props.physioActivePlan,
+    physioSessions: props.physioSessions,
+    physioRom: props.physioRom,
+    physioStrength: props.physioStrength,
+    physioPainPoints: props.physioPainPoints,
+    physioAssessment: props.physioAssessment,
 }));
 
 const tabs = computed(() => {

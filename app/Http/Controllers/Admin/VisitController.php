@@ -153,6 +153,11 @@ class VisitController extends Controller
             }
         }
 
+        // ── Physiotherapy: active plan + sessions + latest assessment (ROM/MMT/pain) ──
+        if ($visit->module === 'physiotherapy' && $visit->patient_id) {
+            $this->loadPhysioExtras($visit, $extra);
+        }
+
         // ── Psychiatry / Neurology: encounter + scales + meds + (gated) risk ──
         if (in_array($visit->module, ['psychiatry', 'neurology'], true) && $visit->patient_id) {
             $module = $visit->module;
@@ -207,6 +212,36 @@ class VisitController extends Controller
             'doctors' => $doctors,
             'services' => $services,
         ], $extra));
+    }
+
+    /**
+     * Physiotherapy visit extras (read-only mirror of the doctor panel): active
+     * plan progress, recent sessions, and the latest assessment's ROM/MMT/pain.
+     */
+    private function loadPhysioExtras(Visit $visit, array &$extra): void
+    {
+        $plan = \App\Models\PhysioTreatmentPlan::where('patient_id', $visit->patient_id)
+            ->active()->latest('start_date')->first();
+        if ($plan) {
+            $extra['physioActivePlan'] = array_merge(
+                $plan->only(['id', 'title_ar', 'title_en', 'frequency', 'estimated_sessions', 'completed_sessions', 'status', 'start_date']),
+                ['progress_percentage' => $plan->progress_percentage, 'sessions_remaining' => $plan->sessions_remaining]
+            );
+        }
+
+        $extra['physioSessions'] = \App\Models\PhysioSession::where('patient_id', $visit->patient_id)
+            ->latest('session_date')->limit(10)
+            ->get(['id', 'session_number', 'session_date', 'attended', 'pain_before', 'pain_after', 'cost']);
+
+        $assessment = \App\Models\PhysioAssessment::where('patient_id', $visit->patient_id)
+            ->with(['romMeasurements', 'strengthTests', 'painPoints'])
+            ->latest('assessment_date')->first();
+        if ($assessment) {
+            $extra['physioAssessment'] = $assessment->only(['id', 'assessment_date', 'diagnosis']);
+            $extra['physioRom'] = $assessment->romMeasurements->map->only(['joint', 'motion', 'side', 'arom', 'prom', 'normal_ref'])->values();
+            $extra['physioStrength'] = $assessment->strengthTests->map->only(['muscle_group', 'side', 'grade'])->values();
+            $extra['physioPainPoints'] = $assessment->painPoints->map->only(['view', 'x', 'y', 'intensity', 'pain_type'])->values();
+        }
     }
 
     public function start(Visit $visit): RedirectResponse

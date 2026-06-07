@@ -53,7 +53,7 @@ const romSeries = computed(() => {
     const norm = Number(rows[0].normal_ref || 0);
     return {
         series: [{ key: 'arom', label: t('Active ROM (°)', 'المدى النشط (°)'), color: ACCENT, points: pts }],
-        band: norm > 0 ? { min: norm * 0.9, max: norm } : null,
+        band: norm > 0 ? pts.map((p) => ({ x: p.x, low: norm * 0.9, high: norm })) : [],
         title: firstKey,
     };
 });
