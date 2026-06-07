@@ -637,6 +637,7 @@ function logout()        { router.post('/admin/logout'); }
                 </button>
 
                 <!-- Pillar body: the groups (each keeps its own accordion) -->
+                <Transition name="adm-pillar">
                 <div v-show="isPillarOpen(pillar.key)" class="mt-1 ltr:pl-1.5 rtl:pr-1.5 space-y-1 adm-pillar-body">
                 <div v-for="(group, gi) in pillar.groups" :key="group.key" class="adm-nav-group" :style="{ '--gi': gi }">
                     <!-- ─── FEATURED GROUP (Telemedicine, etc.) ─── -->
@@ -865,6 +866,7 @@ function logout()        { router.post('/admin/logout'); }
                     </div>
                 </div>
                 </div>
+                </Transition>
               </div>
             </nav>
 
@@ -1109,6 +1111,27 @@ function logout()        { router.post('/admin/logout'); }
 }
 .nav-collapse {
     will-change: max-height, opacity;
+}
+
+/* Pillar body open/close transition (reorg) */
+.adm-pillar-enter-active,
+.adm-pillar-leave-active {
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.adm-pillar-enter-from,
+.adm-pillar-leave-to {
+    opacity: 0;
+    transform: translateY(-4px);
+}
+@media (prefers-reduced-motion: reduce) {
+    .adm-pillar-enter-active,
+    .adm-pillar-leave-active {
+        transition: none;
+    }
+    .adm-pillar-enter-from,
+    .adm-pillar-leave-to {
+        transform: none;
+    }
 }
 
 /* ═══════════════════════════════════════════════════════════
