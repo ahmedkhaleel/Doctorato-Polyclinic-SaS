@@ -5,6 +5,7 @@ import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import SearchableSelect from '@/Components/Doctor/SearchableSelect.vue';
 import { getAgeDisplay } from '@/Composables/usePediatricAge';
 import PediatricGrowthChart from '@/Components/PediatricGrowthChart.vue';
+import ProgressRing from '@/Components/Charts/ProgressRing.vue';
 import { useConfirm } from '@/Composables/useConfirm.js';
 
 defineOptions({ layout: DoctorLayout });
@@ -803,24 +804,19 @@ const percentileTextColor = (p) => {
             <div v-else-if="activeTab === 'vaccines'" class="space-y-5">
                 <!-- Stats Bar -->
                 <div v-if="vaccineStats" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm p-4 sm:p-5">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
-                            {{ isRtl ? 'تقدم التطعيمات' : 'Vaccination Progress' }}
-                        </h3>
-                        <span class="text-sm font-bold text-emerald-600">
-                            {{ vaccineStats.given || 0 }} / {{ vaccineStats.total || 0 }}
-                        </span>
-                    </div>
-                    <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
-                        <div
-                            class="bg-gradient-to-r from-emerald-500 to-emerald-400 h-full rounded-full transition-all duration-700"
-                            :style="{ width: vaccineStats.total ? ((vaccineStats.given / vaccineStats.total) * 100) + '%' : '0%' }"
-                        ></div>
-                    </div>
-                    <div class="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
-                        <span class="flex items-center gap-1"><span class="w-2 h-2 bg-emerald-500 rounded-full"></span> {{ isRtl ? 'تم إعطاؤها' : 'Given' }} ({{ vaccineStats.given || 0 }})</span>
-                        <span class="flex items-center gap-1"><span class="w-2 h-2 bg-[#1B365D] rounded-full"></span> {{ isRtl ? 'مجدولة' : 'Scheduled' }} ({{ vaccineStats.scheduled || 0 }})</span>
-                        <span v-if="vaccineStats.missed" class="flex items-center gap-1"><span class="w-2 h-2 bg-red-500 rounded-full"></span> {{ isRtl ? 'فائتة' : 'Missed' }} ({{ vaccineStats.missed }})</span>
+                    <div class="flex items-center gap-5">
+                        <ProgressRing
+                            :value="vaccineStats.given || 0" :max="vaccineStats.total || 1"
+                            :size="84" :stroke="9" color="#10B981"
+                            :display="`${vaccineStats.given || 0}/${vaccineStats.total || 0}`" />
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-2">{{ isRtl ? 'تغطية التطعيمات' : 'Vaccination Coverage' }}</h3>
+                            <div class="flex flex-col gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span> {{ isRtl ? 'تم إعطاؤها' : 'Given' }} ({{ vaccineStats.given || 0 }})</span>
+                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-[#1B365D] rounded-full"></span> {{ isRtl ? 'مجدولة' : 'Scheduled' }} ({{ vaccineStats.scheduled || 0 }})</span>
+                                <span v-if="vaccineStats.missed" class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-red-500 rounded-full"></span> {{ isRtl ? 'فائتة' : 'Missed' }} ({{ vaccineStats.missed }})</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

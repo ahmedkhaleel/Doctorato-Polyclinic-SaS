@@ -109,6 +109,27 @@ Patient routes are the only ones under a `{locale}` prefix — see the
   `module_disabled`, `agora_missing`, `no_payment_gateway`,
   `no_online_doctors`, `no_bookable_schedules`.
 
+- **Clinical visualization kit** (`resources/js/Components/Charts/`) — shared,
+  brand-themed, animated, RTL-aware SVG primitives (NO chart lib). Reuse these
+  for any specialty's clinical indicators instead of hand-rolling SVG. See
+  `docs/CLINICAL_VISUALIZATION_FRAMEWORK_PLAN.md`.
+  - `TrendLine` — multi-series time chart + optional normal-range corridor
+    (`band`) + horizontal `thresholds` + hover crosshair (e.g. OB/GYN BP vs GA,
+    fundal-height corridor; neuro headache intensity).
+  - `Sparkline` — tiny inline trend (e.g. neuropsych MBC per-scale rows).
+  - `ProgressRing` — animated circular gauge (e.g. derma plan %, vaccine coverage).
+  - `CalendarHeatmap` — day-grid event frequency (e.g. seizure activity).
+  - `BodyMap` — anterior/posterior silhouette, read-only markers or `editable`
+    click-to-add (derma lesion map; backed by `derma_lesions`).
+  - **To add a clinical visual to a specialty:** prefer reusing a primitive
+    above; load its data in the relevant controller (visit panel via
+    `DoctorVisitController`/`Admin\VisitController` module block, or the specialty
+    patient page) N+1-safe + patient-scoped; render in the per-specialty
+    `Components/Doctor/Visit/Panels/*Panel.vue` (auto-shown by `SpecialtyPanel`,
+    doctor + admin) and/or the specialty patient page. Sensitive data stays behind
+    `{module}.view_sensitive` + `MedicalDataAccessLog`. Animations honour
+    `prefers-reduced-motion`; charts keep an LTR axis even under RTL.
+
 ---
 
 ## Development commands
