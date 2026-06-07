@@ -242,6 +242,12 @@ class VisitController extends Controller
             $extra['physioStrength'] = $assessment->strengthTests->map->only(['muscle_group', 'side', 'grade'])->values();
             $extra['physioPainPoints'] = $assessment->painPoints->map->only(['view', 'x', 'y', 'intensity', 'pain_type'])->values();
         }
+
+        $promKeys = array_keys(\App\Services\NeuroPsych\ScaleEngine::forModule('physiotherapy'));
+        $extra['physioScales'] = \App\Models\ScaleResult::where('patient_id', $visit->patient_id)
+            ->whereIn('scale_key', $promKeys)
+            ->latest('taken_at')->limit(6)
+            ->get(['scale_key', 'score', 'severity', 'taken_at']);
     }
 
     public function start(Visit $visit): RedirectResponse

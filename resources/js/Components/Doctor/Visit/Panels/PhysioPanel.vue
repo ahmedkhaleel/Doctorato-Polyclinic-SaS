@@ -26,6 +26,14 @@ const props = defineProps({
     physioStrength: { type: Array, default: () => [] },
     physioPainPoints: { type: Array, default: () => [] },
     physioAssessment: { type: Object, default: null },
+    physioScales: { type: Array, default: () => [] },
+});
+
+const PROM_LABELS = { odi: 'ODI', ndi: 'NDI', lefs: 'LEFS' };
+const latestScales = computed(() => {
+    const seen = {};
+    (props.physioScales || []).forEach((s) => { if (!seen[s.scale_key]) seen[s.scale_key] = s; });
+    return Object.values(seen);
 });
 
 const ACCENT = '#0D9488';
@@ -33,7 +41,7 @@ const t = (en, ar) => (props.isRtl ? ar : en);
 const isAdmin = computed(() => props.context === 'admin');
 const fileHref = computed(() => (isAdmin.value ? (props.patientHref || '#') : `/doctor/physiotherapy/patients/${props.visit.patient_id}`));
 
-const hasData = computed(() => props.physioActivePlan || props.physioSessions.length || props.physioRom.length || props.physioStrength.length || props.physioPainPoints.length);
+const hasData = computed(() => props.physioActivePlan || props.physioSessions.length || props.physioRom.length || props.physioStrength.length || props.physioPainPoints.length || props.physioScales.length);
 
 // Post-session pain trend (oldest → newest).
 const painSeries = computed(() => {
@@ -105,6 +113,18 @@ const dateLabel = (d) => (d ? new Date(d).toLocaleDateString(props.isRtl ? 'ar-E
                     <BodyMap v-if="painFront.length" :lesions="painFront" view="front" :accent="'#EF4444'" :is-rtl="isRtl" :height="220" />
                     <BodyMap v-if="painBack.length" :lesions="painBack" view="back" :accent="'#EF4444'" :is-rtl="isRtl" :height="220" />
                 </div>
+            </div>
+        </div>
+
+        <!-- Latest PROMs -->
+        <div v-if="latestScales.length" class="bg-white rounded-xl border border-gray-100 p-4">
+            <p class="text-xs font-medium text-gray-600 mb-2">{{ t('Outcome Measures', 'مقاييس النتائج') }}</p>
+            <div class="flex flex-wrap gap-2">
+                <span v-for="s in latestScales" :key="s.scale_key" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs bg-gray-50">
+                    <span class="font-semibold" :style="{ color: ACCENT }">{{ PROM_LABELS[s.scale_key] || s.scale_key }}</span>
+                    <span class="text-gray-700 tabular-nums">{{ s.score }}</span>
+                    <span class="text-gray-400">{{ s.severity }}</span>
+                </span>
             </div>
         </div>
 

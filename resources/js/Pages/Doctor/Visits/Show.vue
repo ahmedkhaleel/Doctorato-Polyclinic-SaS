@@ -46,6 +46,7 @@ const props = defineProps({
     physioStrength: Array,
     physioPainPoints: Array,
     physioAssessment: Object,
+    physioScales: Array,
     latestVitals: Object,
     vitalsAlerts: Array,
     vitalsHistory: Array,
@@ -79,6 +80,7 @@ const specialtyExtras = computed(() => ({
     physioStrength: props.physioStrength,
     physioPainPoints: props.physioPainPoints,
     physioAssessment: props.physioAssessment,
+    physioScales: props.physioScales,
 }));
 
 const mounted = ref(false);

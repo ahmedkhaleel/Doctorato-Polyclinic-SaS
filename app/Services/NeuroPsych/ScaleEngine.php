@@ -127,7 +127,112 @@ class ScaleEngine
                 ],
                 'flagItems' => [],
             ],
+
+            // ── Physiotherapy PROMs (PT-7) ───────────────────────────
+            // ODI & NDI: 10 sections × 0–5 → raw 0–50 (= % disability ×2);
+            // higher = worse. LEFS: 20 items × 0–4 → 0–80; higher = better.
+            'odi' => [
+                'name_en' => 'ODI (Oswestry — Low Back)',
+                'name_ar' => 'مؤشر أوسويستري لعجز أسفل الظهر',
+                'module' => 'physiotherapy',
+                'higher_is_better' => false,
+                'mcid' => 10, // points (raw); ≈10% change
+                'options' => $disability05 = [
+                    ['v' => 0, 'en' => 'No limitation', 'ar' => 'بدون قيود'],
+                    ['v' => 1, 'en' => 'Very mild', 'ar' => 'بسيط جدًا'],
+                    ['v' => 2, 'en' => 'Mild', 'ar' => 'بسيط'],
+                    ['v' => 3, 'en' => 'Moderate', 'ar' => 'متوسط'],
+                    ['v' => 4, 'en' => 'Severe', 'ar' => 'شديد'],
+                    ['v' => 5, 'en' => 'Unable / worst', 'ar' => 'غير قادر / الأسوأ'],
+                ],
+                'items' => array_map(fn ($en, $ar) => ['en' => $en, 'ar' => $ar], [
+                    'Pain intensity', 'Personal care (washing, dressing)', 'Lifting', 'Walking',
+                    'Sitting', 'Standing', 'Sleeping', 'Sex life', 'Social life', 'Travelling',
+                ], [
+                    'شدة الألم', 'العناية الشخصية (الاغتسال، اللبس)', 'الرفع', 'المشي',
+                    'الجلوس', 'الوقوف', 'النوم', 'الحياة الزوجية', 'الحياة الاجتماعية', 'السفر',
+                ]),
+                'bands' => [
+                    [0, 10, 'Minimal disability', 'عجز ضئيل'],
+                    [11, 20, 'Moderate disability', 'عجز متوسط'],
+                    [21, 30, 'Severe disability', 'عجز شديد'],
+                    [31, 40, 'Crippled', 'عجز بالغ'],
+                    [41, 50, 'Bed-bound', 'طريح الفراش'],
+                ],
+                'flagItems' => [],
+            ],
+            'ndi' => [
+                'name_en' => 'NDI (Neck Disability)',
+                'name_ar' => 'مؤشر عجز الرقبة',
+                'module' => 'physiotherapy',
+                'higher_is_better' => false,
+                'mcid' => 7, // ≈7.5 points
+                'options' => $disability05,
+                'items' => array_map(fn ($en, $ar) => ['en' => $en, 'ar' => $ar], [
+                    'Pain intensity', 'Personal care', 'Lifting', 'Reading', 'Headaches',
+                    'Concentration', 'Work', 'Driving', 'Sleeping', 'Recreation',
+                ], [
+                    'شدة الألم', 'العناية الشخصية', 'الرفع', 'القراءة', 'الصداع',
+                    'التركيز', 'العمل', 'القيادة', 'النوم', 'الترفيه',
+                ]),
+                'bands' => [
+                    [0, 4, 'No disability', 'بدون عجز'],
+                    [5, 14, 'Mild disability', 'عجز خفيف'],
+                    [15, 24, 'Moderate disability', 'عجز متوسط'],
+                    [25, 34, 'Severe disability', 'عجز شديد'],
+                    [35, 50, 'Complete disability', 'عجز كامل'],
+                ],
+                'flagItems' => [],
+            ],
+            'lefs' => [
+                'name_en' => 'LEFS (Lower Extremity Function)',
+                'name_ar' => 'مقياس وظيفة الطرف السفلي',
+                'module' => 'physiotherapy',
+                'higher_is_better' => true,
+                'mcid' => 9,
+                'options' => [
+                    ['v' => 0, 'en' => 'Extreme difficulty / unable', 'ar' => 'صعوبة بالغة / غير قادر'],
+                    ['v' => 1, 'en' => 'Quite a bit of difficulty', 'ar' => 'صعوبة كبيرة'],
+                    ['v' => 2, 'en' => 'Moderate difficulty', 'ar' => 'صعوبة متوسطة'],
+                    ['v' => 3, 'en' => 'A little bit of difficulty', 'ar' => 'صعوبة بسيطة'],
+                    ['v' => 4, 'en' => 'No difficulty', 'ar' => 'بدون صعوبة'],
+                ],
+                'items' => array_map(fn ($en, $ar) => ['en' => $en, 'ar' => $ar], [
+                    'Any usual work/housework/school', 'Usual hobbies/recreation/sports', 'Getting in/out of bath',
+                    'Walking between rooms', 'Putting on shoes/socks', 'Squatting', 'Lifting an object from the floor',
+                    'Light activities at home', 'Heavy activities at home', 'Getting in/out of a car',
+                    'Walking 2 blocks', 'Walking a mile', 'Going up/down 10 stairs', 'Standing for 1 hour',
+                    'Sitting for 1 hour', 'Running on even ground', 'Running on uneven ground',
+                    'Making sharp turns while running', 'Hopping', 'Rolling over in bed',
+                ], [
+                    'العمل/الأعمال المنزلية/الدراسة المعتادة', 'الهوايات/الترفيه/الرياضة المعتادة', 'الدخول/الخروج من الحمام',
+                    'المشي بين الغرف', 'ارتداء الحذاء/الجوارب', 'القرفصاء', 'رفع جسم من الأرض',
+                    'الأنشطة الخفيفة بالمنزل', 'الأنشطة الثقيلة بالمنزل', 'الدخول/الخروج من السيارة',
+                    'المشي مسافة قصيرة', 'المشي مسافة طويلة', 'صعود/نزول 10 درجات', 'الوقوف لمدة ساعة',
+                    'الجلوس لمدة ساعة', 'الجري على أرض مستوية', 'الجري على أرض غير مستوية',
+                    'الانعطاف الحاد أثناء الجري', 'القفز', 'التقلّب في الفراش',
+                ]),
+                'bands' => [
+                    [0, 20, 'Severe limitation', 'قصور شديد'],
+                    [21, 40, 'Moderate limitation', 'قصور متوسط'],
+                    [41, 60, 'Mild limitation', 'قصور خفيف'],
+                    [61, 80, 'Minimal / full function', 'وظيفة شبه كاملة'],
+                ],
+                'flagItems' => [],
+            ],
         ];
+    }
+
+    /** Minimal clinically important difference (points) for a scale, if defined. */
+    public static function mcid(string $key): ?int
+    {
+        return self::definition($key)['mcid'] ?? null;
+    }
+
+    /** Whether a higher score is the better (improving) direction. Default: false. */
+    public static function higherIsBetter(string $key): bool
+    {
+        return (bool) (self::definition($key)['higher_is_better'] ?? false);
     }
 
     public static function exists(string $key): bool

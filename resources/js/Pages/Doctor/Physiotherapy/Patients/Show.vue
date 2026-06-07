@@ -3,6 +3,8 @@ import { Link, useForm, usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import TrendLine from '@/Components/Charts/TrendLine.vue';
+import Sparkline from '@/Components/Charts/Sparkline.vue';
+import ScaleRunner from '@/Components/Clinical/ScaleRunner.vue';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -19,6 +21,8 @@ const props = defineProps({
     romNormatives: { type: Object, default: () => ({}) },
     exerciseCatalog: { type: Array, default: () => [] },
     prescriptions: { type: Array, default: () => [] },
+    promCatalog: { type: Array, default: () => [] },
+    scaleResults: { type: Array, default: () => [] },
 });
 
 const tab = ref('overview');
@@ -115,6 +119,34 @@ function stopRx(rx) {
     useForm({}).post(route('doctor.physiotherapy.exercises.stop', rx.id), { preserveScroll: true });
 }
 const exName = (ex) => (ex ? (isRtl.value ? ex.name_ar : ex.name_en) : '');
+
+// ── PROMs (ODI/NDI/LEFS) ──
+const showPromForm = ref(false);
+const promForm = useForm({ scale_key: '', answers: {} });
+const selectedProm = computed(() => props.promCatalog.find((p) => p.key === promForm.scale_key) || null);
+function submitProm() {
+    promForm.post(route('doctor.physiotherapy.scales.store', props.patient.id), { preserveScroll: true, onSuccess: () => { promForm.reset(); showPromForm.value = false; } });
+}
+// Group results by scale → { def, points[], latest, prev, mcidMet }
+const promSummaries = computed(() => {
+    const byKey = {};
+    (props.scaleResults || []).forEach((r) => { (byKey[r.scale_key] ||= []).push(r); });
+    return Object.entries(byKey).map(([key, rows]) => {
+        const def = props.promCatalog.find((p) => p.key === key) || { name_en: key, name_ar: key, mcid: null, higher_is_better: false };
+        const points = rows.map((r, i) => ({ x: i + 1, y: Number(r.score) }));
+        const latest = rows[rows.length - 1];
+        const prev = rows.length > 1 ? rows[rows.length - 2] : null;
+        let delta = null, improved = false, mcidMet = false;
+        if (prev) {
+            delta = Number(latest.score) - Number(prev.score);
+            improved = def.higher_is_better ? delta > 0 : delta < 0;
+            mcidMet = def.mcid != null && Math.abs(delta) >= def.mcid;
+        }
+        return { key, def, points, latest, delta, improved, mcidMet };
+    });
+});
+const promName = (def) => (isRtl.value ? def.name_ar : def.name_en);
+
 </script>
 
 <template>
@@ -131,6 +163,7 @@ const exName = (ex) => (ex ? (isRtl.value ? ex.name_ar : ex.name_en) : '');
                 <button @click="showSessionForm = !showSessionForm" class="px-4 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">+ {{ t('Session', 'جلسة') }}</button>
                 <button @click="showPlanForm = !showPlanForm" class="px-4 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">+ {{ t('Plan', 'خطة') }}</button>
                 <button @click="showRxForm = !showRxForm" class="px-4 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">+ {{ t('Exercise', 'تمرين') }}</button>
+                <button @click="showPromForm = !showPromForm; tab = 'assessments'" class="px-4 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">+ {{ t('PROM', 'مقياس') }}</button>
             </div>
         </div>
 
@@ -325,6 +358,46 @@ const exName = (ex) => (ex ? (isRtl.value ? ex.name_ar : ex.name_en) : '');
                     <button type="submit" :disabled="assessForm.processing" class="px-5 py-2 rounded-xl text-sm font-semibold text-white" :style="{ backgroundColor: ACCENT }">{{ t('Save Assessment', 'حفظ التقييم') }}</button>
                 </div>
             </form>
+
+            <!-- PROM capture -->
+            <form v-if="showPromForm" @submit.prevent="submitProm" class="bg-white rounded-2xl p-5 shadow-sm border border-teal-100 space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-semibold text-gray-800">{{ t('Outcome Measure (PROM)', 'مقياس النتيجة') }}</h3>
+                    <select v-model="promForm.scale_key" class="form-in">
+                        <option value="">{{ t('Select measure…', 'اختر المقياس…') }}</option>
+                        <option v-for="p in promCatalog" :key="p.key" :value="p.key">{{ promName(p) }}</option>
+                    </select>
+                </div>
+                <ScaleRunner v-if="selectedProm" :scale="selectedProm" v-model="promForm.answers" />
+                <div v-if="selectedProm" class="flex justify-end gap-2">
+                    <button type="button" @click="showPromForm = false" class="px-4 py-2 text-sm text-gray-500">{{ t('Cancel', 'إلغاء') }}</button>
+                    <button type="submit" :disabled="promForm.processing" class="px-5 py-2 rounded-xl text-sm font-semibold text-white" :style="{ backgroundColor: ACCENT }">{{ t('Save', 'حفظ') }}</button>
+                </div>
+            </form>
+
+            <!-- PROM summaries -->
+            <div v-if="promSummaries.length" class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                <h2 class="font-semibold text-gray-800 mb-4">{{ t('Patient-Reported Outcomes', 'النتائج المُبلّغة من المريض') }}</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div v-for="s in promSummaries" :key="s.key" class="border border-gray-100 rounded-xl p-3">
+                        <div class="flex items-center justify-between gap-2">
+                            <p class="text-sm font-medium text-gray-800">{{ promName(s.def) }}</p>
+                            <span v-if="s.mcidMet" class="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                                :class="s.improved ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'">
+                                {{ s.improved ? t('MCID ↑ improved', 'تحسّن MCID') : t('MCID ↓ worse', 'تدهور MCID') }}
+                            </span>
+                        </div>
+                        <div class="flex items-end justify-between mt-1">
+                            <div>
+                                <span class="text-2xl font-bold tabular-nums" :style="{ color: ACCENT }">{{ s.latest.score }}</span>
+                                <span class="text-xs text-gray-400 ms-1">{{ s.latest.severity }}</span>
+                                <span v-if="s.delta != null" class="text-xs ms-2" :class="s.improved ? 'text-emerald-600' : 'text-red-500'">{{ s.delta > 0 ? '+' : '' }}{{ s.delta }}</span>
+                            </div>
+                            <Sparkline v-if="s.points.length >= 2" :values="s.points.map(p => p.y)" :color="ACCENT" :width="90" :height="28" />
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Assessment history -->
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">

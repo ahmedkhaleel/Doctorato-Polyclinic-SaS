@@ -152,6 +152,13 @@ class DoctorPhysioController extends BaseDoctorController
                 ]
             ));
 
+        // PROMs (ODI/NDI/LEFS) via the shared scale engine, newest first.
+        $promKeys = array_keys(\App\Services\NeuroPsych\ScaleEngine::forModule('physiotherapy'));
+        $scaleResults = \App\Models\ScaleResult::where('patient_id', $patient->id)
+            ->whereIn('scale_key', $promKeys)
+            ->orderBy('taken_at')
+            ->get(['scale_key', 'score', 'severity', 'taken_at']);
+
         return Inertia::render('Doctor/Physiotherapy/Patients/Show', [
             'patient' => $patient->only(['id', 'full_name', 'phone', 'file_number', 'photo', 'date_of_birth', 'gender']),
             'assessments' => $assessments,
@@ -161,7 +168,28 @@ class DoctorPhysioController extends BaseDoctorController
             'romNormatives' => RomNormatives::NORMS,
             'exerciseCatalog' => $catalog,
             'prescriptions' => $prescriptions,
+            'promCatalog' => $this->promCatalog(),
+            'scaleResults' => $scaleResults,
         ]);
+    }
+
+    /** PROM definitions for this module shaped for the questionnaire runner. */
+    private function promCatalog(): array
+    {
+        $out = [];
+        foreach (\App\Services\NeuroPsych\ScaleEngine::forModule('physiotherapy') as $key => $def) {
+            $out[] = [
+                'key' => $key,
+                'name_en' => $def['name_en'],
+                'name_ar' => $def['name_ar'],
+                'mcid' => $def['mcid'] ?? null,
+                'higher_is_better' => (bool) ($def['higher_is_better'] ?? false),
+                'options' => $def['options'],
+                'items' => $def['items'],
+            ];
+        }
+
+        return $out;
     }
 
     /** Prescribe an exercise from the shared catalog (part of the HEP). */
@@ -190,6 +218,29 @@ class DoctorPhysioController extends BaseDoctorController
         AuditLogger::log('created', $rx, ['patient_id' => $patient->id], 'Prescribed home exercise');
 
         return back()->with('success', $this->msg('Exercise prescribed.', 'تم وصف التمرين.'));
+    }
+
+    /** Record a patient-reported outcome measure (ODI/NDI/LEFS) via ScaleEngine. */
+    public function storeScale(Request $request, Patient $patient): RedirectResponse
+    {
+        $data = $request->validate([
+            'scale_key' => 'required|string',
+            'answers' => 'required|array|min:1',
+        ]);
+
+        $def = \App\Services\NeuroPsych\ScaleEngine::definition($data['scale_key']);
+        if (! $def || $def['module'] !== 'physiotherapy') {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'scale_key' => $this->msg('This measure is not available here.', 'هذا المقياس غير متاح هنا.'),
+            ]);
+        }
+
+        $result = \App\Models\ScaleResult::build($patient->id, $data['scale_key'], $data['answers'], 'doctor');
+        $result->save();
+
+        AuditLogger::log('created', $result, ['patient_id' => $patient->id], 'Recorded physiotherapy PROM');
+
+        return back()->with('success', $this->msg('Outcome measure recorded.', 'تم تسجيل مقياس النتيجة.'));
     }
 
     /** Retire a prescription (soft stop — kept for history). */

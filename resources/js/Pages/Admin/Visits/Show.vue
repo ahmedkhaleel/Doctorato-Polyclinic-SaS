@@ -43,6 +43,7 @@ const props = defineProps({
     physioStrength: Array,
     physioPainPoints: Array,
     physioAssessment: Object,
+    physioScales: Array,
 });
 
 const activeTab = ref('details');
@@ -77,6 +78,7 @@ const specialtyExtras = computed(() => ({
     physioStrength: props.physioStrength,
     physioPainPoints: props.physioPainPoints,
     physioAssessment: props.physioAssessment,
+    physioScales: props.physioScales,
 }));
 
 const tabs = computed(() => {
