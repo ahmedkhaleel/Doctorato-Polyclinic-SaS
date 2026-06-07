@@ -27,6 +27,7 @@ const props = defineProps({
     dentalPlans: Array,
     dermaActivePlan: Object,
     dermaSessions: Array,
+    dermaLesions: Array,
     obgynPregnancy: Object,
     obgynLabTests: Array,
     neuroEncounter: Object,
@@ -53,6 +54,7 @@ const specialtyTab = computed(() => SPECIALTY_TABS[props.visit?.module] || null)
 const specialtyExtras = computed(() => ({
     dermaActivePlan: props.dermaActivePlan,
     dermaSessions: props.dermaSessions,
+    dermaLesions: props.dermaLesions,
     obgynPregnancy: props.obgynPregnancy,
     obgynLabTests: props.obgynLabTests,
     neuroEncounter: props.neuroEncounter,

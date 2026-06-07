@@ -4,9 +4,10 @@
  * Surfaces the active treatment course (with session progress), the sessions
  * logged on / around this visit, and deep links into the full derma record.
  */
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { useCurrency } from '@/Composables/useCurrency.js';
+import BodyMap from '@/Components/Charts/BodyMap.vue';
 
 const props = defineProps({
     visit: { type: Object, required: true },
@@ -16,7 +17,11 @@ const props = defineProps({
     patientHref: { type: String, default: null },
     dermaActivePlan: { type: Object, default: null },
     dermaSessions: { type: Array, default: () => [] },
+    dermaLesions: { type: Array, default: () => [] },
 });
+
+const lesionView = ref('front');
+const hasLesions = computed(() => (props.dermaLesions || []).length > 0);
 
 const { formatCurrency } = useCurrency();
 
@@ -59,7 +64,7 @@ function fmtDate(d) {
     return new Date(d).toLocaleDateString(props.isRtl ? 'ar-EG' : 'en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
-const hasContent = computed(() => plan.value || totalSessions.value > 0);
+const hasContent = computed(() => plan.value || totalSessions.value > 0 || hasLesions.value);
 </script>
 
 <template>
@@ -168,6 +173,15 @@ const hasContent = computed(() => plan.value || totalSessions.value > 0);
                         </div>
                     </div>
                     <p v-else class="text-sm text-gray-400 text-center py-4">{{ isRtl ? 'لا توجد جلسات مسجّلة' : 'No sessions recorded' }}</p>
+                </div>
+
+                <!-- Body lesion map (read-only, CV-3) -->
+                <div v-if="hasLesions">
+                    <h4 class="text-xs font-bold text-gray-500 uppercase mb-2">
+                        {{ isRtl ? 'خريطة الآفات' : 'Lesion map' }}
+                        <span class="ml-1 normal-case text-[10px] font-semibold px-1.5 py-0.5 rounded-full" :style="`background:${ACCENT}1A; color:${ACCENT}`">{{ dermaLesions.length }}</span>
+                    </h4>
+                    <BodyMap :lesions="dermaLesions" v-model:view="lesionView" :accent="ACCENT" :is-rtl="isRtl" :height="220" />
                 </div>
 
                 <!-- Quick links -->

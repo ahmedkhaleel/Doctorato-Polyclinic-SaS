@@ -123,9 +123,38 @@ class DoctorDermaController extends BaseDoctorController
             'photos' => $photos,
             'consents' => $consents,
             'sessionTypes' => DermaSession::TYPES,
+            'lesions' => \App\Models\DermaLesion::where('patient_id', $patient->id)->latest('id')->get(),
+            'lesionTypes' => \App\Models\DermaLesion::TYPES,
             'procedures' => CosmeticProcedure::where('is_active', true)->orderBy('name_ar')
                 ->get(['id', 'name_ar', 'name_en', 'default_price']),
         ]);
+    }
+
+    public function storeLesion(Request $request, Patient $patient): RedirectResponse
+    {
+        $data = $request->validate([
+            'view' => 'required|in:'.implode(',', \App\Models\DermaLesion::VIEWS),
+            'x' => 'required|numeric|min:0|max:100',
+            'y' => 'required|numeric|min:0|max:100',
+            'lesion_type' => 'nullable|in:'.implode(',', \App\Models\DermaLesion::TYPES),
+            'size_mm' => 'nullable|numeric|min:0|max:9999',
+            'note' => 'nullable|string|max:255',
+        ]);
+
+        \App\Models\DermaLesion::create(array_merge($data, [
+            'patient_id' => $patient->id,
+            'doctor_id' => $this->doctorId($request),
+            'recorded_at' => now()->toDateString(),
+        ]));
+
+        return back()->with('success', $this->msg('Lesion added.', 'تمت إضافة الآفة.'));
+    }
+
+    public function destroyLesion(Request $request, \App\Models\DermaLesion $lesion): RedirectResponse
+    {
+        $lesion->delete();
+
+        return back()->with('success', $this->msg('Lesion removed.', 'تم حذف الآفة.'));
     }
 
     public function storeCosmeticSession(Request $request, Patient $patient): RedirectResponse

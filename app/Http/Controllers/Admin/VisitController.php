@@ -130,6 +130,8 @@ class VisitController extends Controller
                 ->orderByRaw('COALESCE(completed_at, created_at) DESC')
                 ->limit(8)
                 ->get(['id', 'visit_id', 'session_type', 'area_treated', 'product_used', 'session_number', 'total_sessions', 'cost', 'completed_at', 'next_session_date']);
+            $extra['dermaLesions'] = \App\Models\DermaLesion::where('patient_id', $visit->patient_id)
+                ->get(['id', 'view', 'x', 'y', 'lesion_type', 'size_mm', 'note']);
         }
 
         // ── OB/GYN: active pregnancy (with gestational age) + labs ──

@@ -101,6 +101,43 @@ class DoctorDermaFlowTest extends TestCase
     }
 
     #[Test]
+    public function doctor_can_plot_and_remove_body_lesions(): void
+    {
+        $patient = Patient::create(['full_name' => 'Lesion P', 'phone' => '01777', 'gender' => 'female']);
+
+        $this->actingAs($this->doctorUser)
+            ->post("/doctor/derma/patients/{$patient->id}/lesions", [
+                'view' => 'front', 'x' => 45.5, 'y' => 30.2, 'lesion_type' => 'nevus', 'size_mm' => 4, 'note' => 'cheek',
+            ])->assertRedirect();
+
+        $this->assertDatabaseHas('derma_lesions', [
+            'patient_id' => $patient->id, 'view' => 'front', 'lesion_type' => 'nevus',
+        ]);
+
+        $lesion = \App\Models\DermaLesion::where('patient_id', $patient->id)->first();
+
+        $props = $this->actingAs($this->doctorUser)
+            ->get("/doctor/derma/patients/{$patient->id}")->assertOk()
+            ->original->getData()['page']['props'];
+        $this->assertNotEmpty($props['lesions'] ?? []);
+
+        $this->actingAs($this->doctorUser)
+            ->post("/doctor/derma/lesions/{$lesion->id}/delete")->assertRedirect();
+        $this->assertDatabaseMissing('derma_lesions', ['id' => $lesion->id]);
+    }
+
+    #[Test]
+    public function lesion_store_validates_coordinates_and_view(): void
+    {
+        $patient = Patient::create(['full_name' => 'Bad P', 'phone' => '01778', 'gender' => 'female']);
+
+        $this->actingAs($this->doctorUser)
+            ->post("/doctor/derma/patients/{$patient->id}/lesions", [
+                'view' => 'sideways', 'x' => 150, 'y' => -3,
+            ])->assertSessionHasErrors(['view', 'x', 'y']);
+    }
+
+    #[Test]
     public function uploading_a_before_photo_stores_a_derma_photo(): void
     {
         // S1: PHI photos now land on the private `local` disk, served via signed URLs.
