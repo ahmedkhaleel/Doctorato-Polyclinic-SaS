@@ -102,6 +102,14 @@ class ModuleManager
             'color' => '#0EA5E9',
             'is_core' => false,
         ],
+        'physiotherapy' => [
+            'slug' => 'physiotherapy',
+            'default_name_ar' => 'العلاج الطبيعي',
+            'default_name_en' => 'Physiotherapy',
+            'icon' => 'M3 12h4l3 8 4-16 3 8h4',
+            'color' => '#0D9488',
+            'is_core' => false,
+        ],
         'telemedicine' => [
             'slug' => 'telemedicine',
             'default_name_ar' => 'الاستشارات الأونلاين',
@@ -115,7 +123,7 @@ class ModuleManager
     /**
      * Medical specialty modules (have doctors, visits, bookings)
      */
-    const MEDICAL_MODULES = ['derma', 'dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology'];
+    const MEDICAL_MODULES = ['derma', 'dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology', 'physiotherapy'];
 
     /**
      * Get all registered modules

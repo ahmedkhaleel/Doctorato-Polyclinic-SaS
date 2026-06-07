@@ -277,7 +277,7 @@ class ModuleManagerTest extends TestCase
 
     public function test_medical_modules_constant_contains_expected(): void
     {
-        $this->assertEquals(['derma', 'dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology'], ModuleManager::MEDICAL_MODULES);
+        $this->assertEquals(['derma', 'dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology', 'physiotherapy'], ModuleManager::MEDICAL_MODULES);
     }
 
     // ──────────────────────────────────────────────────────────────
