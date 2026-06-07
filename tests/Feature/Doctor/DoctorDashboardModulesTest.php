@@ -66,4 +66,40 @@ class DoctorDashboardModulesTest extends TestCase
             ->assertOk()
             ->assertInertia(fn ($p) => $p->where('telemedicine.today', 0)->where('telemedicine.upcoming', 0));
     }
+
+    /**
+     * The dashboard must load for a doctor of EVERY medical specialty, expose the
+     * worklist counters, and surface that specialty's own summary block.
+     */
+    #[Test]
+    public function dashboard_loads_for_every_specialty_with_worklist(): void
+    {
+        $modules = ['dental', 'derma', 'pediatric', 'obgyn', 'psychiatry', 'neurology'];
+
+        foreach ($modules as $i => $module) {
+            ModuleManager::enable($module);
+            $role = Role::firstOrCreate(['name' => 'doctor'],
+                ['display_name_en' => 'Doctor', 'display_name_ar' => 'طبيب', 'permissions' => [], 'is_system' => true]);
+            $user = User::create([
+                'name' => "dash-{$module}", 'email' => "dash-{$module}-{$i}@test.com",
+                'password' => bcrypt('password'), 'role_id' => $role->id, 'is_active' => true,
+            ]);
+            Doctor::create([
+                'name_ar' => 'د', 'name_en' => 'Dr '.$module, 'user_id' => $user->id,
+                'status' => 'active', 'module' => $module,
+            ]);
+
+            $props = $this->actingAs($user)->get('/doctor')->assertOk()
+                ->original->getData()['page']['props'];
+
+            // Worklist counters are always present (CV/D5).
+            $this->assertArrayHasKey('worklistCounts', $props, "worklistCounts for {$module}");
+            $this->assertArrayHasKey('total', $props['worklistCounts']);
+
+            // The doctor's own specialty summary block is exposed.
+            $specialtyKey = in_array($module, ['psychiatry', 'neurology'], true) ? 'neuropsych' : $module;
+            $this->assertArrayHasKey($specialtyKey, $props, "specialty block {$specialtyKey} for {$module}");
+            $this->assertNotNull($props[$specialtyKey], "specialty block {$specialtyKey} not null for {$module}");
+        }
+    }
 }
