@@ -479,6 +479,47 @@ const filteredGroups = computed(() =>
         .sort((a, b) => groupRank(a.key) - groupRank(b.key))
 );
 
+/* ── Pillars: a top-level hierarchy over the groups (reorg) ──────────────
+ * Folds the ~19 flat groups into a handful of collapsible pillars. Pure
+ * presentation — every group (and every href) is preserved; an unmapped group
+ * never disappears (it falls into the "More" pillar). */
+const PILLARS = [
+    { key: 'overview', titleAr: 'لوحة القيادة', titleEn: 'Overview', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6', groups: ['main'] },
+    { key: 'clinic', titleAr: 'العيادة', titleEn: 'Clinic', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4', groups: ['clinic'] },
+    { key: 'specialties', titleAr: 'التخصصات', titleEn: 'Specialties', icon: 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z', groups: ['derma', 'dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology'] },
+    { key: 'finance', titleAr: 'المالية', titleEn: 'Finance', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', groups: ['finance', 'insurance'] },
+    { key: 'growth', titleAr: 'النمو والتسويق', titleEn: 'Growth', icon: 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6', groups: ['crm', 'telemedicine'] },
+    { key: 'inventory', titleAr: 'المخزون', titleEn: 'Inventory', icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4', groups: ['inventory'] },
+    { key: 'people', titleAr: 'الفريق', titleEn: 'People', icon: 'M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4z', groups: ['hr'] },
+    { key: 'engagement', titleAr: 'التفاعل والذكاء', titleEn: 'Engagement', icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9', groups: ['notifications', 'quality', 'ai'] },
+    { key: 'system', titleAr: 'النظام', titleEn: 'System', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z', groups: ['system', 'website'] },
+];
+
+const pillarGroups = computed(() => {
+    const byKey = {};
+    filteredGroups.value.forEach((g) => { byKey[g.key] = g; });
+    const used = new Set();
+    const out = PILLARS.map((p) => {
+        const groups = p.groups.map((k) => byKey[k]).filter(Boolean);
+        groups.forEach((g) => used.add(g.key));
+        return { ...p, groups };
+    }).filter((p) => p.groups.length > 0);
+    // Safety net: any visible group not mapped to a pillar still shows (never lost).
+    const orphans = filteredGroups.value.filter((g) => !used.has(g.key));
+    if (orphans.length) {
+        out.push({ key: 'more', titleAr: 'أخرى', titleEn: 'More', icon: PILLARS[0].icon, groups: orphans });
+    }
+    return out;
+});
+
+const openPillars = ref(new Set());
+function togglePillar(key) {
+    const s = new Set(openPillars.value);
+    s.has(key) ? s.delete(key) : s.add(key);
+    openPillars.value = s;
+}
+function isPillarOpen(key) { return openPillars.value.has(key); }
+
 function isActive(href) {
     if (href === '/admin') return currentUrl.value === '/admin' || currentUrl.value === '/admin/';
     return currentUrl.value.startsWith(href);
@@ -487,12 +528,17 @@ function isActive(href) {
 /* Auto-open the group containing the active route — only on mount and route change */
 function autoOpenActiveGroup() {
     const newSet = new Set(openGroups.value);
-    filteredGroups.value.forEach((group) => {
-        if (group.items.some(item => isActive(item.href))) {
-            newSet.add(group.key);
-        }
+    const pillarSet = new Set(openPillars.value);
+    pillarGroups.value.forEach((pillar) => {
+        pillar.groups.forEach((group) => {
+            if (group.items.some(item => isActive(item.href))) {
+                newSet.add(group.key);
+                pillarSet.add(pillar.key);
+            }
+        });
     });
     openGroups.value = newSet;
+    openPillars.value = pillarSet;
 }
 
 onMounted(autoOpenActiveGroup);
@@ -557,8 +603,33 @@ function logout()        { router.post('/admin/logout'); }
             </div>
 
             <!-- Navigation Groups -->
-            <nav class="flex-1 overflow-y-auto py-3 px-3 space-y-1 admin-sidebar-scroll relative">
-                <div v-for="(group, gi) in filteredGroups" :key="group.key" class="adm-nav-group" :style="{ '--gi': gi }">
+            <nav class="flex-1 overflow-y-auto py-3 px-3 space-y-1.5 admin-sidebar-scroll relative">
+              <div v-for="pillar in pillarGroups" :key="'pillar-' + pillar.key" class="adm-pillar">
+                <!-- Pillar header -->
+                <button
+                    @click="togglePillar(pillar.key)"
+                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[12.5px] font-extrabold tracking-wide transition-all duration-200"
+                    :class="isPillarOpen(pillar.key) ? 'bg-white/[0.06] text-white' : 'text-white/70 hover:bg-white/[0.03]'"
+                >
+                    <span class="flex items-center gap-2.5">
+                        <span class="w-6 h-6 rounded-lg flex items-center justify-center bg-[var(--brand-primary)]/15 text-[var(--brand-primary)] flex-shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="pillar.icon" /></svg>
+                        </span>
+                        {{ isRtl ? pillar.titleAr : pillar.titleEn }}
+                    </span>
+                    <svg
+                        class="w-3.5 h-3.5 transition-transform duration-300 ease-out"
+                        :class="[
+                            isPillarOpen(pillar.key) ? 'text-[var(--brand-primary)] rotate-0' : 'text-white/30',
+                            !isPillarOpen(pillar.key) ? (isRtl ? 'rotate-90' : '-rotate-90') : '',
+                        ]"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    ><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
+                </button>
+
+                <!-- Pillar body: the groups (each keeps its own accordion) -->
+                <div v-show="isPillarOpen(pillar.key)" class="mt-1 ltr:pl-1.5 rtl:pr-1.5 space-y-1 adm-pillar-body">
+                <div v-for="(group, gi) in pillar.groups" :key="group.key" class="adm-nav-group" :style="{ '--gi': gi }">
                     <!-- ─── FEATURED GROUP (Telemedicine, etc.) ─── -->
                     <template v-if="group.featured">
                         <button
@@ -784,6 +855,8 @@ function logout()        { router.post('/admin/logout'); }
                     </div>
                     </div>
                 </div>
+                </div>
+              </div>
             </nav>
 
             <!-- Sidebar footer — Admin Card -->
