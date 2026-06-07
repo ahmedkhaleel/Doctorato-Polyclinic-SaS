@@ -12,6 +12,8 @@ const props = defineProps({
     visit: { type: Object, required: true },
     isRtl: { type: Boolean, default: true },
     mounted: { type: Boolean, default: false },
+    context: { type: String, default: 'doctor' },
+    patientHref: { type: String, default: null },
     neuroEncounter: { type: Object, default: null },
     neuroScales: { type: Array, default: () => [] },
     neuroMeds: { type: Array, default: () => [] },
@@ -22,6 +24,11 @@ const props = defineProps({
 const module = computed(() => props.visit?.module);
 const isPsych = computed(() => module.value === 'psychiatry');
 const ACCENT = computed(() => (isPsych.value ? '#4F46E5' : '#0D9488')); // indigo / teal
+
+const isAdmin = computed(() => props.context === 'admin');
+const encountersHref = computed(() => isAdmin.value ? (props.patientHref || '#') : `/doctor/${module.value}/encounters`);
+const medsHref = computed(() => isAdmin.value ? (props.patientHref || '#') : `/doctor/${module.value}/medications`);
+const scalesHref = computed(() => isAdmin.value ? (props.patientHref || '#') : `/doctor/${module.value}/scales/${props.visit.patient_id}/trend`);
 
 const SCALE_LABELS = {
     phq9: 'PHQ-9', gad7: 'GAD-7', hit6: 'HIT-6', moca: 'MoCA',
@@ -96,7 +103,7 @@ const hasContent = computed(() => props.neuroEncounter || (props.neuroScales || 
                     </div>
                     <h3 class="text-sm font-bold text-gray-800">{{ isPsych ? (isRtl ? 'الطب النفسي' : 'Psychiatry') : (isRtl ? 'المخ والأعصاب' : 'Neurology') }}</h3>
                 </div>
-                <Link :href="`/doctor/${module}/encounters`" class="inline-flex items-center gap-1 text-xs font-medium transition-colors" :style="`color:${ACCENT}`">
+                <Link :href="encountersHref" class="inline-flex items-center gap-1 text-xs font-medium transition-colors" :style="`color:${ACCENT}`">
                     {{ isRtl ? 'سجل اللقاءات' : 'Encounters' }}
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="isRtl ? 'M15 19l-7-7 7-7' : 'M9 5l7 7-7 7'" /></svg>
                 </Link>
@@ -110,7 +117,7 @@ const hasContent = computed(() => props.neuroEncounter || (props.neuroScales || 
                     <svg class="w-6 h-6" :style="`color:${ACCENT}99`" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                 </div>
                 <p class="text-sm text-gray-400 mb-3">{{ isRtl ? 'لا يوجد لقاء أو مقاييس بعد' : 'No encounter or scales yet' }}</p>
-                <Link :href="`/doctor/${module}/encounters`" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white rounded-lg transition-all hover:-translate-y-0.5" :style="`background:${ACCENT}`">
+                <Link :href="encountersHref" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white rounded-lg transition-all hover:-translate-y-0.5" :style="`background:${ACCENT}`">
                     {{ isRtl ? 'تسجيل لقاء' : 'New encounter' }}
                 </Link>
             </div>
@@ -160,7 +167,7 @@ const hasContent = computed(() => props.neuroEncounter || (props.neuroScales || 
                         <polyline :points="trend.points" fill="none" :stroke="ACCENT" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                     <div class="text-right">
-                        <Link :href="`/doctor/${module}/scales/${visit.patient_id}/trend`" class="text-[11px] font-medium" :style="`color:${ACCENT}`">{{ isRtl ? 'كل المقاييس' : 'All scales' }}</Link>
+                        <Link :href="scalesHref" class="text-[11px] font-medium" :style="`color:${ACCENT}`">{{ isRtl ? 'كل المقاييس' : 'All scales' }}</Link>
                     </div>
                 </div>
 
@@ -205,11 +212,11 @@ const hasContent = computed(() => props.neuroEncounter || (props.neuroScales || 
 
                 <!-- Quick links -->
                 <div class="flex flex-wrap gap-2 pt-2 border-t border-gray-100">
-                    <Link :href="`/doctor/${module}/encounters`" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all" :style="`color:${ACCENT}; background:${ACCENT}0D; border-color:${ACCENT}33`">
+                    <Link :href="encountersHref" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all" :style="`color:${ACCENT}; background:${ACCENT}0D; border-color:${ACCENT}33`">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                         {{ isRtl ? 'اللقاءات' : 'Encounters' }}
                     </Link>
-                    <Link :href="`/doctor/${module}/medications`" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#1B365D] bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-all">
+                    <Link :href="medsHref" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#1B365D] bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-all">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                         {{ isRtl ? 'الأدوية' : 'Medications' }}
                     </Link>

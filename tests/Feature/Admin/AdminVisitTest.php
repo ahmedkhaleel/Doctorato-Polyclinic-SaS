@@ -106,6 +106,47 @@ class AdminVisitTest extends TestCase
         $this->actingAs($this->admin)->get("/admin/visits/{$visit->id}")->assertOk();
     }
 
+    public function test_admin_obgyn_visit_exposes_pregnancy_panel_data(): void
+    {
+        $visit = $this->createVisitWithBooking(['module' => 'obgyn']);
+        $preg = \App\Models\Pregnancy::create([
+            'patient_id' => $this->patient->id, 'doctor_id' => $this->doctor->id,
+            'lmp' => now()->subWeeks(12)->toDateString(), 'edd' => now()->addWeeks(28)->toDateString(),
+            'edd_source' => 'lmp', 'gravida' => 1, 'para' => 0, 'conception_method' => 'natural',
+            'is_high_risk' => false, 'status' => \App\Models\Pregnancy::STATUS_ACTIVE,
+        ]);
+        \App\Models\ObgynLabTest::create([
+            'patient_id' => $this->patient->id, 'pregnancy_id' => $preg->id, 'doctor_id' => $this->doctor->id,
+            'test_type' => 'Hb', 'value' => '12', 'unit' => 'g/dL', 'result_date' => now()->toDateString(), 'is_abnormal' => false,
+        ]);
+
+        $props = $this->actingAs($this->admin)->get("/admin/visits/{$visit->id}")->assertOk()
+            ->original->getData()['page']['props'];
+
+        $this->assertSame(12, (int) $props['obgynPregnancy']['gestational_weeks']);
+        $this->assertNotEmpty($props['obgynLabTests'] ?? []);
+    }
+
+    public function test_admin_with_wildcard_sees_neuropsych_risk(): void
+    {
+        $visit = $this->createVisitWithBooking(['module' => 'psychiatry']);
+        \App\Models\RiskAssessment::create([
+            'patient_id' => $this->patient->id, 'doctor_id' => $this->doctor->id,
+            'type' => 'suicide', 'tool' => 'c-ssrs', 'answers' => [],
+            'risk_level' => 'high', 'is_active' => true, 'assessed_at' => now(),
+        ]);
+
+        $props = $this->actingAs($this->admin)->get("/admin/visits/{$visit->id}")->assertOk()
+            ->original->getData()['page']['props'];
+
+        // super_admin has '*' → sensitive risk visible + audited.
+        $this->assertTrue((bool) $props['neuroCanViewSensitive']);
+        $this->assertSame('high', $props['neuroRisk']['risk_level']);
+        $this->assertDatabaseHas('medical_data_access_logs', [
+            'patient_id' => $this->patient->id, 'data_category' => 'neuropsych_risk',
+        ]);
+    }
+
     public function test_can_start_visit(): void
     {
         $visit = $this->createVisitWithBooking(['status' => 'waiting']);

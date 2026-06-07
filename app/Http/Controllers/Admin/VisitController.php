@@ -114,6 +114,71 @@ class VisitController extends Controller
                 ->get();
         }
 
+        // ── Derma: active treatment course + session log ─────
+        if ($visit->module === 'derma' && $visit->patient_id) {
+            $activePlan = \App\Models\DermaTreatmentPlan::where('patient_id', $visit->patient_id)
+                ->active()
+                ->latest('start_date')
+                ->first();
+            if ($activePlan) {
+                $extra['dermaActivePlan'] = array_merge(
+                    $activePlan->only(['id', 'title_ar', 'title_en', 'session_type', 'estimated_sessions', 'completed_sessions', 'interval_days', 'status', 'start_date']),
+                    ['progress_percentage' => $activePlan->progress_percentage, 'sessions_remaining' => $activePlan->sessions_remaining]
+                );
+            }
+            $extra['dermaSessions'] = \App\Models\DermaSession::where('patient_id', $visit->patient_id)
+                ->orderByRaw('COALESCE(completed_at, created_at) DESC')
+                ->limit(8)
+                ->get(['id', 'visit_id', 'session_type', 'area_treated', 'product_used', 'session_number', 'total_sessions', 'cost', 'completed_at', 'next_session_date']);
+        }
+
+        // ── OB/GYN: active pregnancy (with gestational age) + labs ──
+        if ($visit->module === 'obgyn' && $visit->patient_id) {
+            $pregnancy = \App\Models\Pregnancy::where('patient_id', $visit->patient_id)
+                ->where('status', \App\Models\Pregnancy::STATUS_ACTIVE)
+                ->latest('lmp')
+                ->first();
+            if ($pregnancy) {
+                $days = $pregnancy->lmp ? (int) $pregnancy->lmp->diffInDays(now()) : null;
+                $extra['obgynPregnancy'] = array_merge(
+                    $pregnancy->only(['id', 'lmp', 'edd', 'gravida', 'para', 'blood_group', 'rh_factor', 'is_high_risk', 'risk_factors', 'conception_method', 'status']),
+                    ['gestational_weeks' => $days !== null ? intdiv($days, 7) : null, 'gestational_days' => $days !== null ? $days % 7 : null]
+                );
+                $extra['obgynLabTests'] = $pregnancy->labTests()
+                    ->latest('result_date')
+                    ->limit(6)
+                    ->get(['id', 'test_type', 'value', 'unit', 'reference_range', 'result_date', 'is_abnormal']);
+            }
+        }
+
+        // ── Psychiatry / Neurology: encounter + scales + meds + (gated) risk ──
+        if (in_array($visit->module, ['psychiatry', 'neurology'], true) && $visit->patient_id) {
+            $module = $visit->module;
+            $encounter = \App\Models\NeuropsychEncounter::where('patient_id', $visit->patient_id)
+                ->where('module', $module)->where('visit_id', $visit->id)->first()
+                ?? \App\Models\NeuropsychEncounter::where('patient_id', $visit->patient_id)
+                    ->where('module', $module)->latest('encounter_date')->first();
+            if ($encounter) {
+                $extra['neuroEncounter'] = $encounter->only(['id', 'note_format', 'subjective', 'objective', 'assessment', 'plan', 'mse', 'encounter_date', 'visit_id']);
+            }
+            $extra['neuroScales'] = \App\Models\ScaleResult::where('patient_id', $visit->patient_id)
+                ->latest('taken_at')->limit(12)->get(['id', 'scale_key', 'score', 'severity', 'flag', 'taken_at']);
+            $extra['neuroMeds'] = \App\Models\MedicationPlan::where('patient_id', $visit->patient_id)
+                ->where('module', $module)->whereNull('stopped_at')->latest('started_at')
+                ->get(['id', 'drug', 'drug_class', 'dose', 'frequency', 'route', 'is_controlled', 'started_at']);
+
+            $canSensitive = (bool) (auth()->user()?->role?->hasPermission("{$module}.view_sensitive") ?? false);
+            $extra['neuroCanViewSensitive'] = $canSensitive;
+            if ($canSensitive) {
+                $risk = \App\Models\RiskAssessment::where('patient_id', $visit->patient_id)
+                    ->where('is_active', true)->latest('assessed_at')->first();
+                if ($risk) {
+                    $extra['neuroRisk'] = $risk->only(['id', 'type', 'tool', 'risk_level', 'assessed_at']);
+                    \App\Models\MedicalDataAccessLog::record($visit->patient_id, 'view', 'neuropsych_risk', ['risk_level', 'type'], 'Admin visit page risk summary');
+                }
+            }
+        }
+
         // Doctors + services for the reschedule/reassign modal — kept
         // lean (id + display name) so we don't bloat the visit show
         // payload for the common read-only case.

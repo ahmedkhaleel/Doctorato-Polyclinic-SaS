@@ -12,12 +12,19 @@ const props = defineProps({
     visit: { type: Object, required: true },
     isRtl: { type: Boolean, default: true },
     mounted: { type: Boolean, default: false },
+    context: { type: String, default: 'doctor' },
+    patientHref: { type: String, default: null },
     obgynPregnancy: { type: Object, default: null },
     obgynLabTests: { type: Array, default: () => [] },
 });
 
 const ACCENT = '#DB2777';
 const TERM_WEEKS = 40;
+
+const isAdmin = computed(() => props.context === 'admin');
+const pregHref = computed(() => isAdmin.value ? (props.patientHref || '#') : `/doctor/obgyn/pregnancies/${props.obgynPregnancy?.id}`);
+const pregListHref = computed(() => isAdmin.value ? (props.patientHref || '#') : '/doctor/obgyn/pregnancies');
+const ancCardHref = computed(() => isAdmin.value ? (props.patientHref || '#') : `/doctor/obgyn/pregnancies/${props.obgynPregnancy?.id}/antenatal-card`);
 
 const preg = computed(() => props.obgynPregnancy);
 const gaWeeks = computed(() => Number(preg.value?.gestational_weeks ?? 0));
@@ -60,7 +67,7 @@ function fmtDate(d) {
                     </div>
                     <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'النساء والتوليد' : 'Obstetrics & Gynecology' }}</h3>
                 </div>
-                <Link v-if="preg" :href="`/doctor/obgyn/pregnancies/${preg.id}`"
+                <Link v-if="preg" :href="pregHref"
                     class="inline-flex items-center gap-1 text-xs font-medium transition-colors" :style="`color:${ACCENT}`">
                     {{ isRtl ? 'ملف الحمل' : 'Pregnancy Record' }}
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="isRtl ? 'M15 19l-7-7 7-7' : 'M9 5l7 7-7 7'" /></svg>
@@ -75,7 +82,7 @@ function fmtDate(d) {
                     <svg class="w-6 h-6" :style="`color:${ACCENT}99`" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H5m14 0h2M5 21H3m4-12h10M9 13h6" /></svg>
                 </div>
                 <p class="text-sm text-gray-400 mb-3">{{ isRtl ? 'لا يوجد حمل نشط مسجّل' : 'No active pregnancy on record' }}</p>
-                <Link :href="`/doctor/obgyn/pregnancies`"
+                <Link :href="pregListHref"
                     class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white rounded-lg transition-all hover:-translate-y-0.5" :style="`background:${ACCENT}`">
                     {{ isRtl ? 'سجل حمل / مراجعة نسائية' : 'Register pregnancy / gyn visit' }}
                 </Link>
@@ -152,11 +159,11 @@ function fmtDate(d) {
 
                 <!-- Quick links -->
                 <div class="flex flex-wrap gap-2 pt-2 border-t border-gray-100">
-                    <Link :href="`/doctor/obgyn/pregnancies/${preg.id}`" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all" :style="`color:${ACCENT}; background:${ACCENT}0D; border-color:${ACCENT}33`">
+                    <Link :href="pregHref" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all" :style="`color:${ACCENT}; background:${ACCENT}0D; border-color:${ACCENT}33`">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
                         {{ isRtl ? 'بطاقة الحمل' : 'ANC Card' }}
                     </Link>
-                    <Link :href="`/doctor/obgyn/pregnancies/${preg.id}/antenatal-card`" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#1B365D] bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-all">
+                    <Link :href="ancCardHref" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#1B365D] bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-all">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                         {{ isRtl ? 'طباعة البطاقة' : 'Print card' }}
                     </Link>
