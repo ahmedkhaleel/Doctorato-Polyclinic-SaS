@@ -6,6 +6,7 @@ import AiAssist from '@/Components/Ai/AiAssist.vue';
 import PrescriptionsSection from '@/Components/Doctor/Visit/PrescriptionsSection.vue';
 import VitalsHistorySection from '@/Components/Doctor/Visit/VitalsHistorySection.vue';
 import SpecialtyPanel from '@/Components/Doctor/Visit/SpecialtyPanel.vue';
+import VisitProgressStepper from '@/Components/Doctor/Visit/VisitProgressStepper.vue';
 import { useCurrency } from '@/Composables/useCurrency.js';
 
 defineOptions({ layout: DoctorLayout });
@@ -310,6 +311,9 @@ function formatDate(date) {
                 </div>
             </div>
         </div>
+
+        <!-- Visit lifecycle stepper -->
+        <VisitProgressStepper :status="visit.status" :is-rtl="isRtl" :started-at="visit.started_at" :completed-at="visit.completed_at" :mounted="mounted" />
 
         <!-- Dental Medical Alerts Banner -->
         <Transition enter-active-class="transition-all duration-500" enter-from-class="opacity-0 -translate-y-2" enter-to-class="opacity-100 translate-y-0">
