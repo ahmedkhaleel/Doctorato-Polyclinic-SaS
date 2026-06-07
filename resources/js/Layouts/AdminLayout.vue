@@ -293,7 +293,6 @@ const navGroups = [
             { labelEn: 'Shifts',        labelAr: 'الورديات',        href: '/admin/shifts',             icon: 'clock',     permission: 'shifts.view' },
             { labelEn: 'Attendance',    labelAr: 'الحضور والانصراف', href: '/admin/attendances',        icon: 'checklist', permission: 'attendances.view' },
             { labelEn: 'Leaves',        labelAr: 'الإجازات',        href: '/admin/leaves',             icon: 'logout',    permission: 'leaves.view' },
-            { labelEn: 'Documents',     labelAr: 'وثائق الموظفين',   href: '/admin/documents',          icon: 'document',  permission: 'employees.view' },
             { labelEn: 'Expiring Docs', labelAr: 'وثائق قاربت الانتهاء', href: '/admin/documents/expiring', icon: 'bellCenter', permission: 'employees.view' },
         ],
     },
