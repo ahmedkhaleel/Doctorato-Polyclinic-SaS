@@ -34,7 +34,17 @@ const props = defineProps({
     pendingFollowups: Array,
     todayMedicalAlerts: Array,
     reviewsSnapshot: { type: Object, default: null },
+    worklistCounts: { type: Object, default: () => ({}) },
 });
+
+/* ── Worklist counter card ── */
+const worklistTiles = computed(() => [
+    { key: 'incomplete_docs', ar: 'توثيق ناقص', en: 'Docs', accent: '#D97706' },
+    { key: 'results_review', ar: 'نتائج للمراجعة', en: 'Results', accent: '#DC2626' },
+    { key: 'due_followups', ar: 'متابعات', en: 'Follow-ups', accent: '#4F46E5' },
+    { key: 'open_plans', ar: 'خطط مفتوحة', en: 'Plans', accent: '#8B5CF6' },
+]);
+const worklistTotal = computed(() => props.worklistCounts?.total || 0);
 
 /* ── Quick Access tiles (gated by enabled module + doctor's specialty) ── */
 const modules = computed(() => page.props.modules || {});
@@ -255,6 +265,32 @@ const completionDash = computed(() => {
                 </Link>
             </div>
         </div>
+
+        <!-- My Worklist (actionable) -->
+        <Link href="/doctor/worklist"
+            class="group block mb-6 rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all overflow-hidden">
+            <div class="flex items-center gap-4 p-4 sm:p-5">
+                <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
+                    :class="worklistTotal > 0 ? 'bg-[#1B365D]' : 'bg-emerald-500'">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-2">
+                        <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'قائمة مهامي' : 'My Worklist' }}</h3>
+                        <span v-if="worklistTotal > 0" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#1B365D] text-white tabular-nums">{{ worklistTotal }}</span>
+                    </div>
+                    <p v-if="worklistTotal === 0" class="text-xs text-emerald-600 mt-0.5">{{ isRtl ? 'لا مهام معلّقة — عمل رائع' : 'All caught up' }}</p>
+                    <div v-else class="flex flex-wrap gap-x-4 gap-y-1 mt-1.5">
+                        <span v-for="t in worklistTiles" :key="t.key" v-show="(worklistCounts[t.key] || 0) > 0"
+                            class="inline-flex items-center gap-1.5 text-[11px] text-gray-500">
+                            <span class="w-1.5 h-1.5 rounded-full" :style="{ background: t.accent }"></span>
+                            <span class="font-bold text-gray-700 tabular-nums">{{ worklistCounts[t.key] }}</span> {{ isRtl ? t.ar : t.en }}
+                        </span>
+                    </div>
+                </div>
+                <svg class="w-5 h-5 text-gray-300 group-hover:text-[#C4A265] shrink-0 rtl:rotate-180 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            </div>
+        </Link>
 
         <!-- Main Grid -->
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
