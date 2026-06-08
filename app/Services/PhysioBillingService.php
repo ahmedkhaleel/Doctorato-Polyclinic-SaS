@@ -37,19 +37,26 @@ class PhysioBillingService
         if ($fee <= 0) {
             $fee = $this->moduleFee('session_fee', 0);
         }
+        // Home-visit surcharge is added on top of the base session fee.
+        $homeVisit = (bool) $session->home_visit;
+        if ($homeVisit) {
+            $fee += $this->moduleFee('home_visit_surcharge', 0);
+        }
         if ($fee <= 0) {
             return null;
         }
 
         $n = $session->session_number ? " #{$session->session_number}" : '';
+        $hvEn = $homeVisit ? ' (home visit)' : '';
+        $hvAr = $homeVisit ? ' (زيارة منزلية)' : '';
 
-        return DB::transaction(function () use ($session, $fee, $n) {
+        return DB::transaction(function () use ($session, $fee, $n, $hvEn, $hvAr) {
             $invoice = $this->findOrCreateInvoice($session->patient_id, $session->visit_id);
 
             $item = InvoiceItem::create([
                 'invoice_id' => $invoice->id,
-                'description_en' => 'Physiotherapy session'.$n,
-                'description_ar' => 'جلسة علاج طبيعي'.$n,
+                'description_en' => 'Physiotherapy session'.$n.$hvEn,
+                'description_ar' => 'جلسة علاج طبيعي'.$n.$hvAr,
                 'quantity' => 1,
                 'unit_price' => $fee,
                 'discount' => 0,

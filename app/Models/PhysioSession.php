@@ -14,12 +14,12 @@ class PhysioSession extends Model
     protected $fillable = [
         'patient_id', 'doctor_id', 'treatment_plan_id', 'visit_id', 'invoice_id', 'invoice_item_id',
         'session_number', 'session_date', 'soap', 'modalities', 'techniques', 'exercises_done',
-        'attended', 'pain_before', 'pain_after', 'cost', 'completed_at', 'notes',
+        'attended', 'home_visit', 'pain_before', 'pain_after', 'cost', 'completed_at', 'notes',
     ];
 
     protected $casts = [
         'session_date' => 'date', 'modalities' => 'array', 'attended' => 'boolean',
-        'cost' => 'decimal:2', 'completed_at' => 'datetime',
+        'home_visit' => 'boolean', 'cost' => 'decimal:2', 'completed_at' => 'datetime',
     ];
 
     public function patient(): BelongsTo

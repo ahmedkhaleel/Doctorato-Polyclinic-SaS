@@ -419,6 +419,7 @@ class DoctorPhysioController extends BaseDoctorController
             'techniques' => 'nullable|string|max:2000',
             'exercises_done' => 'nullable|string|max:2000',
             'attended' => 'boolean',
+            'home_visit' => 'boolean',
             'pain_before' => 'nullable|integer|min:0|max:10',
             'pain_after' => 'nullable|integer|min:0|max:10',
             'cost' => 'nullable|numeric|min:0',
@@ -431,8 +432,9 @@ class DoctorPhysioController extends BaseDoctorController
             $plan = PhysioTreatmentPlan::where('patient_id', $patient->id)->find($data['treatment_plan_id']);
         }
         $attended = $request->boolean('attended', true);
+        $homeVisit = $request->boolean('home_visit', false);
 
-        $session = DB::transaction(function () use ($data, $patient, $doctorId, $plan, $attended) {
+        $session = DB::transaction(function () use ($data, $patient, $doctorId, $plan, $attended, $homeVisit) {
             $nextNumber = $plan
                 ? ((int) $plan->completed_sessions + 1)
                 : (PhysioSession::where('patient_id', $patient->id)->max('session_number') + 1);
@@ -449,6 +451,7 @@ class DoctorPhysioController extends BaseDoctorController
                 'techniques' => $data['techniques'] ?? null,
                 'exercises_done' => $data['exercises_done'] ?? null,
                 'attended' => $attended,
+                'home_visit' => $homeVisit,
                 'pain_before' => $data['pain_before'] ?? null,
                 'pain_after' => $data['pain_after'] ?? null,
                 'cost' => $data['cost'] ?? null,

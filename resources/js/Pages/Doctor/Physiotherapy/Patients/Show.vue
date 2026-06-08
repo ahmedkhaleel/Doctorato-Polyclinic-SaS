@@ -78,7 +78,7 @@ function setPlanStatus(plan, status) {
 }
 
 // ── Session form ──
-const sessionForm = useForm({ treatment_plan_id: '', session_date: new Date().toISOString().slice(0, 10), pain_before: null, pain_after: null, modalities: '', techniques: '', soap: '', cost: null, attended: true, bill: true });
+const sessionForm = useForm({ treatment_plan_id: '', session_date: new Date().toISOString().slice(0, 10), pain_before: null, pain_after: null, modalities: '', techniques: '', soap: '', cost: null, attended: true, home_visit: false, bill: true });
 function submitSession() {
     sessionForm.transform((d) => ({ ...d, modalities: d.modalities ? d.modalities.split(',').map((x) => x.trim()).filter(Boolean) : [] }))
         .post(route('doctor.physiotherapy.sessions.store', props.patient.id), { preserveScroll: true, onSuccess: () => { sessionForm.reset('pain_before', 'pain_after', 'modalities', 'techniques', 'soap', 'cost'); showSessionForm.value = false; } });
@@ -199,6 +199,7 @@ const promName = (def) => (isRtl.value ? def.name_ar : def.name_en);
                 <input v-model="sessionForm.modalities" :placeholder="t('Modalities', 'الوسائل')" class="form-in md:col-span-2" />
                 <input v-model.number="sessionForm.cost" type="number" min="0" :placeholder="t('Cost', 'التكلفة')" class="form-in" />
                 <label class="flex items-center gap-2 text-sm text-gray-600"><input v-model="sessionForm.bill" type="checkbox" class="rounded" /> {{ t('Bill', 'فوترة') }}</label>
+                <label class="flex items-center gap-2 text-sm text-gray-600"><input v-model="sessionForm.home_visit" type="checkbox" class="rounded" /> {{ t('Home visit', 'زيارة منزلية') }}</label>
             </div>
             <textarea v-model="sessionForm.soap" :placeholder="t('SOAP note', 'ملاحظة SOAP')" rows="2" class="form-in w-full"></textarea>
             <div class="flex justify-end gap-2">
