@@ -32,7 +32,7 @@ const props = defineProps({
     physioScales: { type: Array, default: () => [] },
 });
 
-const PROM_LABELS = { odi: 'ODI', ndi: 'NDI', lefs: 'LEFS' };
+const PROM_LABELS = { odi: 'ODI', ndi: 'NDI', lefs: 'LEFS', quickdash: 'QuickDASH' };
 const latestScales = computed(() => {
     const seen = {};
     (props.physioScales || []).forEach((s) => { if (!seen[s.scale_key]) seen[s.scale_key] = s; });

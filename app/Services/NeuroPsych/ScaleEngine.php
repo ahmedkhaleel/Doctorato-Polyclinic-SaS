@@ -220,6 +220,39 @@ class ScaleEngine
                 ],
                 'flagItems' => [],
             ],
+            'quickdash' => [
+                'name_en' => 'QuickDASH (Arm/Shoulder/Hand)',
+                'name_ar' => 'كويك-داش (الذراع والكتف واليد)',
+                'module' => 'physiotherapy',
+                'higher_is_better' => false,
+                'mcid' => 11,
+                'score_mode' => 'mean_scaled', // ((mean − 1)/4) × 100, range 0–100
+                'options' => [
+                    ['v' => 1, 'en' => 'No difficulty', 'ar' => 'بدون صعوبة'],
+                    ['v' => 2, 'en' => 'Mild difficulty', 'ar' => 'صعوبة بسيطة'],
+                    ['v' => 3, 'en' => 'Moderate difficulty', 'ar' => 'صعوبة متوسطة'],
+                    ['v' => 4, 'en' => 'Severe difficulty', 'ar' => 'صعوبة شديدة'],
+                    ['v' => 5, 'en' => 'Unable', 'ar' => 'غير قادر'],
+                ],
+                'items' => array_map(fn ($en, $ar) => ['en' => $en, 'ar' => $ar], [
+                    'Open a tight or new jar', 'Do heavy household chores', 'Carry a shopping bag or briefcase',
+                    'Wash your back', 'Use a knife to cut food', 'Recreational activities with arm force/impact',
+                    'Arm/shoulder/hand problem limited social activities', 'Limited work or daily activities',
+                    'Arm/shoulder/hand pain', 'Tingling (pins and needles)', 'Difficulty sleeping due to pain',
+                ], [
+                    'فتح برطمان محكم أو جديد', 'القيام بالأعمال المنزلية الثقيلة', 'حمل كيس تسوق أو حقيبة',
+                    'غسل ظهرك', 'استخدام السكين لتقطيع الطعام', 'أنشطة ترفيهية تتطلب قوة الذراع',
+                    'مشكلة الذراع حدّت من الأنشطة الاجتماعية', 'محدودية العمل أو الأنشطة اليومية',
+                    'ألم الذراع/الكتف/اليد', 'تنميل (وخز)', 'صعوبة النوم بسبب الألم',
+                ]),
+                'bands' => [
+                    [0, 14, 'Minimal disability', 'عجز ضئيل'],
+                    [15, 40, 'Mild disability', 'عجز خفيف'],
+                    [41, 60, 'Moderate disability', 'عجز متوسط'],
+                    [61, 100, 'Severe disability', 'عجز شديد'],
+                ],
+                'flagItems' => [],
+            ],
         ];
     }
 
@@ -251,7 +284,14 @@ class ScaleEngine
         return array_filter(self::registry(), fn ($d) => $d['module'] === $module);
     }
 
-    /** Total = sum of chosen answer values. Answers: [itemIndex => chosenValue]. */
+    /**
+     * Score a completed scale. Answers: [itemIndex => chosenValue].
+     *
+     * Default mode is 'sum' (PHQ-9, GAD-7, ODI, …). Scales that declare
+     * 'score_mode' => 'mean_scaled' (e.g. QuickDASH) are scored as the mean of
+     * the answered items rescaled to 0–100 across the option min/max, i.e.
+     * ((mean − min) / (max − min)) × 100 — matching the published instrument.
+     */
     public static function score(string $key, array $answers): int
     {
         $def = self::definition($key);
@@ -259,6 +299,21 @@ class ScaleEngine
             return 0;
         }
         $valid = array_column($def['options'], 'v');
+
+        if (($def['score_mode'] ?? 'sum') === 'mean_scaled') {
+            $vals = array_values(array_filter(
+                array_map('intval', $answers),
+                fn ($v) => in_array($v, $valid, true)
+            ));
+            if (count($vals) === 0) {
+                return 0;
+            }
+            $mean = array_sum($vals) / count($vals);
+            $min = min($valid);
+            $max = max($valid);
+
+            return (int) round(($mean - $min) / max(1, $max - $min) * 100);
+        }
 
         $total = 0;
         foreach ($answers as $val) {

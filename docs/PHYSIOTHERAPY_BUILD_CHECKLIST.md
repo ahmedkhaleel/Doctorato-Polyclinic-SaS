@@ -72,18 +72,27 @@ Accent colour: teal `#0D9488`.
 
 ---
 
-## Deferred follow-ups (not yet built)
+## Follow-ups (now done)
 
-These were scoped under PT-6 "full bookings" but intentionally deferred to keep
-each shipped phase complete + tested. The server already accepts the booking
-types from every surface — these are UI/feature extensions:
+The PT-6 "full bookings" follow-ups have all shipped as the F-series:
 
-- [ ] Surface the physiotherapy booking-type cards on the **secretary**,
-  **patient**, and **public/frontend** booking forms (admin form done).
-- [ ] **Recurring session series** — book N weekly sessions in one action.
-- [ ] **Session packages** — prepaid bundles with a remaining-sessions balance
-  (mirror `CosmeticPackagePurchase`).
-- [ ] **Home-visit surcharge toggle** on the booking/session surfaces (the
-  `home_visit_surcharge` module setting already exists).
-- [ ] Additional PROMs needing non-sum scoring (QuickDASH, KOOS, WOMAC, PSFS)
-  — requires a percent/weighted scoring mode in `ScaleEngine`.
+- [x] **F-A** — physiotherapy booking-type cards on the **secretary**,
+  **patient**, and **public/frontend** booking forms (admin was done in PT-6).
+  Tests via build + existing booking suite.
+- [x] **F-B** — **home-visit surcharge**: `physio_sessions.home_visit` +
+  `PhysioBillingService` adds the `home_visit_surcharge` setting + doctor toggle.
+  Test: `PhysiotherapyHomeVisitTest`.
+- [x] **F-C** — **recurring session series**: `DoctorPhysioController.scheduleSeries`
+  creates N interval-spaced `physiotherapy_session` bookings via the workflow.
+  Test: `PhysiotherapySessionSeriesTest`.
+- [x] **F-D** — **session packages**: `physio_packages` catalog +
+  `physio_package_purchases` + `physio_sessions.package_purchase_id`; sell +
+  draw-down (covered, not billed); surfaced on doctor/secretary/patient.
+  Test: `PhysiotherapyPackageTest`.
+- [x] **F-E** — **weighted-scoring PROMs**: `ScaleEngine` gains a `mean_scaled`
+  scoring mode; **QuickDASH** registered for physiotherapy (sum scales
+  unaffected). Test: `PhysiotherapyQuickDashTest`.
+
+Still open (lower priority, additive): KOOS / WOMAC / PSFS instruments
+(PSFS needs patient-specific items, not a fixed list) and a dedicated admin
+package-catalog CRUD page (the catalog is seeded + editable via DB for now).
