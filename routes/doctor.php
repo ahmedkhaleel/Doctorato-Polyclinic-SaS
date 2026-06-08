@@ -173,6 +173,8 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
 
     // ─── Dental Module ────────────────────────────────────────
     Route::prefix('dental')->middleware('module:dental')->group(function () {
+        // Dedicated dental cockpit (landing).
+        Route::get('/', [\App\Http\Controllers\Doctor\DoctorDentalDashboardController::class, 'index'])->name('doctor.dental.dashboard');
         // Dental Chart
         Route::get('/chart-search', [DoctorDentalChartController::class, 'search'])->name('doctor.dental.chart.search');
         Route::get('/chart/{patient}', [DoctorDentalChartController::class, 'show'])->name('doctor.dental.chart.show');

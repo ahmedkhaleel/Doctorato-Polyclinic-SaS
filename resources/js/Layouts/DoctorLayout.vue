@@ -94,6 +94,7 @@ const navGroups = computed(() => [
         key: 'dental',
         moduleKey: 'dental',
         items: [
+            { label: isRtl.value ? 'لوحة الأسنان' : 'Dental Dashboard', href: '/doctor/dental', icon: 'grid' },
             { label: isRtl.value ? 'مخطط الأسنان' : 'Dental Chart',   href: '/doctor/dental/chart-search', icon: 'tooth' },
             { label: isRtl.value ? 'خطط العلاج' : 'Treatment Plans', href: '/doctor/dental/treatment-plans', icon: 'clipboard' },
             { label: isRtl.value ? 'العلاجات' : 'Treatments',        href: '/doctor/dental/treatments',      icon: 'pill' },
@@ -283,6 +284,7 @@ const quickSearchPages = computed(() => {
     // Add dental pages if dental module enabled
     if (modules.value.dental?.enabled && doctorModule.value === 'dental') {
         pages.push(
+            { label: isRtl.value ? 'لوحة الأسنان' : 'Dental Dashboard', href: '/doctor/dental', icon: 'grid', group: isRtl.value ? 'طب الأسنان' : 'Dental' },
             { label: isRtl.value ? 'مخطط الأسنان' : 'Dental Chart', href: '/doctor/dental/chart-search', icon: 'tooth', group: isRtl.value ? 'طب الأسنان' : 'Dental' },
             { label: isRtl.value ? 'خطط العلاج' : 'Treatment Plans', href: '/doctor/dental/treatment-plans', icon: 'clipboard', group: isRtl.value ? 'طب الأسنان' : 'Dental' },
             { label: isRtl.value ? 'العلاجات' : 'Treatments', href: '/doctor/dental/treatments', icon: 'pill', group: isRtl.value ? 'طب الأسنان' : 'Dental' },
