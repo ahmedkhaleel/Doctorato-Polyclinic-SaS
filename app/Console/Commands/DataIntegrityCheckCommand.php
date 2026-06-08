@@ -405,6 +405,11 @@ class DataIntegrityCheckCommand extends Command
                     'neuropsych_encounters', 'neuropsych_treatment_plans', 'medication_plans',
                     'controlled_substance_register', 'neuro_procedures', 'treatment_courses',
                     'course_sessions', 'controlled_prescriptions',
+                    // Physiotherapy branch-scoped clinical + finance events (PT-1..F-D).
+                    // The exercises + physio_packages catalogs are SHARED (no branch_id) — excluded.
+                    'physio_assessments', 'physio_treatment_plans', 'physio_sessions',
+                    'physio_pain_points', 'physio_rom_measurements', 'physio_strength_tests',
+                    'physio_exercise_prescriptions', 'hep_adherence_logs', 'physio_package_purchases',
                 ];
                 $missing = [];
                 $orphan = [];
