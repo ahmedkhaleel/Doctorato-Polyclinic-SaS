@@ -1006,6 +1006,10 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
         Route::post('/exercises', [$pt, 'storeExercise'])->name('admin.physiotherapy.exercises.store')->middleware('permission:physiotherapy.update');
         Route::post('/exercises/{exercise}', [$pt, 'updateExercise'])->name('admin.physiotherapy.exercises.update')->middleware('permission:physiotherapy.update');
         Route::post('/exercises/{exercise}/toggle', [$pt, 'toggleExercise'])->name('admin.physiotherapy.exercises.toggle')->middleware('permission:physiotherapy.update');
+        Route::get('/packages', [$pt, 'packages'])->name('admin.physiotherapy.packages')->middleware('permission:physiotherapy.view');
+        Route::post('/packages', [$pt, 'storePackage'])->name('admin.physiotherapy.packages.store')->middleware('permission:physiotherapy.update');
+        Route::post('/packages/{package}', [$pt, 'updatePackage'])->name('admin.physiotherapy.packages.update')->middleware('permission:physiotherapy.update');
+        Route::post('/packages/{package}/toggle', [$pt, 'togglePackage'])->name('admin.physiotherapy.packages.toggle')->middleware('permission:physiotherapy.update');
         Route::get('/settings', [$pt, 'settings'])->name('admin.physiotherapy.settings')->middleware('permission:physiotherapy.view');
         Route::post('/settings', [$pt, 'updateSettings'])->name('admin.physiotherapy.settings.update')->middleware('permission:physiotherapy.update');
     });

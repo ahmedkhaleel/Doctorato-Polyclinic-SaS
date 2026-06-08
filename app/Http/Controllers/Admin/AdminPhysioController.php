@@ -122,6 +122,51 @@ class AdminPhysioController extends Controller
         return back()->with('success', 'Exercise updated.');
     }
 
+    public function packages(): Response
+    {
+        $packages = \App\Models\PhysioPackage::orderBy('total_sessions')
+            ->get(['id', 'name_ar', 'name_en', 'total_sessions', 'price', 'validity_days', 'is_active'])
+            ->map(fn ($p) => array_merge($p->toArray(), [
+                'active_purchases' => \App\Models\PhysioPackagePurchase::where('package_id', $p->id)->where('status', 'active')->count(),
+            ]));
+
+        return Inertia::render('Admin/Physiotherapy/Packages', ['packages' => $packages]);
+    }
+
+    public function storePackage(Request $request): RedirectResponse
+    {
+        $p = \App\Models\PhysioPackage::create($this->validatePackage($request) + ['is_active' => $request->boolean('is_active', true)]);
+        AuditLogger::log('created', $p, null, 'Created physio package');
+
+        return back()->with('success', 'Package added.');
+    }
+
+    public function updatePackage(Request $request, \App\Models\PhysioPackage $package): RedirectResponse
+    {
+        $package->update($this->validatePackage($request));
+        AuditLogger::log('updated', $package, null, 'Updated physio package');
+
+        return back()->with('success', 'Package updated.');
+    }
+
+    public function togglePackage(\App\Models\PhysioPackage $package): RedirectResponse
+    {
+        $package->update(['is_active' => ! $package->is_active]);
+
+        return back()->with('success', 'Package updated.');
+    }
+
+    private function validatePackage(Request $request): array
+    {
+        return $request->validate([
+            'name_ar' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
+            'total_sessions' => 'required|integer|min:1|max:200',
+            'price' => 'required|numeric|min:0',
+            'validity_days' => 'nullable|integer|min:0|max:1095',
+        ]);
+    }
+
     public function settings(): Response
     {
         return Inertia::render('Admin/Physiotherapy/Settings', [

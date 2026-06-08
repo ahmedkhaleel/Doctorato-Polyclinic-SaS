@@ -253,6 +253,51 @@ class ScaleEngine
                 ],
                 'flagItems' => [],
             ],
+            'womac' => [
+                'name_en' => 'WOMAC (Knee/Hip Osteoarthritis)',
+                'name_ar' => 'ووماك (خشونة الركبة/الورك)',
+                'module' => 'physiotherapy',
+                'higher_is_better' => false,
+                'mcid' => 12, // raw points (0–96)
+                'options' => [
+                    ['v' => 0, 'en' => 'None', 'ar' => 'لا شيء'],
+                    ['v' => 1, 'en' => 'Mild', 'ar' => 'بسيط'],
+                    ['v' => 2, 'en' => 'Moderate', 'ar' => 'متوسط'],
+                    ['v' => 3, 'en' => 'Severe', 'ar' => 'شديد'],
+                    ['v' => 4, 'en' => 'Extreme', 'ar' => 'بالغ'],
+                ],
+                'items' => array_map(fn ($en, $ar) => ['en' => $en, 'ar' => $ar], [
+                    // Pain (5)
+                    'Pain — walking on flat surface', 'Pain — going up/down stairs', 'Pain — at night in bed',
+                    'Pain — sitting or lying', 'Pain — standing upright',
+                    // Stiffness (2)
+                    'Stiffness — first thing in the morning', 'Stiffness — later in the day',
+                    // Physical function (17)
+                    'Difficulty — descending stairs', 'Difficulty — ascending stairs', 'Difficulty — rising from sitting',
+                    'Difficulty — standing', 'Difficulty — bending to floor', 'Difficulty — walking on flat',
+                    'Difficulty — getting in/out of car', 'Difficulty — going shopping', 'Difficulty — putting on socks',
+                    'Difficulty — rising from bed', 'Difficulty — taking off socks', 'Difficulty — lying in bed',
+                    'Difficulty — getting in/out of bath', 'Difficulty — sitting', 'Difficulty — getting on/off toilet',
+                    'Difficulty — heavy domestic duties', 'Difficulty — light domestic duties',
+                ], [
+                    'ألم — المشي على سطح مستوٍ', 'ألم — صعود/نزول الدرج', 'ألم — ليلاً في الفراش',
+                    'ألم — الجلوس أو الاستلقاء', 'ألم — الوقوف منتصباً',
+                    'تيبّس — أول الصباح', 'تيبّس — لاحقاً في اليوم',
+                    'صعوبة — نزول الدرج', 'صعوبة — صعود الدرج', 'صعوبة — النهوض من الجلوس',
+                    'صعوبة — الوقوف', 'صعوبة — الانحناء للأرض', 'صعوبة — المشي على مستوٍ',
+                    'صعوبة — الدخول/الخروج من السيارة', 'صعوبة — التسوّق', 'صعوبة — ارتداء الجوارب',
+                    'صعوبة — النهوض من الفراش', 'صعوبة — خلع الجوارب', 'صعوبة — الاستلقاء بالفراش',
+                    'صعوبة — الدخول/الخروج من الحمام', 'صعوبة — الجلوس', 'صعوبة — الجلوس/النهوض من المرحاض',
+                    'صعوبة — الأعمال المنزلية الثقيلة', 'صعوبة — الأعمال المنزلية الخفيفة',
+                ]),
+                'bands' => [
+                    [0, 24, 'Minimal', 'ضئيل'],
+                    [25, 48, 'Mild', 'خفيف'],
+                    [49, 72, 'Moderate', 'متوسط'],
+                    [73, 96, 'Severe', 'شديد'],
+                ],
+                'flagItems' => [],
+            ],
         ];
     }
 

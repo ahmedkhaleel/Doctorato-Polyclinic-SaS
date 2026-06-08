@@ -260,6 +260,7 @@ const navGroups = [
             { labelEn: 'Dashboard',  labelAr: 'لوحة التحكم', href: '/admin/physiotherapy',          icon: 'grid',     permission: 'physiotherapy.view' },
             { labelEn: 'Patients',   labelAr: 'المرضى',      href: '/admin/physiotherapy/patients', icon: 'users',    permission: 'physiotherapy.view' },
             { labelEn: 'Exercises',  labelAr: 'التمارين',    href: '/admin/physiotherapy/exercises', icon: 'activity', permission: 'physiotherapy.view' },
+            { labelEn: 'Packages',   labelAr: 'الباقات',     href: '/admin/physiotherapy/packages', icon: 'box',      permission: 'physiotherapy.view' },
             { labelEn: 'Settings',   labelAr: 'الإعدادات',   href: '/admin/physiotherapy/settings', icon: 'cog',      permission: 'physiotherapy.view' },
         ],
     },

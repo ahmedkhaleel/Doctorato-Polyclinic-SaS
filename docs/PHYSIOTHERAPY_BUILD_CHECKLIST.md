@@ -93,6 +93,13 @@ The PT-6 "full bookings" follow-ups have all shipped as the F-series:
   scoring mode; **QuickDASH** registered for physiotherapy (sum scales
   unaffected). Test: `PhysiotherapyQuickDashTest`.
 
-Still open (lower priority, additive): KOOS / WOMAC / PSFS instruments
-(PSFS needs patient-specific items, not a fixed list) and a dedicated admin
-package-catalog CRUD page (the catalog is seeded + editable via DB for now).
+- [x] **G-A** — admin **package-catalog CRUD** page (`/admin/physiotherapy/packages`,
+  create / edit / activate-toggle + active-enrollment counts) + sidebar nav.
+  Test: `PhysiotherapyAdminPackageTest`.
+- [x] **G-B** — **WOMAC** (knee/hip OA, 24 items × 0–4 → 0–96) registered as a
+  physiotherapy PROM. Test: `PhysiotherapyWomacTest`.
+
+Still open (lower priority, additive): KOOS and PSFS instruments — KOOS is
+multi-subscale and PSFS uses patient-specific (non-fixed) items, so both need a
+small ScaleEngine extension (per-subscale / dynamic items) beyond the current
+single-score model.
