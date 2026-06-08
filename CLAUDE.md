@@ -41,8 +41,8 @@ Patient routes are the only ones under a `{locale}` prefix — see the
 
 - **ModuleManager** (`app/Services/ModuleManager.php`) — feature flags per
   clinic module. Slugs: `derma`, `dental`, `pediatric`, `obgyn`,
-  `psychiatry`, `neurology`, `telemedicine`.
-  `MEDICAL_MODULES = ['derma','dental','pediatric','obgyn','psychiatry','neurology']`
+  `psychiatry`, `neurology`, `physiotherapy`, `telemedicine`.
+  `MEDICAL_MODULES = ['derma','dental','pediatric','obgyn','psychiatry','neurology','physiotherapy']`
   — only these have doctors/visits/bookings. Enable with `ModuleManager::enable('slug')`.
   OB/GYN module design + build notes: `docs/OBGYN_MODULE_PLAN.md`.
   Psychiatry & Neurology (built over a shared `App\Services\NeuroPsych` layer +
@@ -50,6 +50,16 @@ Patient routes are the only ones under a `{locale}` prefix — see the
   checklist `docs/NEUROPSYCH_BUILD_CHECKLIST.md`. Tests under
   `tests/Feature/Neuropsych/`. Psychotherapy notes + risk assessments are gated
   by a separate `{module}.view_sensitive` permission (heightened RBAC + audit).
+  Physiotherapy (ships **disabled**; teal `#0D9488`): design
+  `docs/PHYSIOTHERAPY_MODULE_PLAN.md`, build checklist
+  `docs/PHYSIOTHERAPY_BUILD_CHECKLIST.md`. Tests under `tests/Feature/Physio/`.
+  Clinical tier = `physio_assessments` (ROM/MMT/pain) + `physio_treatment_plans`
+  + `physio_sessions` (billed via `PhysioBillingService`) + `physio_exercise_prescriptions`
+  + `hep_adherence_logs` + shared `exercises` catalog. PROMs (ODI/NDI/LEFS) reuse
+  `ScaleEngine`/`ScaleResult`. `App\Services\Physio\RomNormatives` holds the AAOS
+  normal-ROM reference. Doctor cockpit + patient HEP portal + admin/secretary
+  front-desk all wired; booking types `physiotherapy_consultation` /
+  `physiotherapy_session`.
 
 - **Settings** (`app/Models/Setting.php`) — key/value table, used for
   everything runtime-configurable (clinic name, payment keys, Agora
@@ -133,7 +143,13 @@ Patient routes are the only ones under a `{locale}` prefix — see the
   - `ProgressRing` — animated circular gauge (e.g. derma plan %, vaccine coverage).
   - `CalendarHeatmap` — day-grid event frequency (e.g. seizure activity).
   - `BodyMap` — anterior/posterior silhouette, read-only markers or `editable`
-    click-to-add (derma lesion map; backed by `derma_lesions`).
+    click-to-add (derma lesion map; backed by `derma_lesions`; physio pain map).
+  - `RadialChart` — ROM spider/radar (patient polygon vs normal-ROM reference)
+    with a horizontal actual-vs-normal bar fallback for <3 motions (physio).
+  - `StrengthGrid` — MMT 0–5 grid, red→green grade scale (physio muscle testing).
+  - `Body3D` — OPTIONAL three.js pain-mapping body; three is **dynamically
+    imported** so it ships in its own lazy chunk (never the main bundle, like
+    VideoRoom/Agora) and degrades to `BodyMap` when WebGL is unavailable.
   - **To add a clinical visual to a specialty:** prefer reusing a primitive
     above; load its data in the relevant controller (visit panel via
     `DoctorVisitController`/`Admin\VisitController` module block, or the specialty
@@ -182,7 +198,7 @@ composer deploy              # git pull + composer install --no-dev + migrate + 
 | `php artisan media:migrate-phi [--dry-run] [--keep-public]` | Auto on deploy + on-demand. Moves sensitive PHI files (x-rays, photos, documents, consents, insurance cards, patient photos, chat) from the public disk to the private disk. Idempotent; serving has a public-disk fallback so it never breaks display. (S1) |
 | `php artisan pricing:audit [--json]`     | On-demand, READ-ONLY. Prints the resolved consultation pricing for every medical module. Run before/after any pricing change and diff. (ADR-001) |
 | `php artisan pricing:backfill-module-settings [--dry-run]` | On-demand. Copies legacy `Setting` fees into `module_settings` (idempotent upsert). Read path is unchanged; verify with `pricing:audit --json` before/after. (ADR-001 Phase 1) |
-| `php artisan db:seed --class=Database\\Seeders\\SpecialtyDoctorDemoSeeder` | On-demand, demo/staging only. Creates one demo doctor login per medical specialty (`demo.<module>@doctorato.net`, password `DEMO_PASSWORD`) — each owning a complete self-contained data set: patients, bookings (past + upcoming), completed visits with commissions, invoices + payments, and rich specialty clinical records (dental charts/plans/treatments/xrays, derma plans/sessions, pediatric growth/vaccinations, obgyn pregnancies/labs, neuropsych encounters/scales/meds/risk). Idempotent (skips a module whose demo doctor already has visits). NOT in the auto-deploy path — `deploy.yml` never runs `db:seed`. |
+| `php artisan db:seed --class=Database\\Seeders\\SpecialtyDoctorDemoSeeder` | On-demand, demo/staging only. Creates one demo doctor login per medical specialty (`demo.<module>@doctorato.net`, password `DEMO_PASSWORD`) — each owning a complete self-contained data set: patients, bookings (past + upcoming), completed visits with commissions, invoices + payments, and rich specialty clinical records (dental charts/plans/treatments/xrays, derma plans/sessions, pediatric growth/vaccinations, obgyn pregnancies/labs, neuropsych encounters/scales/meds/risk, physiotherapy plan/assessment(ROM/MMT/pain)/sessions/HEP/ODI-PROMs). Idempotent (skips a module whose demo doctor already has visits). NOT in the auto-deploy path — `deploy.yml` never runs `db:seed`. |
 
 **Pricing source (ADR-001):** `module_settings` is now the primary store for all
 medical-module consultation fees, with a fallback to the legacy global `Setting`

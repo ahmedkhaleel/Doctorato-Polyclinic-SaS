@@ -57,6 +57,7 @@ class SpecialtyDoctorDemoSeeder extends Seeder
             ['m' => 'obgyn', 'ar' => 'النساء والتوليد', 'spEn' => 'OB/GYN', 'spAr' => 'نساء وتوليد', 'name' => 'Huda Obgyn', 'fee' => 350, 'female' => true, 'type' => 'obgyn_consultation'],
             ['m' => 'psychiatry', 'ar' => 'الطب النفسي', 'spEn' => 'Psychiatry', 'spAr' => 'طب نفسي', 'name' => 'Faisal Psych', 'fee' => 350, 'female' => false, 'type' => 'psychiatry_consultation'],
             ['m' => 'neurology', 'ar' => 'المخ والأعصاب', 'spEn' => 'Neurology', 'spAr' => 'مخ وأعصاب', 'name' => 'Maya Neuro', 'fee' => 350, 'female' => false, 'type' => 'neurology_consultation'],
+            ['m' => 'physiotherapy', 'ar' => 'العلاج الطبيعي', 'spEn' => 'Physiotherapy', 'spAr' => 'علاج طبيعي', 'name' => 'Tarek Physio', 'fee' => 250, 'female' => false, 'type' => 'physiotherapy_consultation'],
         ];
 
         foreach ($modules as $i => $cfg) {
@@ -227,6 +228,53 @@ class SpecialtyDoctorDemoSeeder extends Seeder
                 if ($module === 'psychiatry') {
                     \App\Models\RiskAssessment::create(['patient_id' => $patient->id, 'doctor_id' => $doctor->id, 'type' => 'suicide', 'tool' => 'c-ssrs', 'answers' => [], 'risk_level' => 'low', 'safety_plan' => 'Demo safety plan', 'is_active' => true, 'assessed_at' => $date]);
                 }
+                break;
+
+            case 'physiotherapy':
+                // Plan of care + progress.
+                $plan = \App\Models\PhysioTreatmentPlan::create([
+                    'patient_id' => $patient->id, 'doctor_id' => $doctor->id,
+                    'title_ar' => 'إعادة تأهيل أسفل الظهر', 'title_en' => 'Low-back rehab',
+                    'goals' => [['type' => 'pain', 'baseline' => 8, 'target' => 2]], 'modalities' => ['tens', 'manual', 'exercise'],
+                    'frequency' => '3x/week', 'duration_weeks' => 4, 'estimated_sessions' => 12, 'completed_sessions' => 4,
+                    'status' => 'in_progress', 'start_date' => now()->subWeeks(2)->toDateString(),
+                ]);
+
+                // Assessment with ROM / MMT / pain map.
+                $assessment = \App\Models\PhysioAssessment::create([
+                    'patient_id' => $patient->id, 'doctor_id' => $doctor->id, 'assessment_date' => $date->toDateString(),
+                    'subjective' => 'Mechanical LBP, 3 weeks', 'objective' => 'Reduced lumbar flexion', 'diagnosis' => 'Mechanical low back pain', 'completed_at' => $date,
+                ]);
+                foreach ([['knee', 'flexion', 100, 135], ['hip', 'flexion', 95, 120], ['lumbar', 'flexion', 40, 60]] as [$j, $mo, $a, $n]) {
+                    $assessment->romMeasurements()->create(['patient_id' => $patient->id, 'doctor_id' => $doctor->id, 'joint' => $j, 'motion' => $mo, 'side' => 'right', 'arom' => $a, 'normal_ref' => $n, 'recorded_at' => $date->toDateString()]);
+                }
+                $assessment->strengthTests()->create(['patient_id' => $patient->id, 'doctor_id' => $doctor->id, 'muscle_group' => 'quadriceps', 'side' => 'right', 'grade' => 4, 'recorded_at' => $date->toDateString()]);
+                $assessment->painPoints()->create(['patient_id' => $patient->id, 'doctor_id' => $doctor->id, 'view' => 'back', 'x' => 50, 'y' => 55, 'intensity' => 7, 'pain_type' => 'aching', 'recorded_at' => $date->toDateString()]);
+
+                // A couple of billable sessions with improving pain.
+                foreach ([[1, 7, 5], [2, 6, 3]] as [$num, $pb, $pa]) {
+                    \App\Models\PhysioSession::create([
+                        'patient_id' => $patient->id, 'doctor_id' => $doctor->id, 'treatment_plan_id' => $plan->id,
+                        'session_number' => $num, 'session_date' => now()->subDays(10 - $num * 3)->toDateString(),
+                        'modalities' => [['type' => 'tens', 'params' => '80Hz/20min']], 'attended' => true,
+                        'pain_before' => $pb, 'pain_after' => $pa, 'cost' => 200, 'completed_at' => $date,
+                    ]);
+                }
+
+                // HEP prescription + an adherence log.
+                $ex = \App\Models\Exercise::query()->where('is_active', true)->first();
+                if ($ex) {
+                    $rx = \App\Models\PhysioExercisePrescription::create([
+                        'patient_id' => $patient->id, 'doctor_id' => $doctor->id, 'treatment_plan_id' => $plan->id,
+                        'exercise_id' => $ex->id, 'sets' => 3, 'reps' => 12, 'hold_sec' => 20, 'frequency' => 'daily',
+                        'status' => 'active', 'prescribed_at' => now()->subWeek()->toDateString(),
+                    ]);
+                    \App\Models\HepAdherenceLog::create(['patient_id' => $patient->id, 'prescription_id' => $rx->id, 'log_date' => now()->subDay()->toDateString(), 'done' => true, 'pain_after' => 3]);
+                }
+
+                // PROMs (ODI) showing improvement across two timepoints.
+                \App\Models\ScaleResult::create(['patient_id' => $patient->id, 'scale_key' => 'odi', 'answers' => array_fill(0, 10, 3), 'score' => 30, 'severity' => 'Severe disability', 'entered_by' => 'doctor', 'taken_at' => now()->subWeeks(3)]);
+                \App\Models\ScaleResult::create(['patient_id' => $patient->id, 'scale_key' => 'odi', 'answers' => array_fill(0, 10, 1), 'score' => 18, 'severity' => 'Moderate disability', 'entered_by' => 'doctor', 'taken_at' => now()]);
                 break;
         }
     }

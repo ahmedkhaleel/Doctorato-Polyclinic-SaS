@@ -19,7 +19,7 @@ class SpecialtyDoctorDemoSeederTest extends TestCase
 {
     use RefreshDatabase;
 
-    private array $modules = ['dental', 'derma', 'pediatric', 'obgyn', 'psychiatry', 'neurology'];
+    private array $modules = ['dental', 'derma', 'pediatric', 'obgyn', 'psychiatry', 'neurology', 'physiotherapy'];
 
     public function test_seeds_a_login_and_full_dataset_per_specialty(): void
     {
@@ -51,6 +51,10 @@ class SpecialtyDoctorDemoSeederTest extends TestCase
         $this->assertGreaterThan(0, \App\Models\Pregnancy::count());
         $this->assertGreaterThan(0, \App\Models\ScaleResult::where('scale_key', 'phq9')->count());
         $this->assertGreaterThan(0, \App\Models\PediatricGrowthRecord::count());
+        // Physiotherapy demo data: plan, assessment, sessions, HEP + ODI PROMs.
+        $this->assertGreaterThan(0, \App\Models\PhysioTreatmentPlan::count());
+        $this->assertGreaterThan(0, \App\Models\PhysioSession::count());
+        $this->assertGreaterThan(0, \App\Models\ScaleResult::where('scale_key', 'odi')->count());
     }
 
     public function test_is_idempotent(): void
