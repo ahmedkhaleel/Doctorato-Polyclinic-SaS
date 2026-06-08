@@ -282,8 +282,19 @@ const totalRecorded = computed(() => {
 });
 
 // ─── Helpers ──────────────────────────────────────────────
+// Map common synonyms / legacy values onto the known conditionTheme keys so the
+// odontogram never reads an undefined theme (which would crash the whole chart).
+const conditionAliases = { caries: 'decayed', cavity: 'decayed', restored: 'filled', rct: 'root_canal', sound: 'healthy' };
+
+function normalizeCondition(c) {
+    const k = conditionAliases[c] || c;
+    return conditionTheme[k] ? k : 'healthy';
+}
+
 function getToothData(num) {
-    return props.chart[num] || { tooth_number: num, condition: 'healthy', status: 'present', surfaces: [] };
+    const raw = props.chart[num] || { tooth_number: num, condition: 'healthy', status: 'present', surfaces: [] };
+    // Guard: an unknown condition must never reach the template (conditionTheme[...].fill).
+    return { ...raw, condition: normalizeCondition(raw.condition || 'healthy') };
 }
 
 function getToothType(num) { return toothTypeMap[num] || 'premolar1'; }

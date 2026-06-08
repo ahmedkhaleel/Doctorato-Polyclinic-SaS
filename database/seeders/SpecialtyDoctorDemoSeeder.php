@@ -189,8 +189,8 @@ class SpecialtyDoctorDemoSeeder extends Seeder
     {
         switch ($module) {
             case 'dental':
-                foreach ([11, 12, 36] as $t) {
-                    \App\Models\DentalChart::create(['patient_id' => $patient->id, 'tooth_number' => $t, 'condition' => 'caries', 'status' => 'active', 'notes' => 'Demo']);
+                foreach ([[11, 'decayed'], [12, 'filled'], [36, 'crown']] as [$t, $cond]) {
+                    \App\Models\DentalChart::create(['patient_id' => $patient->id, 'tooth_number' => $t, 'condition' => $cond, 'status' => 'active', 'notes' => 'Demo']);
                 }
                 $plan = \App\Models\DentalTreatmentPlan::create(['patient_id' => $patient->id, 'doctor_id' => $doctor->id, 'title_ar' => 'خطة علاج الأسنان', 'title_en' => 'Dental Plan', 'description' => 'Demo plan', 'estimated_cost' => 1200, 'status' => 'in_progress', 'estimated_sessions' => 4, 'completed_sessions' => $isPast ? 2 : 0]);
                 \App\Models\DentalTreatment::create(['patient_id' => $patient->id, 'doctor_id' => $doctor->id, 'treatment_plan_id' => $plan->id, 'tooth_number' => 11, 'treatment_type' => 'filling', 'description' => 'Composite filling', 'cost' => 300, 'status' => $isPast ? 'completed' : 'planned']);
