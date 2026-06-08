@@ -318,6 +318,7 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
         Route::post('/patients/{patient}/exercises', [$pt, 'prescribeExercise'])->middleware('permission:physiotherapy.create')->name('doctor.physiotherapy.exercises.store');
         Route::post('/exercises/{prescription}/stop', [$pt, 'removeExercise'])->middleware('permission:physiotherapy.update')->name('doctor.physiotherapy.exercises.stop');
         Route::post('/patients/{patient}/scales', [$pt, 'storeScale'])->middleware('permission:physiotherapy.update')->name('doctor.physiotherapy.scales.store');
+        Route::post('/patients/{patient}/session-series', [$pt, 'scheduleSeries'])->middleware('permission:physiotherapy.create')->name('doctor.physiotherapy.session-series.store');
     });
 
     // ─── Psychiatry & Neurology (shared NeuropsychEncounterController) ──

@@ -479,6 +479,62 @@ class DoctorPhysioController extends BaseDoctorController
         return back()->with('success', $this->msg('Session recorded.', 'تم تسجيل الجلسة.'));
     }
 
+    /**
+     * Schedule a recurring series of physiotherapy_session bookings (weekly by
+     * default) for a patient — e.g. "3x/week for 4 weeks". Each occurrence is a
+     * real booking created through the tested BookingWorkflowService, so it shows
+     * up in schedules + the secretary front desk and bills like any session.
+     */
+    public function scheduleSeries(Request $request, Patient $patient): RedirectResponse
+    {
+        $doctor = $this->doctor($request);
+
+        $data = $request->validate([
+            'start_date' => 'required|date|after_or_equal:today',
+            'start_time' => 'required|date_format:H:i',
+            'occurrences' => 'required|integer|min:1|max:60',
+            'interval_days' => 'nullable|integer|min:1|max:30',
+            'treatment_plan_id' => 'nullable|integer|exists:physio_treatment_plans,id',
+        ]);
+
+        $planId = $data['treatment_plan_id'] ?? null;
+        $interval = (int) ($data['interval_days'] ?? 7);
+        $fee = (float) \App\Services\ModuleManager::getSetting('physiotherapy', 'session_fee', 0);
+        $durationMin = (int) \App\Services\ModuleManager::getSetting('physiotherapy', 'session_duration', 45);
+        $userId = $request->user()->id;
+        $workflow = app(\App\Services\BookingWorkflowService::class);
+
+        $start = \Illuminate\Support\Carbon::parse($data['start_date']);
+        $created = 0;
+        for ($i = 0; $i < (int) $data['occurrences']; $i++) {
+            $date = $start->copy()->addDays($interval * $i)->toDateString();
+            $startTime = $data['start_time'];
+            $endTime = \Illuminate\Support\Carbon::parse($date.' '.$startTime)->addMinutes($durationMin)->format('H:i');
+
+            $workflow->createFromSecretary([
+                'patient_id' => $patient->id,
+                'full_name' => $patient->full_name,
+                'phone' => $patient->phone,
+                'booking_type' => 'physiotherapy_session',
+                'source' => 'doctor',
+                'notes' => $planId ? "Plan #{$planId} — session ".($i + 1) : null,
+                'services' => [[
+                    'doctor_id' => $doctor->id,
+                    'unit_price' => $fee,
+                    'sessions_count' => 1,
+                    'appointments' => [[
+                        'date' => $date, 'start_time' => $startTime, 'end_time' => $endTime, 'doctor_id' => $doctor->id,
+                    ]],
+                ]],
+            ], $userId);
+            $created++;
+        }
+
+        AuditLogger::log('created', $patient, ['occurrences' => $created], 'Scheduled physiotherapy session series');
+
+        return back()->with('success', $this->msg("Scheduled {$created} sessions.", "تم جدولة {$created} جلسة."));
+    }
+
     /** Active/all plans across this doctor's caseload. */
     public function treatmentPlans(Request $request): Response
     {

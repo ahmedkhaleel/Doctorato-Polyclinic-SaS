@@ -120,6 +120,13 @@ function stopRx(rx) {
 }
 const exName = (ex) => (ex ? (isRtl.value ? ex.name_ar : ex.name_en) : '');
 
+// ── Recurring session series ──
+const showSeriesForm = ref(false);
+const seriesForm = useForm({ treatment_plan_id: '', start_date: new Date().toISOString().slice(0, 10), start_time: '10:00', occurrences: 12, interval_days: 7 });
+function submitSeries() {
+    seriesForm.post(route('doctor.physiotherapy.session-series.store', props.patient.id), { preserveScroll: true, onSuccess: () => { showSeriesForm.value = false; } });
+}
+
 // ── PROMs (ODI/NDI/LEFS) ──
 const showPromForm = ref(false);
 const promForm = useForm({ scale_key: '', answers: {} });
@@ -164,6 +171,7 @@ const promName = (def) => (isRtl.value ? def.name_ar : def.name_en);
                 <button @click="showPlanForm = !showPlanForm" class="px-4 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">+ {{ t('Plan', 'خطة') }}</button>
                 <button @click="showRxForm = !showRxForm" class="px-4 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">+ {{ t('Exercise', 'تمرين') }}</button>
                 <button @click="showPromForm = !showPromForm; tab = 'assessments'" class="px-4 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">+ {{ t('PROM', 'مقياس') }}</button>
+                <button @click="showSeriesForm = !showSeriesForm" class="px-4 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">+ {{ t('Series', 'سلسلة') }}</button>
             </div>
         </div>
 
@@ -205,6 +213,31 @@ const promName = (def) => (isRtl.value ? def.name_ar : def.name_en);
             <div class="flex justify-end gap-2">
                 <button type="button" @click="showSessionForm = false" class="px-4 py-2 text-sm text-gray-500">{{ t('Cancel', 'إلغاء') }}</button>
                 <button type="submit" :disabled="sessionForm.processing" class="px-5 py-2 rounded-xl text-sm font-semibold text-white" :style="{ backgroundColor: ACCENT }">{{ t('Save', 'حفظ') }}</button>
+            </div>
+        </form>
+
+        <!-- Recurring session series form -->
+        <form v-if="showSeriesForm" @submit.prevent="submitSeries" class="bg-white rounded-2xl p-5 shadow-sm border border-teal-100 space-y-3">
+            <h3 class="font-semibold text-gray-800">{{ t('Schedule Session Series', 'جدولة سلسلة جلسات') }}</h3>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                <select v-model="seriesForm.treatment_plan_id" class="form-in">
+                    <option value="">{{ t('No plan', 'بدون خطة') }}</option>
+                    <option v-for="p in activePlans" :key="p.id" :value="p.id">{{ (isRtl ? p.title_ar : p.title_en) || ('#' + p.id) }}</option>
+                </select>
+                <input v-model="seriesForm.start_date" type="date" class="form-in" />
+                <input v-model="seriesForm.start_time" type="time" class="form-in" />
+                <input v-model.number="seriesForm.occurrences" type="number" min="1" max="60" :placeholder="t('Occurrences', 'عدد الجلسات')" class="form-in" />
+                <select v-model.number="seriesForm.interval_days" class="form-in">
+                    <option :value="7">{{ t('Weekly', 'أسبوعي') }}</option>
+                    <option :value="3">{{ t('2x/week', 'مرتين/أسبوع') }}</option>
+                    <option :value="2">{{ t('3x/week', '3 مرات/أسبوع') }}</option>
+                    <option :value="1">{{ t('Daily', 'يومي') }}</option>
+                </select>
+            </div>
+            <p class="text-xs text-gray-400">{{ t('Creates bookable session appointments from the start date.', 'تنشئ مواعيد جلسات قابلة للحجز ابتداءً من تاريخ البدء.') }}</p>
+            <div class="flex justify-end gap-2">
+                <button type="button" @click="showSeriesForm = false" class="px-4 py-2 text-sm text-gray-500">{{ t('Cancel', 'إلغاء') }}</button>
+                <button type="submit" :disabled="seriesForm.processing" class="px-5 py-2 rounded-xl text-sm font-semibold text-white" :style="{ backgroundColor: ACCENT }">{{ t('Schedule', 'جدولة') }}</button>
             </div>
         </form>
 
