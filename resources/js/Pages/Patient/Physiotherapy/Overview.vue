@@ -19,6 +19,7 @@ const props = defineProps({
     prescriptions: { type: Array, default: () => [] },
     adherence: { type: Array, default: () => [] },
     recentSessions: { type: Array, default: () => [] },
+    packages: { type: Array, default: () => [] },
 });
 
 const form = useForm({ prescription_id: null, done: true });
@@ -64,6 +65,14 @@ const doneCount = computed(() => props.prescriptions.filter((r) => r.done_today)
                 <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
                     <h2 class="font-semibold text-gray-800 mb-3 text-sm">{{ t('Adherence (12 weeks)', 'الالتزام (12 أسبوع)') }}</h2>
                     <CalendarHeatmap :events="adherence" :weeks="13" :color="ACCENT" :is-rtl="isRtl" />
+                </div>
+
+                <div v-if="packages.length" class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                    <h2 class="font-semibold text-gray-800 mb-3 text-sm">{{ t('My Packages', 'باقاتي') }}</h2>
+                    <div v-for="(p, i) in packages" :key="i" class="flex items-center justify-between text-sm py-1">
+                        <span class="text-gray-700">{{ isRtl ? p.name_ar : p.name_en }}</span>
+                        <span class="text-xs"><span class="font-bold" :style="{ color: ACCENT }">{{ p.sessions_remaining }}</span> / {{ p.total_sessions }} {{ t('left', 'متبقٍ') }}</span>
+                    </div>
                 </div>
             </div>
 

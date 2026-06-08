@@ -23,6 +23,8 @@ const props = defineProps({
     prescriptions: { type: Array, default: () => [] },
     promCatalog: { type: Array, default: () => [] },
     scaleResults: { type: Array, default: () => [] },
+    packageCatalog: { type: Array, default: () => [] },
+    packages: { type: Array, default: () => [] },
 });
 
 const tab = ref('overview');
@@ -78,7 +80,7 @@ function setPlanStatus(plan, status) {
 }
 
 // ── Session form ──
-const sessionForm = useForm({ treatment_plan_id: '', session_date: new Date().toISOString().slice(0, 10), pain_before: null, pain_after: null, modalities: '', techniques: '', soap: '', cost: null, attended: true, home_visit: false, bill: true });
+const sessionForm = useForm({ treatment_plan_id: '', package_purchase_id: '', session_date: new Date().toISOString().slice(0, 10), pain_before: null, pain_after: null, modalities: '', techniques: '', soap: '', cost: null, attended: true, home_visit: false, bill: true });
 function submitSession() {
     sessionForm.transform((d) => ({ ...d, modalities: d.modalities ? d.modalities.split(',').map((x) => x.trim()).filter(Boolean) : [] }))
         .post(route('doctor.physiotherapy.sessions.store', props.patient.id), { preserveScroll: true, onSuccess: () => { sessionForm.reset('pain_before', 'pain_after', 'modalities', 'techniques', 'soap', 'cost'); showSessionForm.value = false; } });
@@ -119,6 +121,15 @@ function stopRx(rx) {
     useForm({}).post(route('doctor.physiotherapy.exercises.stop', rx.id), { preserveScroll: true });
 }
 const exName = (ex) => (ex ? (isRtl.value ? ex.name_ar : ex.name_en) : '');
+
+// ── Prepaid packages ──
+const usablePackages = computed(() => props.packages.filter((p) => p.is_usable));
+const showPackageForm = ref(false);
+const packageForm = useForm({ package_id: '' });
+function submitPackage() {
+    packageForm.post(route('doctor.physiotherapy.packages.store', props.patient.id), { preserveScroll: true, onSuccess: () => { packageForm.reset(); showPackageForm.value = false; } });
+}
+const pkgName = (p) => (p?.package ? (isRtl.value ? p.package.name_ar : p.package.name_en) : t('Package', 'باقة'));
 
 // ── Recurring session series ──
 const showSeriesForm = ref(false);
@@ -172,6 +183,7 @@ const promName = (def) => (isRtl.value ? def.name_ar : def.name_en);
                 <button @click="showRxForm = !showRxForm" class="px-4 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">+ {{ t('Exercise', 'تمرين') }}</button>
                 <button @click="showPromForm = !showPromForm; tab = 'assessments'" class="px-4 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">+ {{ t('PROM', 'مقياس') }}</button>
                 <button @click="showSeriesForm = !showSeriesForm" class="px-4 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">+ {{ t('Series', 'سلسلة') }}</button>
+                <button @click="showPackageForm = !showPackageForm" class="px-4 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">+ {{ t('Package', 'باقة') }}</button>
             </div>
         </div>
 
@@ -208,6 +220,10 @@ const promName = (def) => (isRtl.value ? def.name_ar : def.name_en);
                 <input v-model.number="sessionForm.cost" type="number" min="0" :placeholder="t('Cost', 'التكلفة')" class="form-in" />
                 <label class="flex items-center gap-2 text-sm text-gray-600"><input v-model="sessionForm.bill" type="checkbox" class="rounded" /> {{ t('Bill', 'فوترة') }}</label>
                 <label class="flex items-center gap-2 text-sm text-gray-600"><input v-model="sessionForm.home_visit" type="checkbox" class="rounded" /> {{ t('Home visit', 'زيارة منزلية') }}</label>
+                <select v-if="usablePackages.length" v-model="sessionForm.package_purchase_id" class="form-in md:col-span-2">
+                    <option value="">{{ t('No package', 'بدون باقة') }}</option>
+                    <option v-for="p in usablePackages" :key="p.id" :value="p.id">{{ pkgName(p) }} ({{ p.sessions_remaining }} {{ t('left', 'متبقٍ') }})</option>
+                </select>
             </div>
             <textarea v-model="sessionForm.soap" :placeholder="t('SOAP note', 'ملاحظة SOAP')" rows="2" class="form-in w-full"></textarea>
             <div class="flex justify-end gap-2">
@@ -215,6 +231,33 @@ const promName = (def) => (isRtl.value ? def.name_ar : def.name_en);
                 <button type="submit" :disabled="sessionForm.processing" class="px-5 py-2 rounded-xl text-sm font-semibold text-white" :style="{ backgroundColor: ACCENT }">{{ t('Save', 'حفظ') }}</button>
             </div>
         </form>
+
+        <!-- Sell package form -->
+        <form v-if="showPackageForm" @submit.prevent="submitPackage" class="bg-white rounded-2xl p-5 shadow-sm border border-teal-100 space-y-3">
+            <h3 class="font-semibold text-gray-800">{{ t('Sell Session Package', 'بيع باقة جلسات') }}</h3>
+            <div class="flex flex-wrap items-center gap-3">
+                <select v-model="packageForm.package_id" class="form-in flex-1 min-w-[14rem]" required>
+                    <option value="">{{ t('Select package…', 'اختر الباقة…') }}</option>
+                    <option v-for="p in packageCatalog" :key="p.id" :value="p.id">{{ isRtl ? p.name_ar : p.name_en }} — {{ p.total_sessions }} {{ t('sessions', 'جلسة') }} · {{ Number(p.price).toLocaleString() }}</option>
+                </select>
+                <button type="button" @click="showPackageForm = false" class="px-4 py-2 text-sm text-gray-500">{{ t('Cancel', 'إلغاء') }}</button>
+                <button type="submit" :disabled="packageForm.processing" class="px-5 py-2 rounded-xl text-sm font-semibold text-white" :style="{ backgroundColor: ACCENT }">{{ t('Sell', 'بيع') }}</button>
+            </div>
+        </form>
+
+        <!-- Active packages -->
+        <div v-if="packages.length" class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+            <h2 class="font-semibold text-gray-800 mb-3">{{ t('Session Packages', 'باقات الجلسات') }}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div v-for="p in packages" :key="p.id" class="border border-gray-100 rounded-xl p-3">
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm font-medium text-gray-800">{{ pkgName(p) }}</p>
+                        <span class="text-[11px] px-2 py-0.5 rounded-full" :class="p.is_usable ? 'bg-teal-50 text-teal-600' : 'bg-gray-100 text-gray-400'">{{ p.status }}</span>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">{{ p.sessions_used }}/{{ p.total_sessions }} {{ t('used', 'مستخدم') }} · {{ p.sessions_remaining }} {{ t('left', 'متبقٍ') }}</p>
+                </div>
+            </div>
+        </div>
 
         <!-- Recurring session series form -->
         <form v-if="showSeriesForm" @submit.prevent="submitSeries" class="bg-white rounded-2xl p-5 shadow-sm border border-teal-100 space-y-3">

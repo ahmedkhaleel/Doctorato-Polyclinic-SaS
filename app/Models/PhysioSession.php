@@ -12,7 +12,7 @@ class PhysioSession extends Model
     use BelongsToBranch;
 
     protected $fillable = [
-        'patient_id', 'doctor_id', 'treatment_plan_id', 'visit_id', 'invoice_id', 'invoice_item_id',
+        'patient_id', 'doctor_id', 'treatment_plan_id', 'package_purchase_id', 'visit_id', 'invoice_id', 'invoice_item_id',
         'session_number', 'session_date', 'soap', 'modalities', 'techniques', 'exercises_done',
         'attended', 'home_visit', 'pain_before', 'pain_after', 'cost', 'completed_at', 'notes',
     ];

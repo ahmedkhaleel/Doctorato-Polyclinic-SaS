@@ -70,11 +70,25 @@ class PatientPhysioController extends BasePatientController
             ->limit(8)
             ->get(['id', 'session_number', 'session_date', 'pain_before', 'pain_after', 'attended']);
 
+        $packages = \App\Models\PhysioPackagePurchase::where('patient_id', $patientId)
+            ->where('status', 'active')
+            ->with('package:id,name_ar,name_en')
+            ->latest('purchased_at')->get()
+            ->map(fn ($p) => [
+                'name_ar' => $p->package?->name_ar,
+                'name_en' => $p->package?->name_en,
+                'total_sessions' => (int) $p->total_sessions,
+                'sessions_used' => (int) $p->sessions_used,
+                'sessions_remaining' => $p->sessions_remaining,
+                'expires_at' => optional($p->expires_at)->toDateString(),
+            ]);
+
         return Inertia::render('Patient/Physiotherapy/Overview', [
             'plan' => $planData,
             'prescriptions' => $prescriptions,
             'adherence' => $adherence,
             'recentSessions' => $recentSessions,
+            'packages' => $packages,
         ]);
     }
 

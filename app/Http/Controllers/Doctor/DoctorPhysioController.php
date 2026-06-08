@@ -170,6 +170,14 @@ class DoctorPhysioController extends BaseDoctorController
             'prescriptions' => $prescriptions,
             'promCatalog' => $this->promCatalog(),
             'scaleResults' => $scaleResults,
+            'packageCatalog' => \App\Models\PhysioPackage::where('is_active', true)->orderBy('total_sessions')->get(['id', 'name_ar', 'name_en', 'total_sessions', 'price']),
+            'packages' => \App\Models\PhysioPackagePurchase::where('patient_id', $patient->id)
+                ->with('package:id,name_ar,name_en')
+                ->latest('purchased_at')->get()
+                ->map(fn ($p) => array_merge(
+                    $p->only(['id', 'total_sessions', 'sessions_used', 'amount', 'status', 'purchased_at', 'expires_at']),
+                    ['sessions_remaining' => $p->sessions_remaining, 'is_usable' => $p->is_usable, 'package' => $p->package]
+                )),
         ]);
     }
 
@@ -218,6 +226,55 @@ class DoctorPhysioController extends BaseDoctorController
         AuditLogger::log('created', $rx, ['patient_id' => $patient->id], 'Prescribed home exercise');
 
         return back()->with('success', $this->msg('Exercise prescribed.', 'تم وصف التمرين.'));
+    }
+
+    /** Sell a prepaid session package to a patient (creates the purchase + an invoice). */
+    public function purchasePackage(Request $request, Patient $patient): RedirectResponse
+    {
+        $doctorId = $this->doctorId($request);
+
+        $data = $request->validate([
+            'package_id' => 'required|integer|exists:physio_packages,id',
+        ]);
+
+        $package = \App\Models\PhysioPackage::findOrFail($data['package_id']);
+
+        DB::transaction(function () use ($package, $patient, $doctorId, $request) {
+            $invoice = \App\Models\Invoice::create([
+                'invoice_number' => \App\Models\Invoice::generateInvoiceNumber(),
+                'invoice_date' => now()->toDateString(),
+                'patient_id' => $patient->id,
+                'subtotal' => $package->price,
+                'discount_amount' => 0,
+                'tax_amount' => 0,
+                'total' => $package->price,
+                'module' => 'physiotherapy',
+                'created_by' => $request->user()->id,
+            ]);
+            $invoice->forceFill(['paid_amount' => 0, 'status' => 'unpaid'])->save();
+            \App\Models\InvoiceItem::create([
+                'invoice_id' => $invoice->id,
+                'description_en' => 'Physiotherapy package — '.$package->name_en,
+                'description_ar' => 'باقة علاج طبيعي — '.$package->name_ar,
+                'quantity' => 1, 'unit_price' => $package->price, 'discount' => 0, 'total' => $package->price,
+            ]);
+
+            \App\Models\PhysioPackagePurchase::create([
+                'patient_id' => $patient->id,
+                'package_id' => $package->id,
+                'invoice_id' => $invoice->id,
+                'doctor_id' => $doctorId,
+                'created_by' => $request->user()->id,
+                'total_sessions' => $package->total_sessions,
+                'sessions_used' => 0,
+                'amount' => $package->price,
+                'purchased_at' => now()->toDateString(),
+                'expires_at' => $package->validity_days ? now()->addDays($package->validity_days)->toDateString() : null,
+                'status' => 'active',
+            ]);
+        });
+
+        return back()->with('success', $this->msg('Package sold.', 'تم بيع الباقة.'));
     }
 
     /** Record a patient-reported outcome measure (ODI/NDI/LEFS) via ScaleEngine. */
@@ -412,6 +469,7 @@ class DoctorPhysioController extends BaseDoctorController
 
         $data = $request->validate([
             'treatment_plan_id' => 'nullable|integer|exists:physio_treatment_plans,id',
+            'package_purchase_id' => 'nullable|integer|exists:physio_package_purchases,id',
             'visit_id' => 'nullable|integer',
             'session_date' => 'required|date',
             'soap' => 'nullable|string|max:4000',
@@ -431,18 +489,26 @@ class DoctorPhysioController extends BaseDoctorController
         if (! empty($data['treatment_plan_id'])) {
             $plan = PhysioTreatmentPlan::where('patient_id', $patient->id)->find($data['treatment_plan_id']);
         }
+        // A session drawn against a prepaid package is covered (not billed).
+        $package = null;
+        if (! empty($data['package_purchase_id'])) {
+            $package = \App\Models\PhysioPackagePurchase::where('patient_id', $patient->id)->find($data['package_purchase_id']);
+        }
         $attended = $request->boolean('attended', true);
         $homeVisit = $request->boolean('home_visit', false);
 
-        $session = DB::transaction(function () use ($data, $patient, $doctorId, $plan, $attended, $homeVisit) {
+        $session = DB::transaction(function () use ($data, $patient, $doctorId, $plan, $package, $attended, $homeVisit) {
             $nextNumber = $plan
                 ? ((int) $plan->completed_sessions + 1)
                 : (PhysioSession::where('patient_id', $patient->id)->max('session_number') + 1);
+
+            $covered = $package && $package->is_usable;
 
             $session = PhysioSession::create([
                 'patient_id' => $patient->id,
                 'doctor_id' => $doctorId,
                 'treatment_plan_id' => $plan?->id,
+                'package_purchase_id' => $covered ? $package->id : null,
                 'visit_id' => $data['visit_id'] ?? null,
                 'session_number' => $nextNumber,
                 'session_date' => $data['session_date'],
@@ -454,7 +520,7 @@ class DoctorPhysioController extends BaseDoctorController
                 'home_visit' => $homeVisit,
                 'pain_before' => $data['pain_before'] ?? null,
                 'pain_after' => $data['pain_after'] ?? null,
-                'cost' => $data['cost'] ?? null,
+                'cost' => $covered ? 0 : ($data['cost'] ?? null),
                 'completed_at' => now(),
                 'notes' => $data['notes'] ?? null,
             ]);
@@ -467,10 +533,16 @@ class DoctorPhysioController extends BaseDoctorController
                 }
             }
 
+            // Draw the session down against the prepaid package.
+            if ($covered) {
+                $package->drawDown();
+            }
+
             return $session;
         });
 
-        if ($request->boolean('bill', true)) {
+        // Package-covered sessions are prepaid → never billed individually.
+        if (! $session->package_purchase_id && $request->boolean('bill', true)) {
             $this->billing->billSession($session);
         }
 

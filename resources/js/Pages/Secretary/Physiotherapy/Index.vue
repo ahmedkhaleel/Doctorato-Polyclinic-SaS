@@ -14,6 +14,7 @@ const props = defineProps({
     appointments: { type: Array, default: () => [] },
     roster: { type: Array, default: () => [] },
     plans: { type: Array, default: () => [] },
+    packages: { type: Array, default: () => [] },
     filters: { type: Object, default: () => ({}) },
 });
 
@@ -67,6 +68,17 @@ const docName = (d) => (d ? (isRtl.value ? d.name_ar : d.name_en) : '—');
                     </li>
                 </ul>
             </div>
+        </div>
+
+        <!-- Prepaid packages — remaining sessions -->
+        <div v-if="packages.length" class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+            <h2 class="font-semibold text-gray-800 mb-3">{{ t('Prepaid Packages — remaining sessions', 'الباقات المدفوعة — الجلسات المتبقية') }}</h2>
+            <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <li v-for="p in packages" :key="p.id" class="flex items-center justify-between text-sm border-b border-gray-50 pb-1">
+                    <span class="text-gray-700">{{ p.patient?.full_name }} <span class="text-xs text-gray-400">· {{ isRtl ? p.package?.name_ar : p.package?.name_en }}</span></span>
+                    <span class="text-xs"><span class="font-semibold" :style="{ color: ACCENT }">{{ p.sessions_remaining }}</span> / {{ p.total_sessions }} {{ t('left', 'متبقٍ') }}</span>
+                </li>
+            </ul>
         </div>
 
         <!-- Roster with outstanding balance -->

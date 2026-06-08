@@ -77,10 +77,25 @@ class SecretaryPhysioController extends BaseSecretaryController
                 'frequency' => $p->frequency,
             ]);
 
+        // Active prepaid packages with remaining sessions (scheduling info).
+        $packages = \App\Models\PhysioPackagePurchase::active()
+            ->with(['patient:id,full_name,phone', 'package:id,name_ar,name_en'])
+            ->latest('purchased_at')->limit(50)->get()
+            ->map(fn (\App\Models\PhysioPackagePurchase $p) => [
+                'id' => $p->id,
+                'patient' => $p->patient ? ['full_name' => $p->patient->full_name, 'phone' => $p->patient->phone] : null,
+                'package' => $p->package ? ['name_ar' => $p->package->name_ar, 'name_en' => $p->package->name_en] : null,
+                'total_sessions' => (int) $p->total_sessions,
+                'sessions_used' => (int) $p->sessions_used,
+                'sessions_remaining' => $p->sessions_remaining,
+                'expires_at' => optional($p->expires_at)->toDateString(),
+            ]);
+
         return Inertia::render('Secretary/Physiotherapy/Index', [
             'appointments' => $appointments,
             'roster' => $roster,
             'plans' => $plans,
+            'packages' => $packages,
             'filters' => ['search' => $search],
         ]);
     }
