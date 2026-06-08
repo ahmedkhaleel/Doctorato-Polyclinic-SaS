@@ -47,22 +47,55 @@ class DoctorDermaController extends BaseDoctorController
         $activePlans = DermaTreatmentPlan::where('doctor_id', $doctorId)
             ->whereColumn('completed_sessions', '<', 'estimated_sessions')->count();
 
-        $revenueMonth = Invoice::where('module', 'derma')
-            ->whereMonth('invoice_date', now()->month)->whereYear('invoice_date', now()->year)->sum('total');
+        $monthRevenue = fn ($m) => (float) Invoice::where('module', 'derma')
+            ->whereMonth('invoice_date', $m->month)->whereYear('invoice_date', $m->year)->sum('total');
+        $revenueMonth = $monthRevenue(now());
+        $revenuePrevMonth = $monthRevenue(now()->copy()->subMonthNoOverflow());
 
         $recentSessions = DermaSession::where('doctor_id', $doctorId)
             ->with('patient:id,full_name,photo')
             ->latest('completed_at')->limit(8)->get();
+
+        // 14-day session trend (derma + cosmetic) for the cockpit chart.
+        $start = now()->copy()->subDays(13)->startOfDay();
+        $dermaByDay = DermaSession::where('doctor_id', $doctorId)->whereNotNull('completed_at')
+            ->where('completed_at', '>=', $start)
+            ->selectRaw('DATE(completed_at) d, COUNT(*) c')->groupBy('d')->pluck('c', 'd');
+        $cosmeticByDay = CosmeticSession::where('doctor_id', $doctorId)
+            ->where('created_at', '>=', $start)
+            ->selectRaw('DATE(created_at) d, COUNT(*) c')->groupBy('d')->pluck('c', 'd');
+        $trend = [];
+        for ($i = 0; $i < 14; $i++) {
+            $day = $start->copy()->addDays($i)->toDateString();
+            $trend[] = ['x' => $i + 1, 'y' => (int) (($dermaByDay[$day] ?? 0) + ($cosmeticByDay[$day] ?? 0)), 'label' => $day];
+        }
+
+        // Resume plans: active courses with progress.
+        $resumePlans = DermaTreatmentPlan::where('doctor_id', $doctorId)
+            ->whereColumn('completed_sessions', '<', 'estimated_sessions')
+            ->with('patient:id,full_name,photo')
+            ->latest('updated_at')->limit(8)->get()
+            ->map(fn ($p) => [
+                'id' => $p->id,
+                'patient' => $p->patient ? $p->patient->only(['id', 'full_name', 'photo']) : null,
+                'title' => $p->title_en ?? $p->title_ar,
+                'completed_sessions' => (int) $p->completed_sessions,
+                'estimated_sessions' => (int) $p->estimated_sessions,
+                'progress' => $p->estimated_sessions > 0 ? min(100, (int) round($p->completed_sessions / $p->estimated_sessions * 100)) : 0,
+            ]);
 
         return Inertia::render('Doctor/Derma/Dashboard', [
             'stats' => [
                 'visits_today' => $todayVisits->count(),
                 'sessions_this_month' => $sessionsThisMonth,
                 'active_plans' => $activePlans,
-                'revenue_this_month' => (float) $revenueMonth,
+                'revenue_this_month' => $revenueMonth,
+                'revenue_prev_month' => $revenuePrevMonth,
             ],
             'todayVisits' => $todayVisits,
             'recentSessions' => $recentSessions,
+            'sessionsTrend' => $trend,
+            'resumePlans' => $resumePlans,
         ]);
     }
 

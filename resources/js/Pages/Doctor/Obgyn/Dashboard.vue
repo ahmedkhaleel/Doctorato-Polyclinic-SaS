@@ -74,7 +74,7 @@ function dueLabel(days) {
         <!-- Stat cards -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div v-for="(c, i) in cards" :key="c.key"
-                 class="relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 overflow-hidden transition-all duration-500"
+                 class="relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 overflow-hidden transition-all duration-500 hover:-translate-y-0.5 hover:shadow-md"
                  :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                  :style="{ transitionDelay: `${i * 80}ms` }">
                 <span class="absolute top-0 inset-x-0 h-1" :style="{ background: c.color }"></span>
