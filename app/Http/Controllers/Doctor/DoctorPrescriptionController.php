@@ -268,6 +268,44 @@ class DoctorPrescriptionController extends BaseDoctorController
         return response()->json($query->get());
     }
 
+    /**
+     * Read-only Rx-templates reference page for the doctor (admin manages them).
+     * The sidebar links here; dentalTemplates() above is the separate JSON list
+     * endpoint used by the prescription-writing flow.
+     */
+    public function dentalTemplatesPage(Request $request): Response
+    {
+        $type = $request->input('treatment_type');
+
+        $templates = DentalPrescriptionTemplate::active()
+            ->when($type, fn ($q) => $q->forTreatmentType($type))
+            ->with('items')
+            ->orderBy('sort_order')
+            ->get()
+            ->map(fn ($t) => [
+                'id' => $t->id,
+                'name_ar' => $t->name_ar,
+                'name_en' => $t->name_en,
+                'treatment_type' => $t->treatment_type,
+                'diagnosis_ar' => $t->diagnosis_ar,
+                'diagnosis_en' => $t->diagnosis_en,
+                'notes_ar' => $t->notes_ar,
+                'notes_en' => $t->notes_en,
+                'items' => $t->items->map(fn ($i) => $i->only([
+                    'medication_name', 'dosage', 'frequency', 'duration', 'instructions_ar', 'instructions_en',
+                ]))->values(),
+            ]);
+
+        $types = DentalPrescriptionTemplate::query()->distinct()
+            ->whereNotNull('treatment_type')->pluck('treatment_type')->values();
+
+        return Inertia::render('Doctor/Dental/PrescriptionTemplates/Index', [
+            'templates' => $templates,
+            'treatmentTypes' => $types,
+            'filters' => ['treatment_type' => $type],
+        ]);
+    }
+
     public function applyDentalTemplate(Request $request, DentalPrescriptionTemplate $template): RedirectResponse
     {
         $doctor = $this->doctor($request);

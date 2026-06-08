@@ -209,7 +209,8 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
         Route::get('/followups', [DoctorDentalFollowupController::class, 'index'])->name('doctor.dental.followups.index');
 
         // Dental Prescription Templates
-        Route::get('/prescription-templates', [DoctorPrescriptionController::class, 'dentalTemplates'])->name('doctor.dental-prescription-templates.index');
+        Route::get('/prescription-templates', [DoctorPrescriptionController::class, 'dentalTemplatesPage'])->name('doctor.dental-prescription-templates.index');
+        Route::get('/prescription-templates/list', [DoctorPrescriptionController::class, 'dentalTemplates'])->name('doctor.dental-prescription-templates.list');
         Route::post('/prescriptions/apply-template/{template}', [DoctorPrescriptionController::class, 'applyDentalTemplate'])->name('doctor.prescriptions.applyDentalTemplate');
     });
 
