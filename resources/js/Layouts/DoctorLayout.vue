@@ -132,6 +132,7 @@ const navGroups = computed(() => [
         key: 'psychiatry',
         moduleKey: 'psychiatry',
         items: [
+            { label: isRtl.value ? 'لوحة التحكم' : 'Dashboard', href: '/doctor/psychiatry', icon: 'grid' },
             { label: isRtl.value ? 'اللقاءات' : 'Encounters',  href: '/doctor/psychiatry/encounters',  icon: 'clipboard' },
             { label: isRtl.value ? 'الأدوية' : 'Medications',   href: '/doctor/psychiatry/medications', icon: 'pill' },
             { label: isRtl.value ? 'الروشتات الخاضعة' : 'Controlled Rx', href: '/doctor/psychiatry/controlled-rx', icon: 'pill', permission: 'psychiatry.view_sensitive' },
@@ -143,6 +144,7 @@ const navGroups = computed(() => [
         key: 'neurology',
         moduleKey: 'neurology',
         items: [
+            { label: isRtl.value ? 'لوحة التحكم' : 'Dashboard', href: '/doctor/neurology', icon: 'grid' },
             { label: isRtl.value ? 'اللقاءات' : 'Encounters',  href: '/doctor/neurology/encounters',  icon: 'clipboard' },
             { label: isRtl.value ? 'أدوات الأعصاب' : 'Neuro tools', href: '/doctor/neurology/neuro',  icon: 'grid' },
             { label: isRtl.value ? 'الأدوية' : 'Medications',   href: '/doctor/neurology/medications', icon: 'pill' },

@@ -328,6 +328,8 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
     // ─── Psychiatry & Neurology (shared NeuropsychEncounterController) ──
     foreach (['psychiatry', 'neurology'] as $npModule) {
         Route::prefix($npModule)->middleware("module:{$npModule}")->group(function () use ($npModule) {
+            Route::get('/', [\App\Http\Controllers\Doctor\NeuropsychDashboardController::class, 'index'])
+                ->defaults('npModule', $npModule)->name("doctor.{$npModule}.dashboard");
             Route::get('/encounters', [\App\Http\Controllers\Doctor\NeuropsychEncounterController::class, 'index'])
                 ->defaults('npModule', $npModule)->name("doctor.{$npModule}.encounters.index");
             Route::post('/encounters', [\App\Http\Controllers\Doctor\NeuropsychEncounterController::class, 'store'])
