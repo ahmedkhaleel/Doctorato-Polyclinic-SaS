@@ -168,6 +168,10 @@ const BOOKING_TYPES_BY_MODULE = {
         { key: 'neurology_consultation', icon: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z', color: 'sky' },
         { key: 'neurology_service', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', color: 'blue' },
     ],
+    physiotherapy: [
+        { key: 'physiotherapy_consultation', icon: 'M3 12h4l3 8 4-16 3 8h4', color: 'teal' },
+        { key: 'physiotherapy_session', icon: 'M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z', color: 'teal' },
+    ],
     derma: [
         { key: 'dermatology_consultation', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', color: 'blue' },
         { key: 'cosmetic_consultation', icon: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z', color: 'pink' },
@@ -198,7 +202,7 @@ const today = computed(() => {
 // Booking type helpers
 const isConsultation = computed(() => form.booking_type.endsWith('_consultation'));
 
-const isService = computed(() => ['service', 'dental_service', 'pediatric_service', 'obgyn_service', 'psychiatry_service', 'neurology_service'].includes(form.booking_type));
+const isService = computed(() => ['service', 'dental_service', 'pediatric_service', 'obgyn_service', 'psychiatry_service', 'neurology_service', 'physiotherapy_session'].includes(form.booking_type));
 
 // Filtered services based on selected category + module
 const filteredServices = computed(() => {

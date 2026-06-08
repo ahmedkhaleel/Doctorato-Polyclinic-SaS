@@ -32,6 +32,8 @@ const props = defineProps({
     obgynConsultationFee: { type: Number, default: 0 },
     psychiatryConsultationFee: { type: Number, default: 0 },
     neurologyConsultationFee: { type: Number, default: 0 },
+    physiotherapyConsultationFee: { type: Number, default: 0 },
+    physiotherapySessionFee: { type: Number, default: 0 },
     specialtyFees: { type: Object, default: () => ({}) },
 });
 
@@ -126,6 +128,7 @@ const isPediatricEnabled = computed(() => modules.value.pediatric?.enabled === t
 const isObgynEnabled = computed(() => modules.value.obgyn?.enabled === true);
 const isPsychiatryEnabled = computed(() => modules.value.psychiatry?.enabled === true);
 const isNeurologyEnabled = computed(() => modules.value.neurology?.enabled === true);
+const isPhysiotherapyEnabled = computed(() => modules.value.physiotherapy?.enabled === true);
 const isTelemedicineEnabled = computed(() => modules.value?.telemedicine?.enabled === true);
 
 const isConsultation = computed(() => bookingType.value.endsWith('_consultation'));
@@ -136,11 +139,13 @@ const consultationLabel = computed(() => {
         dermatology_consultation: 'استشارة جلدية', cosmetic_consultation: 'استشارة تجميلية',
         dental_consultation: 'استشارة أسنان', pediatric_consultation: 'استشارة أطفال',
         obgyn_consultation: 'استشارة نساء وتوليد', psychiatry_consultation: 'كشف نفسية', neurology_consultation: 'كشف أعصاب',
+        physiotherapy_consultation: 'تقييم علاج طبيعي', physiotherapy_session: 'جلسة علاج طبيعي',
     };
     const en = {
         dermatology_consultation: 'Dermatology Consultation', cosmetic_consultation: 'Cosmetic Consultation',
         dental_consultation: 'Dental Consultation', pediatric_consultation: 'Pediatric Consultation',
         obgyn_consultation: 'OB/GYN Consultation', psychiatry_consultation: 'Psychiatry Consultation', neurology_consultation: 'Neurology Consultation',
+        physiotherapy_consultation: 'Physiotherapy Assessment', physiotherapy_session: 'Physiotherapy Session',
     };
     return (isRtl.value ? ar : en)[bookingType.value] || (isRtl.value ? 'استشارة' : 'Consultation');
 });
@@ -160,7 +165,7 @@ const defaultMod = computed(() => page.props.defaultModule || 'derma');
 // default module.
 const currentModule = computed(() => {
     const t = bookingType.value;
-    for (const m of ['dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology']) {
+    for (const m of ['dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology', 'physiotherapy']) {
         if (t.startsWith(m)) return m;
     }
     return defaultMod.value;
@@ -259,6 +264,19 @@ const bookingTypeCards = computed(() => {
         });
     }
 
+    if (isPhysiotherapyEnabled.value) {
+        groups.push({
+            module: 'physiotherapy',
+            titleAr: 'العلاج الطبيعي',
+            titleEn: 'Physiotherapy',
+            color: '#0D9488',
+            items: [
+                { value: 'physiotherapy_consultation', titleAr: 'تقييم علاج طبيعي', titleEn: 'Physiotherapy Assessment', descAr: 'تقييم أولي ووضع خطة علاجية', descEn: 'Initial assessment & treatment plan', iconPath: 'M3 12h4l3 8 4-16 3 8h4' },
+                { value: 'physiotherapy_session', titleAr: 'جلسة علاج طبيعي', titleEn: 'Physiotherapy Session', descAr: 'جلسة علاجية وتأهيل', descEn: 'Treatment & rehabilitation session', iconPath: 'M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+            ],
+        });
+    }
+
     return groups;
 });
 
@@ -314,6 +332,8 @@ function getConsultationFeeForDoctor(doctorId) {
     if (bookingType.value === 'obgyn_consultation') return specialtyConsultationFee('obgyn', doctor);
     if (bookingType.value === 'psychiatry_consultation') return specialtyConsultationFee('psychiatry', doctor);
     if (bookingType.value === 'neurology_consultation') return specialtyConsultationFee('neurology', doctor);
+    if (bookingType.value === 'physiotherapy_consultation') return specialtyConsultationFee('physiotherapy', doctor) || (props.physiotherapyConsultationFee || 0);
+    if (bookingType.value === 'physiotherapy_session') return props.physiotherapySessionFee || 0;
     return 0;
 }
 
@@ -362,6 +382,10 @@ watch(bookingType, (newType) => {
         serviceRows[0].unit_price = newType === 'obgyn_consultation' ? (props.obgynConsultationFee || 0)
             : newType === 'psychiatry_consultation' ? (props.psychiatryConsultationFee || 0)
             : (props.neurologyConsultationFee || 0);
+    } else if (newType === 'physiotherapy_consultation' || newType === 'physiotherapy_session') {
+        serviceRows[0].sessions_count = 1;
+        serviceRows[0].service_id = '';
+        serviceRows[0].unit_price = newType === 'physiotherapy_session' ? (props.physiotherapySessionFee || 0) : (props.physiotherapyConsultationFee || 0);
     } else if (['obgyn_service', 'psychiatry_service', 'neurology_service'].includes(newType)) {
         serviceRows[0].sessions_count = 1;
         serviceRows[0].service_id = '';

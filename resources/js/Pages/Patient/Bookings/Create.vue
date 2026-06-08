@@ -87,6 +87,10 @@ const BOOKING_TYPES_BY_MODULE = computed(() => ({
         { value: 'neurology_consultation', label: isRtl.value ? 'كشف أعصاب' : 'Neurology Consultation', desc: isRtl.value ? 'فحص واستشارة طب أعصاب' : 'Neurological examination and consultation' },
         { value: 'neurology_service', label: isRtl.value ? 'خدمة أعصاب' : 'Neurology Service', desc: isRtl.value ? 'حجز إجراء أو فحص عصبي' : 'Book a neurological procedure or test' },
     ],
+    physiotherapy: [
+        { value: 'physiotherapy_consultation', label: isRtl.value ? 'تقييم علاج طبيعي' : 'Physiotherapy Assessment', desc: isRtl.value ? 'تقييم أولي ووضع خطة علاجية' : 'Initial assessment & treatment plan' },
+        { value: 'physiotherapy_session', label: isRtl.value ? 'جلسة علاج طبيعي' : 'Physiotherapy Session', desc: isRtl.value ? 'جلسة علاجية وتأهيل' : 'Treatment & rehabilitation session' },
+    ],
     derma: [
         { value: 'dermatology_consultation', label: isRtl.value ? 'استشارة جلدية' : 'Dermatology Consultation', desc: isRtl.value ? 'فحص وتشخيص مشاكل الجلد' : 'Skin examination and diagnosis' },
         { value: 'cosmetic_consultation', label: isRtl.value ? 'استشارة تجميلية' : 'Cosmetic Consultation', desc: isRtl.value ? 'استشارة عمليات التجميل والعناية' : 'Cosmetic procedure consultation' },
@@ -96,7 +100,7 @@ const BOOKING_TYPES_BY_MODULE = computed(() => ({
 const bookingTypes = computed(() => BOOKING_TYPES_BY_MODULE.value[selectedModule.value] || BOOKING_TYPES_BY_MODULE.value.derma);
 
 const isConsultation = computed(() => form.booking_type.endsWith('_consultation'));
-const isService = computed(() => ['service', 'dental_service', 'pediatric_service', 'obgyn_service', 'psychiatry_service', 'neurology_service'].includes(form.booking_type));
+const isService = computed(() => ['service', 'dental_service', 'pediatric_service', 'obgyn_service', 'psychiatry_service', 'neurology_service', 'physiotherapy_session'].includes(form.booking_type));
 
 /* Filter services and doctors by module */
 const filteredCategories = computed(() => {

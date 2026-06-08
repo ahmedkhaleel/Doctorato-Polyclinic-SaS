@@ -107,6 +107,8 @@ class SecretaryBookingController extends BaseSecretaryController
             'obgynConsultationFee' => (float) \App\Services\ModuleManager::getSetting('obgyn', 'consultation_fee', 0),
             'psychiatryConsultationFee' => (float) \App\Services\ModuleManager::getSetting('psychiatry', 'consultation_fee', 0),
             'neurologyConsultationFee' => (float) \App\Services\ModuleManager::getSetting('neurology', 'consultation_fee', 0),
+            'physiotherapyConsultationFee' => (float) \App\Services\ModuleManager::getSetting('physiotherapy', 'consultation_fee', 0),
+            'physiotherapySessionFee' => (float) \App\Services\ModuleManager::getSetting('physiotherapy', 'session_fee', 0),
             // Unified per-module pricing (consultant/specialist/base/followup)
             // so the form can default the consultation price by doctor_type.
             'specialtyFees' => $this->specialtyFees(),
@@ -118,7 +120,7 @@ class SecretaryBookingController extends BaseSecretaryController
     {
         $resolver = app(\App\Services\Pricing\PricingResolver::class);
         $out = [];
-        foreach (['derma', 'dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology'] as $m) {
+        foreach (['derma', 'dental', 'pediatric', 'obgyn', 'psychiatry', 'neurology', 'physiotherapy'] as $m) {
             $out[$m] = $resolver->feesFor($m);
         }
 
