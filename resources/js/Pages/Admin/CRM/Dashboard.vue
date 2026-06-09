@@ -4,6 +4,9 @@ import { Link, router, useForm , usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
+import { useCountUp } from '@/Composables/useCountUp';
+import TrendLine from '@/Components/Charts/TrendLine.vue';
+import WhatsAppLink from '@/Components/Crm/WhatsAppLink.vue';
 
 const { can } = usePermissions();
 const { formatCurrency } = useCurrency();
@@ -22,6 +25,7 @@ const props = defineProps({
     weeklyComparison: Object,
     slaMetrics: Object,
     staleLeads: Array,
+    hotUncontacted: Array,
     upcomingFollowUps: Object,
     stageAnalytics: Object,
     period: String,
@@ -161,6 +165,28 @@ const trendBars = computed(() => {
         dayNum: new Date(date).getDate(),
     }));
 });
+
+// Shared-kit TrendLine series for the 30-day lead trend (cockpit standard).
+const trendSeries = computed(() => {
+    const pts = Object.entries(props.leadTrend || {}).map(([date, count], i) => ({ x: i + 1, y: Number(count) }));
+    return pts.length >= 2 ? [{ key: 'leads', label: isRtl.value ? 'العملاء المحتملون' : 'Leads', color: '#C4A265', points: pts }] : [];
+});
+
+// Animated KPI counters (cockpit standard).
+const { values: counters } = useCountUp({
+    total_leads: props.metrics?.total_leads || 0,
+    converted_period: props.metrics?.converted_period || 0,
+    today_follow_ups: props.metrics?.today_follow_ups || 0,
+});
+
+// Action-strip totals.
+const actionTotals = computed(() => ({
+    overdue: props.metrics?.overdue_follow_ups || 0,
+    hot: (props.hotUncontacted || []).length,
+    stale: (props.staleLeads || []).length,
+    awaiting: props.slaMetrics?.awaiting_contact || 0,
+}));
+const hasActions = computed(() => Object.values(actionTotals.value).some((v) => v > 0));
 
 // Weekly comparison deltas
 function weekDelta(key) {
@@ -389,7 +415,7 @@ function missFollowUp(fuId) {
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" /></svg>
                         </div>
                     </div>
-                    <p class="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight">{{ metrics.total_leads }}</p>
+                    <p class="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight tabular-nums">{{ counters.total_leads }}</p>
                     <div class="flex items-center gap-1.5 mt-2">
                         <span class="inline-flex items-center gap-0.5 text-xs font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
@@ -411,7 +437,7 @@ function missFollowUp(fuId) {
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                     </div>
-                    <p class="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight">{{ metrics.converted_period }}</p>
+                    <p class="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight tabular-nums">{{ counters.converted_period }}</p>
                     <div class="flex items-center gap-1.5 mt-2">
                         <span class="inline-flex items-center gap-0.5 text-xs font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md">
                             {{ metrics.conversion_rate }}%
@@ -432,7 +458,7 @@ function missFollowUp(fuId) {
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                     </div>
-                    <p class="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight">{{ metrics.today_follow_ups }}</p>
+                    <p class="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight tabular-nums">{{ counters.today_follow_ups }}</p>
                     <div class="flex items-center gap-1.5 mt-2">
                         <span v-if="metrics.overdue_follow_ups > 0" class="inline-flex items-center gap-0.5 text-xs font-medium text-red-600 bg-red-50 px-1.5 py-0.5 rounded-md">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.27 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
@@ -466,6 +492,50 @@ function missFollowUp(fuId) {
                             {{ slaMetrics.within_1h }}/{{ slaMetrics.total_contacted }} {{ isRtl ? 'خلال ساعة' : 'within 1h' }}
                         </span>
                         <span v-else class="text-xs text-gray-400">{{ isRtl ? 'لا بيانات بعد' : 'No data yet' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action strip: what needs attention RIGHT NOW (cockpit standard) -->
+            <div v-if="hasActions" class="grid grid-cols-1 md:grid-cols-3 gap-4 card-entrance" :class="{ 'card-entrance-active': mounted }" :style="{ transitionDelay: '360ms' }">
+                <!-- Overdue follow-ups -->
+                <div class="rounded-2xl p-4 border bg-rose-50/60 border-rose-100">
+                    <div class="flex items-center justify-between mb-2">
+                        <p class="text-xs font-semibold text-rose-700">{{ isRtl ? 'متابعات متأخرة' : 'Overdue follow-ups' }} ({{ actionTotals.overdue }})</p>
+                        <Link href="/admin/crm/calendar" class="text-[11px] text-rose-600 hover:underline">{{ isRtl ? 'التقويم' : 'calendar' }}</Link>
+                    </div>
+                    <ul class="space-y-1">
+                        <li v-for="fu in (overdueFollowUps || []).slice(0, 4)" :key="fu.id" class="text-xs text-gray-600 flex items-center justify-between gap-2">
+                            <Link :href="`/admin/leads/${fu.lead_id || fu.lead?.id}`" class="truncate hover:text-rose-700">{{ fu.lead?.full_name }}</Link>
+                            <span class="text-gray-400 shrink-0">{{ fu.assigned_user?.name || fu.assignedUser?.name || '—' }}</span>
+                        </li>
+                        <li v-if="!(overdueFollowUps || []).length" class="text-xs text-gray-400">—</li>
+                    </ul>
+                </div>
+                <!-- Hot, never contacted -->
+                <div class="rounded-2xl p-4 border bg-amber-50/60 border-amber-100">
+                    <div class="flex items-center justify-between mb-2">
+                        <p class="text-xs font-semibold text-amber-700">{{ isRtl ? 'ساخن بلا تواصل' : 'Hot, never contacted' }} ({{ actionTotals.hot }})</p>
+                        <Link href="/admin/leads?priority=1&status=new" class="text-[11px] text-amber-600 hover:underline">{{ isRtl ? 'الكل' : 'all' }}</Link>
+                    </div>
+                    <ul class="space-y-1">
+                        <li v-for="l in (hotUncontacted || []).slice(0, 4)" :key="l.id" class="text-xs text-gray-600 flex items-center justify-between gap-2">
+                            <Link :href="`/admin/leads/${l.id}`" class="truncate hover:text-amber-700">{{ l.full_name }}</Link>
+                            <WhatsAppLink :phone="l.phone" :is-rtl="isRtl" size="w-3.5 h-3.5" class="shrink-0" />
+                        </li>
+                        <li v-if="!(hotUncontacted || []).length" class="text-xs text-gray-400">—</li>
+                    </ul>
+                </div>
+                <!-- Stale / awaiting -->
+                <div class="rounded-2xl p-4 border bg-slate-50 border-slate-200 flex items-center justify-around">
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-slate-700 tabular-nums">{{ actionTotals.stale }}</p>
+                        <p class="text-[11px] text-gray-500">{{ isRtl ? 'راكدون 7+ أيام' : 'stale 7+ days' }}</p>
+                    </div>
+                    <div class="w-px h-10 bg-slate-200"></div>
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-amber-600 tabular-nums">{{ actionTotals.awaiting }}</p>
+                        <p class="text-[11px] text-gray-500">{{ isRtl ? 'بانتظار أول تواصل' : 'awaiting first contact' }}</p>
                     </div>
                 </div>
             </div>
@@ -522,26 +592,10 @@ function missFollowUp(fuId) {
                             </div>
                             <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'اتجاه العملاء المحتملين' : 'Lead Trend' }}</h3>
                         </div>
-                        <span class="text-xs text-gray-400">{{ isRtl ? 'اخر 14 يوم' : 'Last 14 days' }}</span>
+                        <span class="text-xs text-gray-400">{{ isRtl ? 'آخر 30 يوماً' : 'Last 30 days' }}</span>
                     </div>
-                    <div class="flex items-end gap-1.5 h-36">
-                        <div v-for="(bar, i) in trendBars" :key="bar.date"
-                            class="flex-1 flex flex-col items-center gap-1 group relative"
-                        >
-                            <div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[10px] font-bold px-2 py-0.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
-                                {{ bar.count }} leads
-                            </div>
-                            <div
-                                class="w-full rounded-t-md bg-gradient-to-t from-[#C4A265] to-[#d4b97a] transition-all duration-700 ease-out group-hover:from-[#A8893E] group-hover:to-[#C4A265] cursor-default"
-                                :style="{ height: mounted ? Math.max(bar.pct, bar.count > 0 ? 8 : 2) + '%' : '0%', transitionDelay: (i * 40) + 'ms' }"
-                            ></div>
-                            <span class="text-[9px] text-gray-400 font-medium hidden sm:block">{{ bar.dayNum }}</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between mt-2 text-[10px] text-gray-300 font-medium">
-                        <span>{{ trendBars[0]?.dayLabel }}</span>
-                        <span>{{ trendBars[trendBars.length - 1]?.dayLabel }}</span>
-                    </div>
+                    <TrendLine v-if="trendSeries.length" :series="trendSeries" :is-rtl="isRtl" :height="170" />
+                    <p v-else class="text-sm text-gray-400 py-12 text-center">{{ isRtl ? 'لا توجد بيانات بعد' : 'No data yet' }}</p>
                 </div>
 
                 <!-- Module Distribution -->

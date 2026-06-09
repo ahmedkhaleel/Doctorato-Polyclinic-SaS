@@ -39,34 +39,39 @@ class SecurityHeaders
             "default-src 'self'",
             // Scripts: analytics, pixels, Stripe.js if we decide to load it client-side.
             "script-src 'self' 'unsafe-inline' 'unsafe-eval' "
-                . "https://unpkg.com "
-                . "https://www.googletagmanager.com https://www.google-analytics.com "
-                . "https://connect.facebook.net https://snap.licdn.com "
-                . "https://static.ads-twitter.com https://analytics.tiktok.com "
-                . "https://js.stripe.com"
-                . $viteDev,
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com" . $viteDev,
+                .'https://unpkg.com '
+                .'https://www.googletagmanager.com https://www.google-analytics.com '
+                .'https://connect.facebook.net https://snap.licdn.com '
+                .'https://static.ads-twitter.com https://analytics.tiktok.com '
+                .'https://js.stripe.com'
+                .$viteDev,
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com".$viteDev,
             "img-src 'self' data: blob: https: http: https://*.tile.openstreetmap.org",
             "font-src 'self' https://fonts.gstatic.com data:",
             // Telemedicine: Agora needs realtime connections. Payments: Stripe/Paymob
             // need connect for tokenisation.
             "connect-src 'self' "
-                . "https://www.google-analytics.com https://analytics.google.com https://www.facebook.com https://analytics.tiktok.com "
-                . "https://*.agora.io wss://*.agora.io "
-                . "https://api.stripe.com https://accept.paymob.com"
-                . $viteDev,
+                .'https://www.google-analytics.com https://analytics.google.com https://www.facebook.com https://analytics.tiktok.com '
+                .'https://*.agora.io wss://*.agora.io '
+                .'https://api.stripe.com https://accept.paymob.com'
+                .$viteDev,
             // Frames: embedded Stripe checkout, Paymob iframe, YouTube.
             "frame-src 'self' https://www.google.com https://www.youtube.com "
-                . "https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com "
-                . "https://accept.paymob.com",
+                .'https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com '
+                .'https://accept.paymob.com',
             // Can't be framed by anyone — modern equivalent of X-Frame-Options DENY.
             "frame-ancestors 'none'",
             "object-src 'none'",
             "base-uri 'self'",
             "form-action 'self' https://checkout.stripe.com https://accept.paymob.com",
-            // Upgrade any http: sub-resources on https: pages (prevents mixed-content).
-            'upgrade-insecure-requests',
         ]);
+
+        // Upgrade any http: sub-resources on https: pages (prevents mixed-content).
+        // Production-only (like HSTS): on a local http dev server this directive
+        // makes the browser upgrade same-origin form POSTs to https and they fail.
+        if (app()->environment('production')) {
+            $csp .= '; upgrade-insecure-requests';
+        }
         $response->headers->set('Content-Security-Policy', $csp);
 
         return $response;

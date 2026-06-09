@@ -5,6 +5,7 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
 import { useConfirm } from '@/Composables/useConfirm.js';
+import WhatsAppLink from '@/Components/Crm/WhatsAppLink.vue';
 
 const { can } = usePermissions();
 const { confirm } = useConfirm();
@@ -594,7 +595,7 @@ function deleteLead(lead) {
                                     </div>
                                 </td>
                                 <td class="px-5 py-3.5">
-                                    <p class="text-gray-700 font-medium">{{ lead.phone || '-' }}</p>
+                                    <p class="text-gray-700 font-medium flex items-center gap-1.5">{{ lead.phone || '-' }}<WhatsAppLink :phone="lead.phone" :is-rtl="isRtl" size="w-3.5 h-3.5" /></p>
                                     <p class="text-xs text-gray-400 mt-0.5" v-if="lead.email">{{ lead.email }}</p>
                                 </td>
                                 <td class="px-5 py-3.5">

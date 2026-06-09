@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CrmCampaign;
 use App\Models\Lead;
 use App\Models\LeadActivity;
 use App\Models\LeadFollowUp;
 use App\Models\LeadSource;
 use App\Models\LeadStageHistory;
-use App\Models\CrmCampaign;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -169,10 +169,10 @@ class CrmDashboardController extends Controller
         $staleLeads = Lead::inPipeline()
             ->where(function ($q) {
                 $q->where('updated_at', '<', now()->subDays(7))
-                  ->orWhere(function ($q2) {
-                      $q2->whereNull('last_contacted_at')
-                          ->where('created_at', '<', now()->subDays(3));
-                  });
+                    ->orWhere(function ($q2) {
+                        $q2->whereNull('last_contacted_at')
+                            ->where('created_at', '<', now()->subDays(3));
+                    });
             })
             ->with(['assignedUser:id,name', 'source:id,name_en,color'])
             ->orderBy('updated_at')
@@ -198,26 +198,35 @@ class CrmDashboardController extends Controller
         ];
 
         // ── Stage Analytics (time-in-stage) ──
-        $stageAnalytics = LeadStageHistory::selectRaw("
+        $stageAnalytics = LeadStageHistory::selectRaw('
             from_status,
             COUNT(*) as transitions,
             AVG(duration_minutes) as avg_minutes,
             MIN(duration_minutes) as min_minutes,
             MAX(duration_minutes) as max_minutes
-        ")
-        ->whereNotNull('from_status')
-        ->whereNotNull('duration_minutes')
-        ->where('changed_at', '>=', $startDate)
-        ->groupBy('from_status')
-        ->get()
-        ->keyBy('from_status')
-        ->map(fn($s) => [
-            'transitions' => $s->transitions,
-            'avg_minutes' => round($s->avg_minutes),
-            'avg_display' => $this->formatMinutes($s->avg_minutes),
-            'min_display' => $this->formatMinutes($s->min_minutes),
-            'max_display' => $this->formatMinutes($s->max_minutes),
-        ]);
+        ')
+            ->whereNotNull('from_status')
+            ->whereNotNull('duration_minutes')
+            ->where('changed_at', '>=', $startDate)
+            ->groupBy('from_status')
+            ->get()
+            ->keyBy('from_status')
+            ->map(fn ($s) => [
+                'transitions' => $s->transitions,
+                'avg_minutes' => round($s->avg_minutes),
+                'avg_display' => $this->formatMinutes($s->avg_minutes),
+                'min_display' => $this->formatMinutes($s->min_minutes),
+                'max_display' => $this->formatMinutes($s->max_minutes),
+            ]);
+
+        // ── Hot leads never contacted (action strip) ──
+        $hotUncontacted = Lead::inPipeline()
+            ->where('priority', Lead::PRIORITY_HOT)
+            ->whereNull('first_contacted_at')
+            ->with('source:id,name_en,color')
+            ->orderBy('created_at')
+            ->limit(8)
+            ->get(['id', 'full_name', 'phone', 'status', 'lead_source_id', 'created_at']);
 
         // ── Upcoming Follow-ups (next 7 days for mini calendar) ──
         $upcomingFollowUps = LeadFollowUp::where('status', 'pending')
@@ -243,6 +252,7 @@ class CrmDashboardController extends Controller
             'weeklyComparison' => $weeklyComparison,
             'slaMetrics' => $slaMetrics,
             'staleLeads' => $staleLeads,
+            'hotUncontacted' => $hotUncontacted,
             'upcomingFollowUps' => $upcomingFollowUps,
             'stageAnalytics' => $stageAnalytics,
             'period' => $period,
@@ -251,10 +261,17 @@ class CrmDashboardController extends Controller
 
     private function formatMinutes(?float $minutes): string
     {
-        if ($minutes === null || $minutes === 0.0) return '-';
-        if ($minutes < 60) return round($minutes) . 'm';
-        if ($minutes < 1440) return round($minutes / 60, 1) . 'h';
-        return round($minutes / 1440, 1) . 'd';
+        if ($minutes === null || $minutes === 0.0) {
+            return '-';
+        }
+        if ($minutes < 60) {
+            return round($minutes).'m';
+        }
+        if ($minutes < 1440) {
+            return round($minutes / 60, 1).'h';
+        }
+
+        return round($minutes / 1440, 1).'d';
     }
 
     /**
@@ -318,8 +335,11 @@ class CrmDashboardController extends Controller
     private function calculateConversionRate(Carbon $startDate): float
     {
         $total = Lead::where('created_at', '>=', $startDate)->count();
-        if ($total === 0) return 0;
+        if ($total === 0) {
+            return 0;
+        }
         $converted = Lead::converted()->where('converted_at', '>=', $startDate)->count();
+
         return round(($converted / $total) * 100, 1);
     }
 }

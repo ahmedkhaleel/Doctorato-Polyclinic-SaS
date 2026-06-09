@@ -91,11 +91,12 @@ class MonthlyAppointmentsDemoSeeder extends Seeder
         $n = 0;
 
         for ($day = $start->copy(); $day->lte($end); $day->addDay()) {
-            if ($day->isFriday()) {
+            if ($day->isFriday() && ! $day->isSameDay($today)) {
                 continue; // clinic closed
             }
-            // ~ every other working day, to keep volume sensible.
-            if ($day->day % 2 === 0) {
+            // ~ every other working day, to keep volume sensible — but TODAY is
+            // always seeded so the chair-side queue is never empty in the demo.
+            if ($day->day % 2 === 0 && ! $day->isSameDay($today)) {
                 continue;
             }
 

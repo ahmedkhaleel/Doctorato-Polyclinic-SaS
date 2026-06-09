@@ -30,8 +30,12 @@ const activeTab = ref('activity');
 
 // Entrance animation
 const mounted = ref(false);
+const timelineShown = ref(false);
 onMounted(() => {
     setTimeout(() => mounted.value = true, 50);
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { timelineShown.value = true; return; }
+    setTimeout(() => timelineShown.value = true, 120);
 });
 
 // Activity form
@@ -1092,7 +1096,9 @@ function translateDescription(desc) {
                                 <div v-if="activities?.length" class="absolute left-[19px] top-4 bottom-4 w-px bg-gradient-to-b from-gray-200 via-gray-200 to-transparent"></div>
                                 <div class="space-y-0">
                                     <div v-for="(act, aIdx) in activities" :key="act.id"
-                                        class="flex gap-4 py-4 relative group hover:bg-gray-50/50 rounded-xl px-2 -mx-2 transition-all duration-200"
+                                        class="flex gap-4 py-4 relative group hover:bg-gray-50/50 rounded-xl px-2 -mx-2 transition-all duration-500 motion-reduce:transition-none"
+                                        :class="timelineShown ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'"
+                                        :style="{ transitionDelay: Math.min(aIdx, 10) * 60 + 'ms' }"
                                     >
                                         <div class="relative z-10">
                                             <div :class="activityTypeColors[act.type] || 'bg-gray-100 text-gray-500'"
