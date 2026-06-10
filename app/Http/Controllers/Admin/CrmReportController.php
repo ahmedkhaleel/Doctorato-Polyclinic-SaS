@@ -270,6 +270,80 @@ class CrmReportController extends Controller
             ]);
         }
 
+        // ── CRM-5: Creation-month cohorts — conversion lag + attributed revenue ──
+        $cohorts = collect();
+        for ($i = 5; $i >= 0; $i--) {
+            $monthStart = Carbon::now()->subMonths($i)->startOfMonth();
+            $monthEnd = Carbon::now()->subMonths($i)->endOfMonth();
+
+            $cohortBase = fn () => Lead::whereBetween('created_at', [$monthStart, $monthEnd])
+                ->when($module, fn ($q) => $q->where('module', $module));
+
+            $created = $cohortBase()->count();
+            $convertedRows = $cohortBase()->where('status', 'converted')->whereNotNull('converted_at')
+                ->get(['id', 'patient_id', 'created_at', 'converted_at']);
+            $converted = $convertedRows->count();
+
+            $avgDays = $converted > 0
+                ? round($convertedRows->avg(fn ($l) => $l->created_at->diffInDays($l->converted_at)), 1)
+                : null;
+
+            $patientIds = $convertedRows->pluck('patient_id')->filter()->all();
+            $revenue = $patientIds === [] ? 0.0 : round((float) \Illuminate\Support\Facades\DB::table('invoices')
+                ->whereIn('patient_id', $patientIds)->whereNull('deleted_at')->sum('total'), 2);
+
+            $cohorts->push([
+                'month' => $monthStart->format('M Y'),
+                'created' => $created,
+                'converted' => $converted,
+                'rate' => $created > 0 ? round($converted / $created * 100, 1) : 0,
+                'avg_days_to_convert' => $avgDays,
+                'revenue' => $revenue,
+            ]);
+        }
+
+        // ── CRM-5: Weekly SLA trend — % of contacted leads reached within target ──
+        $slaTargetMinutes = max(1, (int) \App\Models\CrmSetting::get('sla_response_target_minutes', 60));
+        $slaTrend = collect();
+        for ($i = 7; $i >= 0; $i--) {
+            $weekStart = Carbon::now()->subWeeks($i)->startOfWeek();
+            $weekEnd = Carbon::now()->subWeeks($i)->endOfWeek();
+
+            $contacted = Lead::whereNotNull('first_contacted_at')
+                ->whereBetween('created_at', [$weekStart, $weekEnd])
+                ->when($module, fn ($q) => $q->where('module', $module))
+                ->selectRaw('COUNT(*) as total, SUM(CASE WHEN TIMESTAMPDIFF(MINUTE, created_at, first_contacted_at) <= ? THEN 1 ELSE 0 END) as within', [$slaTargetMinutes])
+                ->first();
+
+            $total = (int) ($contacted->total ?? 0);
+            $slaTrend->push([
+                'week' => $weekStart->format('d M'),
+                'total' => $total,
+                'within' => (int) ($contacted->within ?? 0),
+                'pct' => $total > 0 ? round(((int) $contacted->within) / $total * 100, 1) : null,
+            ]);
+        }
+
+        // ── CRM-5: Revenue attribution summary ──
+        $totalRevenue = $revenueService->total(Carbon::parse($dateFrom));
+        $revenueSummary = [
+            'total' => $totalRevenue,
+            'converted' => $funnel['converted'],
+            'per_converted' => $funnel['converted'] > 0 ? round($totalRevenue / $funnel['converted'], 2) : 0,
+        ];
+
+        // ── CRM-5: AI cost card (CRM features, current month) ──
+        $crmAiFeatures = ['crm_lead_summary', 'crm_intent_score', 'crm_inbound_triage', 'crm_dormancy_risk', 'lead_reply'];
+        $aiUsage = \App\Models\AiRequestLog::whereIn('feature', $crmAiFeatures)
+            ->where('created_at', '>=', Carbon::now()->startOfMonth())
+            ->selectRaw('COUNT(*) as calls, COALESCE(SUM(cost_usd), 0) as cost')
+            ->first();
+        $aiCosts = [
+            'calls' => (int) ($aiUsage->calls ?? 0),
+            'cost_usd' => round((float) ($aiUsage->cost ?? 0), 4),
+            'budget_usd' => (float) \App\Models\Setting::get('ai_monthly_budget_usd', 0),
+        ];
+
         return Inertia::render('Admin/CRM/Reports', [
             'funnel' => $funnel,
             'bySource' => $bySource,
@@ -282,6 +356,11 @@ class CrmReportController extends Controller
             'conversionTimeData' => $conversionTimeData,
             'staffPerformance' => $staffPerformance,
             'monthlyComparison' => $monthlyComparison,
+            'cohorts' => $cohorts,
+            'slaTrend' => $slaTrend,
+            'slaTargetMinutes' => $slaTargetMinutes,
+            'revenueSummary' => $revenueSummary,
+            'aiCosts' => $aiCosts,
             'modules' => ModuleManager::getForFrontend(),
             'filters' => ['date_from' => $dateFrom, 'date_to' => $dateTo, 'module' => $module],
         ]);

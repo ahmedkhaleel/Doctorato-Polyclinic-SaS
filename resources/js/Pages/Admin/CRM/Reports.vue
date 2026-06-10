@@ -18,6 +18,11 @@ const props = defineProps({
     conversionTimeData: Object,
     staffPerformance: Array,
     monthlyComparison: Array,
+    cohorts: Array,
+    slaTrend: Array,
+    slaTargetMinutes: Number,
+    revenueSummary: Object,
+    aiCosts: Object,
     modules: Object,
     filters: Object,
 });
@@ -1112,6 +1117,92 @@ const kpiCards = [
                             </svg>
                         </div>
                         <p class="text-sm text-gray-400 font-medium">No staff data for this period</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ CRM-5: Revenue + AI cost summary cards ═══ -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="relative bg-white rounded-2xl shadow-sm p-5 border border-gray-100 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+                    <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1 bg-gradient-to-r from-emerald-400 to-teal-500"></div>
+                    <p class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold mb-1">{{ isRtl ? 'الايراد المنسوب للفترة' : 'Attributed revenue' }}</p>
+                    <p class="text-2xl font-bold text-emerald-600 tabular-nums">{{ formatCurrency(revenueSummary?.total || 0) }}</p>
+                    <p class="text-xs text-gray-400 mt-1">{{ isRtl ? 'كل فواتير المرضى المحولين من CRM' : 'All invoices of CRM-converted patients' }}</p>
+                </div>
+                <div class="relative bg-white rounded-2xl shadow-sm p-5 border border-gray-100 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+                    <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1" style="background: linear-gradient(to right, #C4A265, #D4B87A);"></div>
+                    <p class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold mb-1">{{ isRtl ? 'ايراد لكل تحويل' : 'Revenue per conversion' }}</p>
+                    <p class="text-2xl font-bold text-gray-800 tabular-nums">{{ formatCurrency(revenueSummary?.per_converted || 0) }}</p>
+                    <p class="text-xs text-gray-400 mt-1">{{ revenueSummary?.converted || 0 }} {{ isRtl ? 'تحويل في الفترة' : 'conversions in period' }}</p>
+                </div>
+                <div class="relative bg-white rounded-2xl shadow-sm p-5 border border-gray-100 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+                    <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1 bg-gradient-to-r from-violet-400 to-purple-500"></div>
+                    <p class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold mb-1">{{ isRtl ? 'تكلفة ذكاء CRM (الشهر)' : 'CRM AI cost (month)' }}</p>
+                    <p class="text-2xl font-bold text-violet-600 tabular-nums" dir="ltr">${{ (aiCosts?.cost_usd || 0).toFixed(2) }}</p>
+                    <p class="text-xs text-gray-400 mt-1">
+                        {{ aiCosts?.calls || 0 }} {{ isRtl ? 'طلب' : 'calls' }}
+                        <span v-if="aiCosts?.budget_usd > 0" dir="ltr"> / ${{ aiCosts.budget_usd }} {{ isRtl ? '' : 'budget' }}</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- ═══ CRM-5: Cohorts + SLA trend ═══ -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <!-- Cohort table -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 md:p-6">
+                    <h3 class="text-sm font-bold text-gray-700 mb-4 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h18M3 8h18M3 12h18m-18 4h18m-18 4h18" /></svg>
+                        {{ isRtl ? 'أفواج العملاء حسب شهر الانشاء' : 'Lead cohorts by creation month' }}
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="text-[10px] text-gray-400 uppercase border-b border-gray-100">
+                                    <th class="ltr:text-left rtl:text-right py-2.5 font-semibold tracking-wider">{{ isRtl ? 'الشهر' : 'Month' }}</th>
+                                    <th class="text-center py-2.5 font-semibold tracking-wider">{{ isRtl ? 'جدد' : 'Created' }}</th>
+                                    <th class="text-center py-2.5 font-semibold tracking-wider">{{ isRtl ? 'تحويل' : 'Conv.' }}</th>
+                                    <th class="text-center py-2.5 font-semibold tracking-wider">%</th>
+                                    <th class="text-center py-2.5 font-semibold tracking-wider">{{ isRtl ? 'أيام للتحويل' : 'Days to conv.' }}</th>
+                                    <th class="ltr:text-right rtl:text-left py-2.5 font-semibold tracking-wider">{{ isRtl ? 'الايراد' : 'Revenue' }}</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-50">
+                                <tr v-for="c in cohorts" :key="c.month" class="hover:bg-gray-50/60 transition-colors duration-150">
+                                    <td class="py-2.5 text-xs font-medium text-gray-700" dir="ltr">{{ c.month }}</td>
+                                    <td class="py-2.5 text-center text-xs text-gray-600 tabular-nums">{{ c.created }}</td>
+                                    <td class="py-2.5 text-center text-xs text-emerald-600 font-semibold tabular-nums">{{ c.converted }}</td>
+                                    <td class="py-2.5 text-center">
+                                        <span class="text-xs font-bold tabular-nums" :class="c.rate >= 30 ? 'text-emerald-600' : c.rate >= 15 ? 'text-amber-600' : 'text-gray-500'">{{ c.rate }}%</span>
+                                    </td>
+                                    <td class="py-2.5 text-center text-xs text-gray-600 tabular-nums">{{ c.avg_days_to_convert ?? '-' }}</td>
+                                    <td class="py-2.5 ltr:text-right rtl:text-left text-xs font-semibold tabular-nums" :class="c.revenue > 0 ? 'text-emerald-700' : 'text-gray-400'">
+                                        {{ c.revenue > 0 ? Number(c.revenue).toLocaleString() : '-' }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- SLA weekly trend -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 md:p-6">
+                    <h3 class="text-sm font-bold text-gray-700 mb-1 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        {{ isRtl ? 'التزام هدف الاستجابة أسبوعياً' : 'Weekly SLA compliance' }}
+                    </h3>
+                    <p class="text-[11px] text-gray-400 mb-4">{{ isRtl ? `نسبة العملاء الذين تم التواصل معهم خلال ${slaTargetMinutes} دقيقة` : `% of leads contacted within ${slaTargetMinutes} minutes` }}</p>
+                    <div class="flex items-end justify-between gap-2 h-36" dir="ltr">
+                        <div v-for="w in slaTrend" :key="w.week" class="flex-1 flex flex-col items-center gap-1.5 group">
+                            <span class="text-[10px] font-bold tabular-nums" :class="w.pct === null ? 'text-gray-300' : w.pct >= 70 ? 'text-emerald-600' : w.pct >= 40 ? 'text-amber-600' : 'text-red-500'">
+                                {{ w.pct === null ? '-' : w.pct + '%' }}
+                            </span>
+                            <div class="w-full max-w-[34px] rounded-t-md transition-all duration-500 group-hover:opacity-80"
+                                :class="w.pct === null ? 'bg-gray-100' : w.pct >= 70 ? 'bg-emerald-400' : w.pct >= 40 ? 'bg-amber-400' : 'bg-red-400'"
+                                :style="{ height: Math.max(6, (w.pct ?? 0)) + '%' }"
+                                :title="`${w.within}/${w.total}`"
+                            ></div>
+                            <span class="text-[9px] text-gray-400 whitespace-nowrap">{{ w.week }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
