@@ -763,6 +763,12 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
     Route::get('/leads-import', [LeadController::class, 'importPage'])->name('admin.leads.importPage')->middleware('permission:leads.create');
     Route::post('/leads-import', [LeadController::class, 'importCsv'])->name('admin.leads.importCsv')->middleware('permission:leads.create');
 
+    // CRM AI (CRM-2) — flag-gated inside AiManager; throttled per user
+    Route::post('/crm/ai/leads/{lead}/summary', [\App\Http\Controllers\Admin\CrmAiController::class, 'summary'])->name('admin.crm.ai.summary')->middleware(['permission:leads.view', 'throttle:30,1']);
+    Route::post('/crm/ai/leads/{lead}/draft', [\App\Http\Controllers\Admin\CrmAiController::class, 'draft'])->name('admin.crm.ai.draft')->middleware(['permission:leads.update', 'throttle:30,1']);
+    Route::post('/crm/ai/leads/{lead}/score-intent', [\App\Http\Controllers\Admin\CrmAiController::class, 'scoreIntent'])->name('admin.crm.ai.scoreIntent')->middleware(['permission:leads.update', 'throttle:30,1']);
+    Route::post('/crm/ai/triage', [\App\Http\Controllers\Admin\CrmAiController::class, 'triage'])->name('admin.crm.ai.triage')->middleware(['permission:leads.view', 'throttle:30,1']);
+
     // Lead merge
     Route::get('/leads-merge', [LeadController::class, 'mergePage'])->name('admin.leads.mergePage')->middleware('permission:leads.update');
     Route::post('/leads-merge', [LeadController::class, 'merge'])->name('admin.leads.merge')->middleware('permission:leads.update');

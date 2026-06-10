@@ -20,6 +20,7 @@ const props = defineProps({
     doctors: Array,
     templates: Array,
     smartContact: Object,
+    aiCrmFeatures: { type: Array, default: () => [] },
 });
 
 const page = usePage();
@@ -116,6 +117,72 @@ function submitReschedule(fuId) {
         },
     });
 }
+
+// ── CRM AI (CRM-2) — summary / message draft / intent score ──
+const aiEnabled = computed(() => (props.aiCrmFeatures || []).length > 0);
+const aiHas = (key) => (props.aiCrmFeatures || []).includes(key);
+const aiBusy = ref('');           // which action is loading
+const aiError = ref('');
+const aiSummary = ref('');
+const aiDraft = ref('');
+const aiIntent = ref(null);       // { adjustment, reason, score }
+const aiDraftCopied = ref(false);
+
+async function aiCall(url, body = {}) {
+    aiError.value = '';
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-XSRF-TOKEN': decodeURIComponent((document.cookie.match(/XSRF-TOKEN=([^;]+)/) || [])[1] || ''),
+        },
+        body: JSON.stringify(body),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || data.ok === false) {
+        throw new Error(data.message || 'AI request failed');
+    }
+    return data;
+}
+
+async function runAiSummary() {
+    aiBusy.value = 'summary';
+    try {
+        const data = await aiCall(`/admin/crm/ai/leads/${props.lead.id}/summary`, { locale: locale.value });
+        aiSummary.value = data.text;
+    } catch (e) { aiError.value = e.message; } finally { aiBusy.value = ''; }
+}
+
+async function runAiDraft() {
+    aiBusy.value = 'draft';
+    aiDraftCopied.value = false;
+    try {
+        const data = await aiCall(`/admin/crm/ai/leads/${props.lead.id}/draft`, { channel: 'whatsapp', tone: 'friendly', locale: locale.value });
+        aiDraft.value = data.text;
+    } catch (e) { aiError.value = e.message; } finally { aiBusy.value = ''; }
+}
+
+async function runAiIntent() {
+    aiBusy.value = 'intent';
+    try {
+        const data = await aiCall(`/admin/crm/ai/leads/${props.lead.id}/score-intent`);
+        aiIntent.value = data;
+        if (data.adjustment !== 0) router.reload({ only: ['lead', 'activities'] });
+    } catch (e) { aiError.value = e.message; } finally { aiBusy.value = ''; }
+}
+
+function copyAiDraft() {
+    navigator.clipboard?.writeText(aiDraft.value).then(() => {
+        aiDraftCopied.value = true;
+        setTimeout(() => aiDraftCopied.value = false, 2000);
+    });
+}
+
+const aiDraftWhatsAppUrl = computed(() => {
+    const digits = (props.lead.phone || '').replace(/\D/g, '');
+    return digits ? `https://wa.me/${digits}?text=${encodeURIComponent(aiDraft.value)}` : null;
+});
 
 // Quick Send (WhatsApp/SMS/Email templates)
 const showQuickSend = ref(false);
@@ -1381,6 +1448,75 @@ function translateDescription(desc) {
                                     {{ $t('a_email') }}
                                 </a>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Assistant (CRM-2; shown only when flags are on) -->
+                    <div v-if="aiEnabled"
+                        :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
+                        class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-700 delay-[360ms] ease-out hover:-translate-y-0.5 hover:shadow-md"
+                    >
+                        <div class="h-1 bg-gradient-to-r from-violet-400 via-[#C4A265] to-violet-400"></div>
+                        <div class="p-5">
+                            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                                {{ isRtl ? 'مساعد الذكاء الاصطناعي' : 'AI Assistant' }}
+                            </h3>
+
+                            <div class="grid grid-cols-1 gap-2.5">
+                                <button v-if="aiHas('crm_lead_summary')" type="button" @click="runAiSummary" :disabled="aiBusy !== ''"
+                                    class="flex items-center justify-center gap-2 px-4 py-3 text-xs font-semibold text-violet-700 bg-violet-50 rounded-xl border border-violet-100 hover:bg-violet-100 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:translate-y-0">
+                                    <svg v-if="aiBusy === 'summary'" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                    <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                    {{ isRtl ? 'ملخص ذكي + الخطوات التالية' : 'Smart summary + next steps' }}
+                                </button>
+
+                                <button v-if="aiHas('lead_reply') && lead.status !== 'converted'" type="button" @click="runAiDraft" :disabled="aiBusy !== ''"
+                                    class="flex items-center justify-center gap-2 px-4 py-3 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-xl border border-emerald-100 hover:bg-emerald-100 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:translate-y-0">
+                                    <svg v-if="aiBusy === 'draft'" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                    <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                                    {{ isRtl ? 'اقتراح رسالة واتساب' : 'Suggest WhatsApp message' }}
+                                </button>
+
+                                <button v-if="aiHas('crm_intent_score') && lead.status !== 'converted' && can('leads.update')" type="button" @click="runAiIntent" :disabled="aiBusy !== ''"
+                                    class="flex items-center justify-center gap-2 px-4 py-3 text-xs font-semibold text-amber-700 bg-amber-50 rounded-xl border border-amber-100 hover:bg-amber-100 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:translate-y-0">
+                                    <svg v-if="aiBusy === 'intent'" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                    <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                                    {{ isRtl ? 'تقييم نية الشراء' : 'Score buying intent' }}
+                                </button>
+                            </div>
+
+                            <p v-if="aiError" class="mt-3 text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">{{ aiError }}</p>
+
+                            <div v-if="aiSummary" class="mt-3 text-xs text-gray-700 bg-violet-50/60 border border-violet-100 rounded-xl px-3.5 py-3 whitespace-pre-line leading-relaxed">{{ aiSummary }}</div>
+
+                            <div v-if="aiDraft" class="mt-3 bg-emerald-50/60 border border-emerald-100 rounded-xl px-3.5 py-3">
+                                <p class="text-xs text-gray-700 whitespace-pre-line leading-relaxed">{{ aiDraft }}</p>
+                                <div class="flex items-center gap-2 mt-2.5">
+                                    <a v-if="aiDraftWhatsAppUrl" :href="aiDraftWhatsAppUrl" target="_blank"
+                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors duration-200">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                                        {{ isRtl ? 'فتح واتساب' : 'Open WhatsApp' }}
+                                    </a>
+                                    <button type="button" @click="copyAiDraft"
+                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold text-gray-600 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors duration-200">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                                        {{ aiDraftCopied ? (isRtl ? 'تم النسخ' : 'Copied') : (isRtl ? 'نسخ' : 'Copy') }}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div v-if="aiIntent" class="mt-3 flex items-start gap-2.5 bg-amber-50/60 border border-amber-100 rounded-xl px-3.5 py-3">
+                                <span class="text-sm font-bold tabular-nums" :class="aiIntent.adjustment > 0 ? 'text-emerald-600' : aiIntent.adjustment < 0 ? 'text-red-500' : 'text-gray-500'">
+                                    {{ aiIntent.adjustment > 0 ? '+' : '' }}{{ aiIntent.adjustment }}
+                                </span>
+                                <div>
+                                    <p class="text-xs text-gray-700 leading-relaxed">{{ aiIntent.reason || (isRtl ? 'لا تعديل مقترح' : 'No adjustment suggested') }}</p>
+                                    <p class="text-[11px] text-gray-400 mt-0.5">{{ isRtl ? 'النقاط الآن' : 'Score now' }}: {{ aiIntent.score }}</p>
+                                </div>
+                            </div>
+
+                            <p class="mt-3 text-[10px] text-gray-400 leading-relaxed">{{ isRtl ? 'اقتراحات آلية للمساعدة فقط — راجعها قبل الاعتماد عليها.' : 'Automated suggestions for assistance only — review before relying on them.' }}</p>
                         </div>
                     </div>
 

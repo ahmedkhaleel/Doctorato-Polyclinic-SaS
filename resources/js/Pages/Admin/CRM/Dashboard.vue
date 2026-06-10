@@ -29,7 +29,11 @@ const props = defineProps({
     upcomingFollowUps: Object,
     stageAnalytics: Object,
     period: String,
+    dormancyRisk: Object,
 });
+
+// CRM-2: high/medium-risk leads from the weekly dormancy scan
+const dormantLeads = computed(() => (props.dormancyRisk?.leads || []).filter((l) => l.risk !== 'low').slice(0, 5));
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -538,6 +542,29 @@ function missFollowUp(fuId) {
                         <p class="text-[11px] text-gray-500">{{ isRtl ? 'بانتظار أول تواصل' : 'awaiting first contact' }}</p>
                     </div>
                 </div>
+            </div>
+
+            <!-- Dormancy Risk (CRM-2 weekly scan) -->
+            <div v-if="dormantLeads.length" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-sm font-bold text-gray-700 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                        {{ isRtl ? 'عملاء معرضون للخمول' : 'Leads at dormancy risk' }}
+                    </h3>
+                    <span class="text-[10px] text-gray-400">
+                        {{ props.dormancyRisk?.mode === 'ai' ? (isRtl ? 'ترتيب بالذكاء الاصطناعي' : 'AI-ranked') : (isRtl ? 'ترتيب آلي' : 'auto-ranked') }}
+                    </span>
+                </div>
+                <ul class="divide-y divide-gray-50">
+                    <li v-for="l in dormantLeads" :key="l.id" class="py-2 flex items-center justify-between gap-3">
+                        <div class="min-w-0 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full shrink-0" :class="l.risk === 'high' ? 'bg-red-500' : 'bg-amber-400'"></span>
+                            <Link :href="`/admin/leads/${l.id}`" class="text-xs font-semibold text-gray-700 hover:text-[#C4A265] truncate transition-colors">{{ l.full_name }}</Link>
+                            <span class="text-[11px] text-gray-400 truncate hidden sm:inline">{{ l.reason }}</span>
+                        </div>
+                        <WhatsAppLink :phone="l.phone" :is-rtl="isRtl" size="w-3.5 h-3.5" class="shrink-0" />
+                    </li>
+                </ul>
             </div>
 
             <!-- Weekly Comparison + Module Distribution -->

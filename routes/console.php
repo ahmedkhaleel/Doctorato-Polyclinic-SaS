@@ -20,6 +20,9 @@ Schedule::command('leads:remind-follow-ups')->everyThirtyMinutes()->between('08:
 // CRM: Check for dormant leads daily at midnight
 Schedule::command('leads:check-dormant')->dailyAt('00:00');
 
+// CRM-2: weekly dormancy-risk ranking (heuristic + optional AI) for the dashboard
+Schedule::command('crm:dormancy-scan')->weeklyOn(1, '06:00');
+
 // CRM: Process follow-up automation sequences every 5 minutes during working hours
 Schedule::command('sequences:process')->everyFiveMinutes()->between('08:00', '22:00');
 

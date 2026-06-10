@@ -259,6 +259,8 @@ class CrmDashboardController extends Controller
             'upcomingFollowUps' => $upcomingFollowUps,
             'stageAnalytics' => $stageAnalytics,
             'period' => $period,
+            // CRM-2: weekly dormancy-risk scan result (null until the first run)
+            'dormancyRisk' => \Illuminate\Support\Facades\Cache::get(\App\Console\Commands\CrmDormancyScan::CACHE_KEY),
         ]);
     }
 

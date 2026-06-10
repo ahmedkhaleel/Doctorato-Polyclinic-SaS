@@ -16,6 +16,7 @@ use App\Services\AuditLogger;
 use App\Services\CommunicationService;
 use App\Services\Crm\PhoneNormalizer;
 use App\Services\LeadService;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -240,7 +241,22 @@ class LeadController extends Controller
             'doctors' => $doctors,
             'smartContact' => $smartContact,
             'templates' => $templates,
+            // CRM-2: which CRM AI buttons to show (flags + kill-switch)
+            'aiCrmFeatures' => $this->enabledCrmAiFeatures(),
         ]);
+    }
+
+    /** Enabled CRM AI feature keys — empty when the global kill-switch is off. */
+    private function enabledCrmAiFeatures(): array
+    {
+        if (! (bool) \App\Models\Setting::get('ai_enabled', false)) {
+            return [];
+        }
+
+        return array_values(array_intersect(
+            \App\Models\AiFeatureFlag::enabledKeys(),
+            ['crm_lead_summary', 'lead_reply', 'crm_intent_score', 'crm_inbound_triage'],
+        ));
     }
 
     public function edit(Lead $lead): Response

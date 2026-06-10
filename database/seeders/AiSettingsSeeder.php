@@ -76,6 +76,11 @@ class AiSettingsSeeder extends Seeder
             ['np_note_assist', 'صياغة ملاحظة من فحص الحالة العقلية', 'Neuropsych Note Assist', 'clinical', 50],
             ['np_risk_flag', 'كشف خطر الانتحار من المقاييس', 'Neuropsych Risk Flag', 'clinical', 51],
             ['np_session_transcription', 'تفريغ جلسة العلاج النفسي', 'Therapy Session Transcription', 'vision', 52],
+            // Wave 7 — CRM (docs/CRM_OVERHAUL_PLAN.md, CRM-2)
+            ['crm_lead_summary', 'ملخص العميل المحتمل والخطوات التالية', 'CRM Lead Summary', 'crm', 60],
+            ['crm_intent_score', 'تقييم نية الشراء (±15)', 'CRM Intent Scoring', 'crm', 61],
+            ['crm_inbound_triage', 'فرز الرسائل الواردة', 'CRM Inbound Triage', 'crm', 62],
+            ['crm_dormancy_risk', 'كشف خطر خمول العملاء', 'CRM Dormancy Risk', 'crm', 63],
         ];
         foreach ($features as [$key, $ar, $en, $group, $order]) {
             AiFeatureFlag::firstOrCreate(
