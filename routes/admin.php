@@ -739,6 +739,7 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
     // ─── CRM ────────────────────────────────────────────────
     Route::get('/crm', [CrmDashboardController::class, 'index'])->name('admin.crm.dashboard')->middleware('permission:leads.view');
     Route::get('/crm/calendar', [CrmDashboardController::class, 'calendar'])->name('admin.crm.calendar')->middleware('permission:leads.view');
+    Route::get('/crm/today', [\App\Http\Controllers\Admin\CrmTodayController::class, 'index'])->name('admin.crm.today')->middleware('permission:leads.view');
 
     // Leads
     Route::get('/leads', [LeadController::class, 'index'])->name('admin.leads.index')->middleware('permission:leads.view');
