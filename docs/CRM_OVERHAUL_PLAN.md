@@ -5,6 +5,19 @@ clinic-grade" across flow, automation (AI via the existing OpenAI layer),
 design/UX, and analytics. Grounded in a full code audit (backend + frontend),
 not assumptions.
 
+> **STATUS: ALL PHASES EXECUTED (2026-06-10).**
+> CRM-0 `40143dda7` · CRM-1 `e503f2a6e` · CRM-2 `88983cf84` ·
+> CRM-3 `872c9609f` · CRM-4 `512a2c4d0` · CRM-5 `7977aba15`.
+> Tests: `tests/Feature/Crm/` + `tests/Feature/Ai/CrmAiTest.php` +
+> `tests/Unit/PhoneNormalizerTest.php`.
+> **Owner actions to activate the optional layers (all default OFF):**
+> 1. AI: enter the OpenAI key in `/admin/ai/settings`, run
+>    `php artisan db:seed --class='Database\Seeders\AiSettingsSeeder' --force`
+>    once (registers the 4 new `crm_*` flags), then enable the desired flags
+>    from `/admin/ai/features`.
+> 2. Auto commissions: CRM Settings → العمولات tab.
+> 3. Webhooks: CRM Settings → التكاملات tab (URL + secret).
+
 ---
 
 ## 0. What the audit found (ground truth)
