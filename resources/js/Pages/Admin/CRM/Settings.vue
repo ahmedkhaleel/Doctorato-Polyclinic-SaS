@@ -27,6 +27,7 @@ const tabs = [
     { key: 'sla',           label: 'SLA & Response',   labelAr: 'اتفاقية الخدمة' },
     { key: 'notifications', label: 'Notifications',    labelAr: 'الاشعارات' },
     { key: 'commissions',   label: 'Commissions',      labelAr: 'العمولات' },
+    { key: 'integrations',  label: 'Integrations',     labelAr: 'التكاملات' },
     { key: 'pipeline',      label: 'Pipeline',         labelAr: 'مراحل العمل' },
 ];
 
@@ -45,6 +46,9 @@ const form = useForm({
     auto_commission_enabled:      !!props.settings.auto_commission_enabled,
     commission_type:              props.settings.commission_type || 'fixed',
     commission_rate:              props.settings.commission_rate ?? 0,
+    webhooks_enabled:             !!props.settings.webhooks_enabled,
+    webhook_url:                  props.settings.webhook_url || '',
+    webhook_secret:               props.settings.webhook_secret || '',
 });
 
 // All medical modules a lead can default to (CRM-1: was derma/dental only)
@@ -717,6 +721,87 @@ const slaGaugePercent = computed(() => {
                                         <p class="text-xs text-gray-400 dark:text-gray-500 mt-1.5">
                                             {{ isRtl ? 'العمولة تنشأ بحالة "معلقة" وتعتمد من صفحة العمولات' : 'Commissions are created as "pending" and approved from the Commissions page' }}
                                         </p>
+                                    </div>
+                                </div>
+                            </Transition>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== INTEGRATIONS TAB (CRM-3) ==================== -->
+                <div v-show="activeTab === 'integrations'">
+                    <div class="space-y-6">
+                        <div
+                            :class="[
+                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 md:p-6 transition-all duration-700 delay-150',
+                                mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                            ]"
+                        >
+                            <div class="flex items-start justify-between gap-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-[#C4A265]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <svg class="w-5 h-5 text-[#C4A265]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+                                            <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base font-semibold text-gray-900 dark:text-white">{{ isRtl ? 'Webhooks الصادرة' : 'Outbound Webhooks' }}</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{{ isRtl ? 'إشعار نظام خارجي (n8n / Make / Zapier / API خاص) عند إنشاء عميل محتمل أو تغيير حالته أو تحويله — موقعة HMAC-SHA256' : 'Notify an external system (n8n / Make / Zapier / custom API) on lead created / status changed / converted — HMAC-SHA256 signed' }}</p>
+                                    </div>
+                                </div>
+                                <button
+                                    type="button"
+                                    :aria-label="isRtl ? 'تفعيل Webhooks' : 'Toggle webhooks'"
+                                    @click="form.webhooks_enabled = !form.webhooks_enabled"
+                                    :class="[
+                                        'relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#C4A265] focus:ring-offset-2 dark:focus:ring-offset-gray-800',
+                                        form.webhooks_enabled ? 'bg-[#C4A265]' : 'bg-gray-300 dark:bg-gray-600'
+                                    ]"
+                                >
+                                    <span
+                                        :class="[
+                                            'pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow ring-0 transition-transform duration-300 ease-in-out',
+                                            form.webhooks_enabled ? (isRtl ? '-translate-x-5' : 'translate-x-5') : 'translate-x-0'
+                                        ]"
+                                    />
+                                </button>
+                            </div>
+
+                            <Transition
+                                enter-active-class="transition-all duration-300 ease-out"
+                                enter-from-class="opacity-0 max-h-0"
+                                enter-to-class="opacity-100 max-h-96"
+                                leave-active-class="transition-all duration-200 ease-in"
+                                leave-from-class="opacity-100 max-h-96"
+                                leave-to-class="opacity-0 max-h-0"
+                            >
+                                <div v-if="form.webhooks_enabled" class="mt-5 overflow-hidden space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ isRtl ? 'رابط الاستقبال (URL)' : 'Endpoint URL' }}</label>
+                                        <input
+                                            type="url"
+                                            v-model="form.webhook_url"
+                                            dir="ltr"
+                                            placeholder="https://example.com/webhooks/crm"
+                                            class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-[#C4A265] focus:ring-[#C4A265] text-sm"
+                                        />
+                                    </div>
+                                    <div class="max-w-md">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ isRtl ? 'المفتاح السري للتوقيع' : 'Signing secret' }}</label>
+                                        <input
+                                            type="text"
+                                            v-model="form.webhook_secret"
+                                            dir="ltr"
+                                            autocomplete="off"
+                                            class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-[#C4A265] focus:ring-[#C4A265] text-sm font-mono"
+                                        />
+                                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1.5" dir="ltr">X-Doctorato-Signature: sha256=HMAC(body, secret)</p>
+                                    </div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/40 rounded-xl px-3.5 py-3 space-y-1">
+                                        <p class="font-semibold text-gray-600 dark:text-gray-300">{{ isRtl ? 'الأحداث المرسلة:' : 'Events sent:' }}</p>
+                                        <p dir="ltr" class="font-mono">lead.created · lead.status_changed · lead.converted</p>
+                                        <p>{{ isRtl ? 'إعادة المحاولة تلقائياً 3 مرات عند الفشل.' : 'Failed deliveries retry automatically 3 times.' }}</p>
                                     </div>
                                 </div>
                             </Transition>

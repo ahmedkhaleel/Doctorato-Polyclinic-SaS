@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\NotificationCampaign;
 use App\Services\Notifications\CampaignService;
+use App\Services\Notifications\LeadSegmentResolver;
 use App\Services\Notifications\SegmentResolver;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -14,7 +15,7 @@ use Inertia\Response;
 
 class AdminCampaignController extends Controller
 {
-    public function __construct(private SegmentResolver $resolver, private CampaignService $campaigns) {}
+    public function __construct(private SegmentResolver $resolver, private LeadSegmentResolver $leadResolver, private CampaignService $campaigns) {}
 
     public function index(): Response
     {
@@ -34,7 +35,12 @@ class AdminCampaignController extends Controller
     /** Live audience size for the given rules (used in the builder UI). */
     public function preview(Request $request): JsonResponse
     {
-        return response()->json(['count' => $this->resolver->count($request->input('rules', []))]);
+        $rules = $request->input('rules', []);
+        $count = ($rules['audience'] ?? 'patients') === 'leads'
+            ? $this->leadResolver->count($rules)
+            : $this->resolver->count($rules);
+
+        return response()->json(['count' => $count]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -53,7 +59,9 @@ class AdminCampaignController extends Controller
             'body_en_b' => $data['body_en_b'] ?? null,
             'rules' => $data['rules'] ?? [],
             'created_by' => $request->user()?->id,
-            'audience_count' => $this->resolver->count($data['rules'] ?? []),
+            'audience_count' => (($data['rules']['audience'] ?? 'patients') === 'leads')
+                ? $this->leadResolver->count($data['rules'] ?? [])
+                : $this->resolver->count($data['rules'] ?? []),
             'status' => ! empty($data['scheduled_at']) ? NotificationCampaign::STATUS_SCHEDULED : NotificationCampaign::STATUS_DRAFT,
             'scheduled_at' => $data['scheduled_at'] ?? null,
         ]);
@@ -134,6 +142,13 @@ class AdminCampaignController extends Controller
             'rules.created_within_days' => 'nullable|integer|min:1',
             'rules.inactive_days' => 'nullable|integer|min:1',
             'rules.marketing_channel' => 'nullable|in:email,sms,whatsapp',
+            // CRM-3: lead-audience campaigns
+            'rules.audience' => 'nullable|in:patients,leads',
+            'rules.statuses' => 'nullable|array',
+            'rules.statuses.*' => 'string|in:'.implode(',', \App\Models\Lead::STATUSES),
+            'rules.priority' => 'nullable|integer|in:1,2,3',
+            'rules.module' => 'nullable|string|in:derma,dental,pediatric,obgyn,psychiatry,neurology,physiotherapy',
+            'rules.lead_source_id' => 'nullable|integer|exists:lead_sources,id',
         ]);
     }
 }

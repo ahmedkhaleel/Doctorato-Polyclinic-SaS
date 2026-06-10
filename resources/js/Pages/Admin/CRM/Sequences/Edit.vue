@@ -117,7 +117,7 @@ function formatDelay(minutes) {
 }
 
 const filteredTemplates = computed(() => (actionType) => {
-    const channelMap = { send_whatsapp: 'whatsapp', send_email: 'email', send_sms: 'sms' };
+    const channelMap = { send_whatsapp: 'whatsapp', send_email: 'email', send_sms: 'sms', send_ai_message: 'whatsapp' };
     const channel = channelMap[actionType];
     if (!channel) return props.templates;
     return props.templates.filter(t => t.channel === channel);
@@ -274,7 +274,7 @@ const filteredTemplates = computed(() => (actionType) => {
                                         <option v-for="(label, key) in actionTypes" :key="key" :value="key">{{ label }}</option>
                                     </select>
                                 </div>
-                                <div v-if="['send_whatsapp', 'send_email', 'send_sms'].includes(step.action_type)">
+                                <div v-if="['send_whatsapp', 'send_email', 'send_sms', 'send_ai_message'].includes(step.action_type)">
                                     <label class="block text-xs font-medium text-gray-600 mb-1">{{ $t('a_template') }}</label>
                                     <select v-model="step.template_id"
                                         class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors">
@@ -303,7 +303,7 @@ const filteredTemplates = computed(() => (actionType) => {
                                 </div>
                             </div>
 
-                            <div v-if="['send_whatsapp', 'send_email', 'send_sms'].includes(step.action_type) && !step.template_id" class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+                            <div v-if="['send_whatsapp', 'send_email', 'send_sms', 'send_ai_message'].includes(step.action_type) && !step.template_id" class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 mb-1">{{ $t('a_message_en') }}</label>
                                     <textarea v-model="step.message_en" rows="2" placeholder="Use {{name}}, {{clinic_name}}..."

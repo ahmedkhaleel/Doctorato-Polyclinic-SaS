@@ -27,15 +27,36 @@ const form = reactive({
     name: '', channel: 'whatsapp', subject: '', body_ar: '', body_en: '',
     ab_enabled: false, subject_b: '', body_ar_b: '', body_en_b: '',
     scheduled_at: '', send_now: false,
-    rules: { gender: '', age_min: '', age_max: '', created_within_days: '', inactive_days: '', marketing_channel: '' },
+    rules: { audience: 'patients', gender: '', age_min: '', age_max: '', created_within_days: '', inactive_days: '', marketing_channel: '', statuses: [], priority: '', module: '' },
 });
 const audience = ref(null);
 
 function cleanRules() {
     const r = {};
-    Object.entries(form.rules).forEach(([k, v]) => { if (v !== '' && v !== null) r[k] = v; });
+    Object.entries(form.rules).forEach(([k, v]) => {
+        if (Array.isArray(v)) { if (v.length) r[k] = v; }
+        else if (v !== '' && v !== null) r[k] = v;
+    });
+    if (r.audience === 'patients') delete r.audience;
     return r;
 }
+
+// CRM-3: lead pipeline statuses selectable as a campaign segment
+const leadStatuses = [
+    { value: 'new', ar: 'جديد', en: 'New' },
+    { value: 'contacted', ar: 'تم التواصل', en: 'Contacted' },
+    { value: 'qualified', ar: 'مؤهل', en: 'Qualified' },
+    { value: 'appointment_booked', ar: 'موعد محجوز', en: 'Appointment booked' },
+    { value: 'consultation_done', ar: 'تمت الاستشارة', en: 'Consultation done' },
+    { value: 'negotiation', ar: 'تفاوض', en: 'Negotiation' },
+    { value: 'dormant', ar: 'خامل', en: 'Dormant' },
+];
+const leadModules = [
+    { value: 'derma', ar: 'الجلدية', en: 'Derma' }, { value: 'dental', ar: 'الأسنان', en: 'Dental' },
+    { value: 'pediatric', ar: 'الأطفال', en: 'Pediatric' }, { value: 'obgyn', ar: 'النساء والتوليد', en: 'OB/GYN' },
+    { value: 'psychiatry', ar: 'الطب النفسي', en: 'Psychiatry' }, { value: 'neurology', ar: 'المخ والأعصاب', en: 'Neurology' },
+    { value: 'physiotherapy', ar: 'العلاج الطبيعي', en: 'Physiotherapy' },
+];
 let previewTimer = null;
 watch(() => JSON.stringify(form.rules), () => {
     clearTimeout(previewTimer);
@@ -62,7 +83,7 @@ function submit(sendNow) {
 function resetForm() {
     Object.assign(form, { name: '', channel: 'whatsapp', subject: '', body_ar: '', body_en: '',
         ab_enabled: false, subject_b: '', body_ar_b: '', body_en_b: '', scheduled_at: '', send_now: false,
-        rules: { gender: '', age_min: '', age_max: '', created_within_days: '', inactive_days: '', marketing_channel: '' } });
+        rules: { audience: 'patients', gender: '', age_min: '', age_max: '', created_within_days: '', inactive_days: '', marketing_channel: '', statuses: [], priority: '', module: '' } });
     audience.value = null;
 }
 function sendCampaign(c) {
@@ -122,7 +143,38 @@ const fmt = (iso) => iso ? new Date(iso).toLocaleString(isRtl.value ? 'ar-EG' : 
                         <h3 class="font-bold text-gray-800 text-sm">{{ t('الجمهور المستهدف', 'Target audience') }}</h3>
                         <button @click="previewAudience" class="text-xs font-semibold text-[#1B365D] hover:underline">{{ t('تحديث العدد', 'Refresh count') }}</button>
                     </div>
-                    <div class="grid sm:grid-cols-3 gap-3">
+                    <!-- CRM-3: audience type — patients (default) or CRM leads -->
+                    <div class="flex gap-2 mb-3">
+                        <button type="button" @click="form.rules.audience = 'patients'"
+                            class="px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors"
+                            :class="form.rules.audience !== 'leads' ? 'bg-[#1B365D] text-white border-[#1B365D]' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'">
+                            {{ t('المرضى', 'Patients') }}
+                        </button>
+                        <button type="button" @click="form.rules.audience = 'leads'"
+                            class="px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors"
+                            :class="form.rules.audience === 'leads' ? 'bg-[#C4A265] text-white border-[#C4A265]' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'">
+                            {{ t('العملاء المحتملون (CRM)', 'Leads (CRM)') }}
+                        </button>
+                    </div>
+
+                    <div v-if="form.rules.audience === 'leads'" class="space-y-3">
+                        <div class="flex flex-wrap gap-1.5">
+                            <button v-for="st in leadStatuses" :key="st.value" type="button"
+                                @click="form.rules.statuses.includes(st.value) ? form.rules.statuses.splice(form.rules.statuses.indexOf(st.value), 1) : form.rules.statuses.push(st.value)"
+                                class="px-2.5 py-1 rounded-full text-[11px] font-semibold border transition-colors"
+                                :class="form.rules.statuses.includes(st.value) ? 'bg-[#C4A265]/15 text-[#C4A265] border-[#C4A265]/40' : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'">
+                                {{ t(st.ar, st.en) }}
+                            </button>
+                        </div>
+                        <div class="grid sm:grid-cols-3 gap-3">
+                            <select v-model="form.rules.priority" class="rounded-lg border-gray-200 text-sm"><option value="">{{ t('كل الأولويات', 'Any priority') }}</option><option value="1">{{ t('ساخن', 'Hot') }}</option><option value="2">{{ t('دافئ', 'Warm') }}</option><option value="3">{{ t('بارد', 'Cold') }}</option></select>
+                            <select v-model="form.rules.module" class="rounded-lg border-gray-200 text-sm"><option value="">{{ t('كل التخصصات', 'Any module') }}</option><option v-for="m in leadModules" :key="m.value" :value="m.value">{{ t(m.ar, m.en) }}</option></select>
+                            <input type="number" v-model="form.rules.inactive_days" :placeholder="t('بلا تواصل منذ (يوم)', 'No contact for (days)')" class="rounded-lg border-gray-200 text-sm" />
+                        </div>
+                        <p class="text-[11px] text-gray-400">{{ t('ترسل لقائمة CRM داخل خط الأنابيب فقط (لا تشمل المحوّلين أو المفقودين) وتسجل على ملف كل عميل.', 'Sends to in-pipeline CRM leads only (excludes converted/lost) and is logged on each lead timeline.') }}</p>
+                    </div>
+
+                    <div v-else class="grid sm:grid-cols-3 gap-3">
                         <select v-model="form.rules.gender" class="rounded-lg border-gray-200 text-sm"><option value="">{{ t('كل الأجناس', 'Any gender') }}</option><option value="male">{{ t('ذكر', 'Male') }}</option><option value="female">{{ t('أنثى', 'Female') }}</option></select>
                         <input type="number" v-model="form.rules.age_min" :placeholder="t('أقل عمر', 'Min age')" class="rounded-lg border-gray-200 text-sm" />
                         <input type="number" v-model="form.rules.age_max" :placeholder="t('أكبر عمر', 'Max age')" class="rounded-lg border-gray-200 text-sm" />

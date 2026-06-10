@@ -41,6 +41,9 @@ class CrmSettingsController extends Controller
             'auto_commission_enabled' => 'nullable|boolean',
             'commission_type' => 'nullable|string|in:fixed,percentage',
             'commission_rate' => 'nullable|numeric|min:0|max:100000',
+            'webhooks_enabled' => 'nullable|boolean',
+            'webhook_url' => 'nullable|url|max:500',
+            'webhook_secret' => 'nullable|string|max:128',
         ]);
 
         $allowedKeys = [
@@ -57,6 +60,9 @@ class CrmSettingsController extends Controller
             'auto_commission_enabled',
             'commission_type',
             'commission_rate',
+            'webhooks_enabled',
+            'webhook_url',
+            'webhook_secret',
         ];
 
         foreach ($allowedKeys as $key) {

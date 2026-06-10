@@ -40,7 +40,7 @@ class FollowUpAutomationService
      */
     public static function triggerStatusChange(Lead $lead, string $newStatus): void
     {
-        $event = 'status_changed_to_' . $newStatus;
+        $event = 'status_changed_to_'.$newStatus;
         static::triggerEvent($lead, $event);
     }
 
@@ -137,6 +137,7 @@ class FollowUpAutomationService
         // Check if lead was converted/lost → stop
         if ($sequence->stop_on_conversion && in_array($lead->status, [Lead::STATUS_CONVERTED, Lead::STATUS_LOST])) {
             $enrollment->cancel(LeadSequenceEnrollment::STATUS_STOPPED_CONVERSION);
+
             return;
         }
 
@@ -150,6 +151,7 @@ class FollowUpAutomationService
 
             if ($hasInbound) {
                 $enrollment->cancel(LeadSequenceEnrollment::STATUS_STOPPED_REPLY);
+
                 return;
             }
         }
@@ -162,6 +164,7 @@ class FollowUpAutomationService
 
         if (! $step) {
             $enrollment->markCompleted();
+
             return;
         }
 
@@ -197,11 +200,49 @@ class FollowUpAutomationService
             FollowUpSequenceStep::ACTION_SEND_WHATSAPP => static::actionSendMessage($lead, $step, 'whatsapp'),
             FollowUpSequenceStep::ACTION_SEND_EMAIL => static::actionSendMessage($lead, $step, 'email'),
             FollowUpSequenceStep::ACTION_SEND_SMS => static::actionSendMessage($lead, $step, 'sms'),
+            FollowUpSequenceStep::ACTION_SEND_AI_MESSAGE => static::actionSendAiMessage($lead, $step),
             FollowUpSequenceStep::ACTION_NOTIFY_STAFF => static::actionNotifyStaff($lead, $step),
             FollowUpSequenceStep::ACTION_CHANGE_STATUS => static::actionChangeStatus($lead, $step),
             FollowUpSequenceStep::ACTION_ADD_SCORE => static::actionAddScore($lead, $step),
-            default => ['success' => false, 'message' => 'Unknown action type: ' . $step->action_type],
+            default => ['success' => false, 'message' => 'Unknown action type: '.$step->action_type],
         };
+    }
+
+    /**
+     * CRM-3 — AI-personalized WhatsApp step. Drafts via the gated CrmAssistant
+     * (lead_reply flag); when AI is off/unavailable it falls back to the step's
+     * template/custom message so the sequence NEVER stalls on the AI layer.
+     */
+    protected static function actionSendAiMessage(Lead $lead, FollowUpSequenceStep $step): array
+    {
+        if ($lead->phone) {
+            try {
+                $result = app(\App\Services\Ai\Features\CrmAssistant::class)
+                    ->draftMessage($lead, 'whatsapp', 'friendly', app()->getLocale());
+
+                $phone = preg_replace('/[^0-9]/', '', $lead->phone);
+                $redirectUrl = 'https://wa.me/'.$phone.'?text='.urlencode($result->text);
+
+                LeadActivity::create([
+                    'lead_id' => $lead->id,
+                    'type' => 'whatsapp',
+                    'subject' => 'Auto WhatsApp (Sequence, AI)',
+                    'description' => $result->text,
+                    'direction' => 'outbound',
+                    'metadata' => ['automated' => true, 'ai' => true, 'model' => $result->model, 'redirect_url' => $redirectUrl],
+                ]);
+
+                $lead->markAsContacted();
+
+                return ['success' => true, 'message' => 'AI WhatsApp message prepared.', 'redirect_url' => $redirectUrl];
+            } catch (\App\Services\Ai\Exceptions\AiUnavailableException) {
+                // fall through to the template/custom-message path below
+            } catch (\Throwable $e) {
+                report($e);
+            }
+        }
+
+        return static::actionSendMessage($lead, $step, 'whatsapp');
     }
 
     /**
@@ -250,6 +291,7 @@ class FollowUpAutomationService
             $template = CommunicationTemplate::find($step->template_id);
             if ($template) {
                 $lang = app()->getLocale() === 'ar' ? 'ar' : 'en';
+
                 return CommunicationService::send($lead, $template, $channel, $lang);
             }
         }
@@ -266,13 +308,13 @@ class FollowUpAutomationService
         // Replace variables in custom message
         $variables = CommunicationService::buildVariables($lead);
         foreach ($variables as $key => $value) {
-            $message = str_replace('{{' . $key . '}}', $value, $message);
+            $message = str_replace('{{'.$key.'}}', $value, $message);
         }
 
         // For WhatsApp, generate link
         if ($channel === 'whatsapp' && $lead->phone) {
             $phone = preg_replace('/[^0-9]/', '', $lead->phone);
-            $redirectUrl = 'https://wa.me/' . $phone . '?text=' . urlencode($message);
+            $redirectUrl = 'https://wa.me/'.$phone.'?text='.urlencode($message);
 
             LeadActivity::create([
                 'lead_id' => $lead->id,
@@ -284,6 +326,7 @@ class FollowUpAutomationService
             ]);
 
             $lead->markAsContacted();
+
             return ['success' => true, 'message' => 'WhatsApp message prepared.', 'redirect_url' => $redirectUrl];
         }
 
@@ -303,9 +346,10 @@ class FollowUpAutomationService
                 ]);
 
                 $lead->markAsContacted();
+
                 return ['success' => true, 'message' => 'Email sent.'];
             } catch (\Exception $e) {
-                return ['success' => false, 'message' => 'Email failed: ' . $e->getMessage()];
+                return ['success' => false, 'message' => 'Email failed: '.$e->getMessage()];
             }
         }
 
@@ -321,10 +365,11 @@ class FollowUpAutomationService
             ]);
 
             $lead->markAsContacted();
+
             return ['success' => true, 'message' => 'SMS logged.'];
         }
 
-        return ['success' => false, 'message' => 'Missing contact info for channel: ' . $channel];
+        return ['success' => false, 'message' => 'Missing contact info for channel: '.$channel];
     }
 
     /**
@@ -339,12 +384,14 @@ class FollowUpAutomationService
             foreach ($admins as $admin) {
                 $admin->notify(new SequenceStepNotification($lead, $step));
             }
+
             return ['success' => true, 'message' => 'Admins notified.'];
         }
 
         $user = User::find($userId);
         if ($user) {
             $user->notify(new SequenceStepNotification($lead, $step));
+
             return ['success' => true, 'message' => "Staff notified: {$user->name}"];
         }
 

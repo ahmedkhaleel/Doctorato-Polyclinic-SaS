@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\StampsBranch;
+use App\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Concerns\StampsBranch;
-use App\Traits\LogsActivity;
 
 class Lead extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity, StampsBranch;
+    use HasFactory, LogsActivity, SoftDeletes, StampsBranch;
 
     protected $fillable = [
         'full_name',
@@ -75,6 +75,21 @@ class Lead extends Model
     {
         parent::boot();
 
+        // CRM-3: outbound webhook on creation (no-op unless enabled in settings).
+        static::created(function ($lead) {
+            \App\Services\Crm\CrmWebhookService::dispatch('lead.created', $lead);
+        });
+
+        static::updated(function ($lead) {
+            if ($lead->wasChanged('status')) {
+                \App\Services\Crm\CrmWebhookService::dispatch(
+                    $lead->status === self::STATUS_CONVERTED ? 'lead.converted' : 'lead.status_changed',
+                    $lead,
+                    ['previous_status' => $lead->getOriginal('status')],
+                );
+            }
+        });
+
         static::updating(function ($lead) {
             if ($lead->isDirty('status')) {
                 $oldStatus = $lead->getOriginal('status');
@@ -102,7 +117,7 @@ class Lead extends Model
                 ]);
 
                 // Notify assigned user of status change
-                if ($lead->assigned_to && (int)$lead->assigned_to !== (int)auth()->id()) {
+                if ($lead->assigned_to && (int) $lead->assigned_to !== (int) auth()->id()) {
                     $assignedUser = \App\Models\User::find($lead->assigned_to);
                     if ($assignedUser) {
                         $assignedUser->notify(new \App\Notifications\LeadStatusChangedNotification(
@@ -120,17 +135,27 @@ class Lead extends Model
     // ─── Constants ───────────────────────────────────────
 
     const STATUS_NEW = 'new';
+
     const STATUS_CONTACTED = 'contacted';
+
     const STATUS_QUALIFIED = 'qualified';
+
     const STATUS_APPOINTMENT_BOOKED = 'appointment_booked';
+
     const STATUS_CONSULTATION_DONE = 'consultation_done';
+
     const STATUS_NEGOTIATION = 'negotiation';
+
     const STATUS_CONVERTED = 'converted';
+
     const STATUS_LOST = 'lost';
+
     const STATUS_DORMANT = 'dormant';
 
     const PRIORITY_HOT = 1;
+
     const PRIORITY_WARM = 2;
+
     const PRIORITY_COLD = 3;
 
     const STATUSES = [
@@ -259,10 +284,10 @@ class Lead extends Model
     {
         return $query->where(function ($q) {
             $q->where('status', self::STATUS_NEW)
-              ->orWhere(function ($q2) {
-                  $q2->whereNotNull('next_follow_up_at')
-                     ->where('next_follow_up_at', '<', now());
-              });
+                ->orWhere(function ($q2) {
+                    $q2->whereNotNull('next_follow_up_at')
+                        ->where('next_follow_up_at', '<', now());
+                });
         })->whereNotIn('status', [self::STATUS_CONVERTED, self::STATUS_LOST]);
     }
 
@@ -270,9 +295,9 @@ class Lead extends Model
     {
         return $query->where(function ($q) use ($term) {
             $q->where('full_name', 'like', "%{$term}%")
-              ->orWhere('phone', 'like', "%{$term}%")
-              ->orWhere('email', 'like', "%{$term}%")
-              ->orWhere('city', 'like', "%{$term}%");
+                ->orWhere('phone', 'like', "%{$term}%")
+                ->orWhere('email', 'like', "%{$term}%")
+                ->orWhere('city', 'like', "%{$term}%");
         });
     }
 
@@ -295,7 +320,10 @@ class Lead extends Model
 
     public function getDaysSinceLastContactAttribute(): ?int
     {
-        if (! $this->last_contacted_at) return null;
+        if (! $this->last_contacted_at) {
+            return null;
+        }
+
         return $this->last_contacted_at->diffInDays(now());
     }
 
