@@ -154,13 +154,16 @@ class CrmDashboardController extends Controller
             ->where('created_at', '>=', $startDate)
             ->selectRaw('AVG(TIMESTAMPDIFF(MINUTE, created_at, first_contacted_at)) as avg_minutes')
             ->value('avg_minutes');
+        // CRM-1: target comes from CRM settings (was hardcoded 60).
+        $slaTargetMinutes = max(1, (int) \App\Models\CrmSetting::get('sla_response_target_minutes', 60));
         $slaMetrics = [
             'avg_response_minutes' => $avgResponseMinutes ? round($avgResponseMinutes) : null,
             'avg_response_display' => $this->formatMinutes($avgResponseMinutes),
             'awaiting_contact' => Lead::where('status', 'new')->whereNull('first_contacted_at')->count(),
+            'target_minutes' => $slaTargetMinutes,
             'within_1h' => Lead::whereNotNull('first_contacted_at')
                 ->where('created_at', '>=', $startDate)
-                ->whereRaw('TIMESTAMPDIFF(MINUTE, created_at, first_contacted_at) <= 60')
+                ->whereRaw('TIMESTAMPDIFF(MINUTE, created_at, first_contacted_at) <= ?', [$slaTargetMinutes])
                 ->count(),
             'total_contacted' => Lead::whereNotNull('first_contacted_at')->where('created_at', '>=', $startDate)->count(),
         ];

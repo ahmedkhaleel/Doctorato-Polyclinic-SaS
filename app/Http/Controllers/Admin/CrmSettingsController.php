@@ -28,16 +28,19 @@ class CrmSettingsController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'sla_response_target_minutes'  => 'nullable|integer|min:1|max:1440',
-            'sla_followup_target_hours'    => 'nullable|integer|min:1|max:720',
-            'stale_lead_days'              => 'nullable|integer|min:1|max:365',
-            'auto_assign_enabled'          => 'nullable|boolean',
-            'auto_assign_method'           => 'nullable|string|in:round_robin,load_based',
-            'default_lead_priority'        => 'nullable|integer|in:1,2,3',
-            'default_lead_module'          => 'nullable|string|in:derma,dental,pediatric',
-            'notify_on_new_lead'           => 'nullable|boolean',
-            'notify_on_status_change'      => 'nullable|boolean',
-            'notify_on_overdue_followup'   => 'nullable|boolean',
+            'sla_response_target_minutes' => 'nullable|integer|min:1|max:1440',
+            'sla_followup_target_hours' => 'nullable|integer|min:1|max:720',
+            'stale_lead_days' => 'nullable|integer|min:1|max:365',
+            'auto_assign_enabled' => 'nullable|boolean',
+            'auto_assign_method' => 'nullable|string|in:round_robin,load_based',
+            'default_lead_priority' => 'nullable|integer|in:1,2,3',
+            'default_lead_module' => 'nullable|string|in:derma,dental,pediatric,obgyn,psychiatry,neurology,physiotherapy',
+            'notify_on_new_lead' => 'nullable|boolean',
+            'notify_on_status_change' => 'nullable|boolean',
+            'notify_on_overdue_followup' => 'nullable|boolean',
+            'auto_commission_enabled' => 'nullable|boolean',
+            'commission_type' => 'nullable|string|in:fixed,percentage',
+            'commission_rate' => 'nullable|numeric|min:0|max:100000',
         ]);
 
         $allowedKeys = [
@@ -51,6 +54,9 @@ class CrmSettingsController extends Controller
             'notify_on_new_lead',
             'notify_on_status_change',
             'notify_on_overdue_followup',
+            'auto_commission_enabled',
+            'commission_type',
+            'commission_rate',
         ];
 
         foreach ($allowedKeys as $key) {

@@ -416,6 +416,7 @@ const kpiCards = [
                                             <th class="text-center py-2.5 font-semibold tracking-wider">{{ $t('a_total') }}</th>
                                             <th class="text-center py-2.5 font-semibold tracking-wider">Conv.</th>
                                             <th class="text-center py-2.5 font-semibold tracking-wider">{{ $t('a_lost') }}</th>
+                                            <th class="text-center py-2.5 font-semibold tracking-wider">{{ isRtl ? 'الايراد' : 'Revenue' }}</th>
                                             <th class="ltr:text-right rtl:text-left py-2.5 font-semibold tracking-wider">{{ $t('a_rate') }}</th>
                                         </tr>
                                     </thead>
@@ -430,6 +431,7 @@ const kpiCards = [
                                             <td class="py-2.5 text-center text-gray-600 text-xs font-medium">{{ s.total }}</td>
                                             <td class="py-2.5 text-center text-emerald-600 font-semibold text-xs">{{ s.converted }}</td>
                                             <td class="py-2.5 text-center text-red-500 text-xs">{{ s.lost }}</td>
+                                            <td class="py-2.5 text-center text-xs font-semibold" :class="s.revenue > 0 ? 'text-emerald-700' : 'text-gray-400'">{{ s.revenue > 0 ? Number(s.revenue).toLocaleString() : '-' }}</td>
                                             <td class="py-2.5 ltr:text-right rtl:text-left">
                                                 <span class="text-xs font-bold" :class="s.rate >= 30 ? 'text-emerald-600' : s.rate >= 15 ? 'text-amber-600' : 'text-gray-500'">{{ s.rate }}%</span>
                                             </td>

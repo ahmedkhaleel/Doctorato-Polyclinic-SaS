@@ -104,6 +104,15 @@ class CommunicationService
     {
         $clinicName = Setting::get('clinic_name_en', 'Doctorato Polyclinic');
 
+        // CRM-1 — variables v2: service / source / assignee / follow-up / module
+        // context so templates can personalize beyond name+phone.
+        $moduleNames = [
+            'derma' => 'الجلدية', 'dental' => 'الأسنان', 'pediatric' => 'الأطفال',
+            'obgyn' => 'النساء والتوليد', 'psychiatry' => 'الطب النفسي',
+            'neurology' => 'المخ والأعصاب', 'physiotherapy' => 'العلاج الطبيعي',
+        ];
+        $services = $lead->interested_services;
+
         return [
             'name' => $lead->full_name,
             'first_name' => explode(' ', $lead->full_name)[0],
@@ -112,6 +121,11 @@ class CommunicationService
             'clinic_name' => $clinicName,
             'clinic_phone' => Setting::get('clinic_phone', ''),
             'date' => now()->format('d/m/Y'),
+            'service' => is_array($services) ? implode('، ', $services) : (string) ($services ?? ''),
+            'source' => $lead->source?->name_ar ?? $lead->source?->name_en ?? '',
+            'assigned_to' => $lead->assignedUser?->name ?? '',
+            'next_follow_up' => $lead->next_follow_up_at?->format('d/m/Y H:i') ?? '',
+            'module' => $moduleNames[$lead->module] ?? ($lead->module ?? ''),
         ];
     }
 

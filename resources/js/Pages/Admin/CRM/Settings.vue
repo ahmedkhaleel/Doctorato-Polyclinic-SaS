@@ -26,6 +26,7 @@ const tabs = [
     { key: 'general',       label: 'General',          labelAr: 'عام' },
     { key: 'sla',           label: 'SLA & Response',   labelAr: 'اتفاقية الخدمة' },
     { key: 'notifications', label: 'Notifications',    labelAr: 'الاشعارات' },
+    { key: 'commissions',   label: 'Commissions',      labelAr: 'العمولات' },
     { key: 'pipeline',      label: 'Pipeline',         labelAr: 'مراحل العمل' },
 ];
 
@@ -41,7 +42,21 @@ const form = useForm({
     notify_on_new_lead:           !!props.settings.notify_on_new_lead,
     notify_on_status_change:      !!props.settings.notify_on_status_change,
     notify_on_overdue_followup:   !!props.settings.notify_on_overdue_followup,
+    auto_commission_enabled:      !!props.settings.auto_commission_enabled,
+    commission_type:              props.settings.commission_type || 'fixed',
+    commission_rate:              props.settings.commission_rate ?? 0,
 });
+
+// All medical modules a lead can default to (CRM-1: was derma/dental only)
+const moduleOptions = [
+    { value: 'derma',         label: 'Derma',         labelAr: 'الجلدية' },
+    { value: 'dental',        label: 'Dental',        labelAr: 'الاسنان' },
+    { value: 'pediatric',     label: 'Pediatric',     labelAr: 'الاطفال' },
+    { value: 'obgyn',         label: 'OB/GYN',        labelAr: 'النساء والتوليد' },
+    { value: 'psychiatry',    label: 'Psychiatry',    labelAr: 'الطب النفسي' },
+    { value: 'neurology',     label: 'Neurology',     labelAr: 'المخ والاعصاب' },
+    { value: 'physiotherapy', label: 'Physiotherapy', labelAr: 'العلاج الطبيعي' },
+];
 
 const showSuccess = ref(false);
 
@@ -312,13 +327,15 @@ const slaGaugePercent = computed(() => {
                                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{{ isRtl ? 'القسم الافتراضي للعملاء الجدد' : 'Default department for new leads' }}</p>
                                 </div>
                             </div>
-                            <div class="grid grid-cols-2 gap-3">
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                                 <button
+                                    v-for="m in moduleOptions"
+                                    :key="m.value"
                                     type="button"
-                                    @click="form.default_lead_module = 'derma'"
+                                    @click="form.default_lead_module = m.value"
                                     :class="[
                                         'relative p-4 rounded-xl border-2 transition-all duration-300 text-center',
-                                        form.default_lead_module === 'derma'
+                                        form.default_lead_module === m.value
                                             ? 'border-[#C4A265] bg-[#C4A265]/5 shadow-md shadow-[#C4A265]/10'
                                             : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
                                     ]"
@@ -328,24 +345,7 @@ const slaGaugePercent = computed(() => {
                                             <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
                                         </svg>
                                     </div>
-                                    <div class="font-semibold text-sm text-gray-900 dark:text-white">{{ isRtl ? 'الجلدية' : 'Derma' }}</div>
-                                </button>
-                                <button
-                                    type="button"
-                                    @click="form.default_lead_module = 'dental'"
-                                    :class="[
-                                        'relative p-4 rounded-xl border-2 transition-all duration-300 text-center',
-                                        form.default_lead_module === 'dental'
-                                            ? 'border-[#C4A265] bg-[#C4A265]/5 shadow-md shadow-[#C4A265]/10'
-                                            : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
-                                    ]"
-                                >
-                                    <div class="w-10 h-10 mx-auto rounded-full bg-gradient-to-br from-slate-400 to-[#1B365D] flex items-center justify-center mb-2">
-                                        <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M12 2C8 2 6 5 6 8c0 3 1 5 1 8 0 2 2 6 5 6s5-4 5-6c0-3 1-5 1-8 0-3-2-6-6-6z"/>
-                                        </svg>
-                                    </div>
-                                    <div class="font-semibold text-sm text-gray-900 dark:text-white">{{ isRtl ? 'الاسنان' : 'Dental' }}</div>
+                                    <div class="font-semibold text-sm text-gray-900 dark:text-white">{{ isRtl ? m.labelAr : m.label }}</div>
                                 </button>
                             </div>
                         </div>
@@ -616,6 +616,110 @@ const slaGaugePercent = computed(() => {
                                     />
                                 </button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== COMMISSIONS TAB ==================== -->
+                <div v-show="activeTab === 'commissions'">
+                    <div class="space-y-6">
+                        <div
+                            :class="[
+                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 md:p-6 transition-all duration-700 delay-150',
+                                mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                            ]"
+                        >
+                            <div class="flex items-start justify-between gap-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-[#C4A265]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <svg class="w-5 h-5 text-[#C4A265]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="12" y1="1" x2="12" y2="23"/>
+                                            <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base font-semibold text-gray-900 dark:text-white">{{ isRtl ? 'عمولة التحويل التلقائية' : 'Auto Conversion Commission' }}</h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{{ isRtl ? 'عند تحويل عميل محتمل الى مريض، تنشأ عمولة معلقة للموظف المسؤول تلقائيا (تحتاج اعتماد)' : 'When a lead converts to a patient, a pending commission is auto-created for the assigned member (needs approval)' }}</p>
+                                    </div>
+                                </div>
+                                <button
+                                    type="button"
+                                    :aria-label="isRtl ? 'تفعيل العمولة التلقائية' : 'Toggle auto commission'"
+                                    @click="form.auto_commission_enabled = !form.auto_commission_enabled"
+                                    :class="[
+                                        'relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#C4A265] focus:ring-offset-2 dark:focus:ring-offset-gray-800',
+                                        form.auto_commission_enabled ? 'bg-[#C4A265]' : 'bg-gray-300 dark:bg-gray-600'
+                                    ]"
+                                >
+                                    <span
+                                        :class="[
+                                            'pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow ring-0 transition-transform duration-300 ease-in-out',
+                                            form.auto_commission_enabled ? (isRtl ? '-translate-x-5' : 'translate-x-5') : 'translate-x-0'
+                                        ]"
+                                    />
+                                </button>
+                            </div>
+
+                            <Transition
+                                enter-active-class="transition-all duration-300 ease-out"
+                                enter-from-class="opacity-0 max-h-0"
+                                enter-to-class="opacity-100 max-h-96"
+                                leave-active-class="transition-all duration-200 ease-in"
+                                leave-from-class="opacity-100 max-h-96"
+                                leave-to-class="opacity-0 max-h-0"
+                            >
+                                <div v-if="form.auto_commission_enabled" class="mt-5 overflow-hidden space-y-5">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            {{ isRtl ? 'نوع العمولة' : 'Commission Type' }}
+                                        </label>
+                                        <div class="grid grid-cols-2 gap-3">
+                                            <button
+                                                type="button"
+                                                @click="form.commission_type = 'fixed'"
+                                                :class="[
+                                                    'relative p-4 rounded-xl border-2 transition-all duration-300 text-start',
+                                                    form.commission_type === 'fixed'
+                                                        ? 'border-[#C4A265] bg-[#C4A265]/5 shadow-md shadow-[#C4A265]/10'
+                                                        : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+                                                ]"
+                                            >
+                                                <div class="font-medium text-sm text-gray-900 dark:text-white">{{ isRtl ? 'مبلغ ثابت' : 'Fixed Amount' }}</div>
+                                                <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ isRtl ? 'مبلغ محدد لكل تحويل' : 'A set amount per conversion' }}</div>
+                                            </button>
+                                            <button
+                                                type="button"
+                                                @click="form.commission_type = 'percentage'"
+                                                :class="[
+                                                    'relative p-4 rounded-xl border-2 transition-all duration-300 text-start',
+                                                    form.commission_type === 'percentage'
+                                                        ? 'border-[#C4A265] bg-[#C4A265]/5 shadow-md shadow-[#C4A265]/10'
+                                                        : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+                                                ]"
+                                            >
+                                                <div class="font-medium text-sm text-gray-900 dark:text-white">{{ isRtl ? 'نسبة مئوية' : 'Percentage' }}</div>
+                                                <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ isRtl ? 'نسبة من فاتورة الحجز الاول' : '% of the first booking invoice' }}</div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="max-w-xs">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            {{ form.commission_type === 'percentage' ? (isRtl ? 'النسبة %' : 'Rate %') : (isRtl ? 'المبلغ' : 'Amount') }}
+                                        </label>
+                                        <input
+                                            type="number"
+                                            v-model.number="form.commission_rate"
+                                            min="0"
+                                            :max="form.commission_type === 'percentage' ? 100 : 100000"
+                                            step="0.5"
+                                            class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-[#C4A265] focus:ring-[#C4A265] text-sm"
+                                        />
+                                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1.5">
+                                            {{ isRtl ? 'العمولة تنشأ بحالة "معلقة" وتعتمد من صفحة العمولات' : 'Commissions are created as "pending" and approved from the Commissions page' }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </Transition>
                         </div>
                     </div>
                 </div>

@@ -2,15 +2,16 @@
 
 namespace App\Services;
 
+use App\Models\ContactMessage;
+use App\Models\FollowUpSequence;
 use App\Models\Lead;
 use App\Models\LeadActivity;
 use App\Models\LeadAssignmentRule;
 use App\Models\LeadScoringRule;
 use App\Models\LeadSource;
-use App\Models\ContactMessage;
-use App\Models\FollowUpSequence;
 use App\Models\User;
 use App\Notifications\NewWebsiteLeadNotification;
+use App\Services\Crm\PhoneNormalizer;
 
 class LeadService
 {
@@ -22,7 +23,7 @@ class LeadService
         // Check if a lead with the same phone or email already exists
         $existingLead = null;
         if ($message->phone) {
-            $existingLead = Lead::where('phone', $message->phone)->first();
+            $existingLead = Lead::whereIn('phone', PhoneNormalizer::matchForms($message->phone))->first();
         }
         if (! $existingLead && $message->email) {
             $existingLead = Lead::where('email', $message->email)->first();
@@ -50,7 +51,7 @@ class LeadService
         // Create a new lead
         $lead = Lead::create([
             'full_name' => $message->name,
-            'phone' => $message->phone,
+            'phone' => PhoneNormalizer::normalize($message->phone),
             'email' => $message->email,
             'status' => Lead::STATUS_NEW,
             'priority' => Lead::PRIORITY_WARM,
@@ -103,7 +104,7 @@ class LeadService
         // Check if a lead with the same phone or email already exists
         $existingLead = null;
         if ($booking->phone) {
-            $existingLead = Lead::where('phone', $booking->phone)->first();
+            $existingLead = Lead::whereIn('phone', PhoneNormalizer::matchForms($booking->phone))->first();
         }
         if (! $existingLead && $booking->email) {
             $existingLead = Lead::where('email', $booking->email)->first();
@@ -145,7 +146,7 @@ class LeadService
         // Create a new lead
         $lead = Lead::create([
             'full_name' => $booking->full_name,
-            'phone' => $booking->phone,
+            'phone' => PhoneNormalizer::normalize($booking->phone),
             'email' => $booking->email,
             'module' => $booking->module ?? 'derma',
             'status' => Lead::STATUS_APPOINTMENT_BOOKED,
@@ -202,13 +203,15 @@ class LeadService
      */
     public static function linkBookingToLead(\App\Models\Booking $booking): void
     {
-        if ($booking->lead_id) return; // Already linked
+        if ($booking->lead_id) {
+            return;
+        } // Already linked
 
         $lead = null;
 
         // Try to match by patient phone
         if ($booking->phone) {
-            $lead = Lead::where('phone', $booking->phone)
+            $lead = Lead::whereIn('phone', PhoneNormalizer::matchForms($booking->phone))
                 ->whereNotIn('status', [Lead::STATUS_CONVERTED, Lead::STATUS_LOST])
                 ->first();
         }
@@ -250,7 +253,9 @@ class LeadService
      */
     public static function autoAssign(Lead $lead): void
     {
-        if ($lead->assigned_to) return; // Already assigned
+        if ($lead->assigned_to) {
+            return;
+        } // Already assigned
 
         $rule = LeadAssignmentRule::findMatchingRule($lead);
 

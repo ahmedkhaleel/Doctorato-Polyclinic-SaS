@@ -58,6 +58,10 @@ const availableVariables = [
     { key: '{time}', icon: 'clock' },
     { key: '{clinic_name}', icon: 'building' },
     { key: '{clinic_phone}', icon: 'phone-office' },
+    { key: '{source}', icon: 'service' },
+    { key: '{assigned_to}', icon: 'user' },
+    { key: '{next_follow_up}', icon: 'calendar' },
+    { key: '{module}', icon: 'building' },
 ];
 
 /* ---- character counts ---- */

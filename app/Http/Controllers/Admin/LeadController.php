@@ -14,6 +14,7 @@ use App\Models\Patient;
 use App\Models\User;
 use App\Services\AuditLogger;
 use App\Services\CommunicationService;
+use App\Services\Crm\PhoneNormalizer;
 use App\Services\LeadService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -133,6 +134,15 @@ class LeadController extends Controller
         $data['status'] = 'new';
         $data['created_by'] = auth()->id();
         $data['score'] = 0;
+
+        // CRM-1: store phones normalized (digits-only international) so
+        // WhatsApp/SMS and dedupe behave consistently.
+        if (! empty($data['phone'])) {
+            $data['phone'] = PhoneNormalizer::normalize($data['phone']);
+        }
+        if (! empty($data['phone2'])) {
+            $data['phone2'] = PhoneNormalizer::normalize($data['phone2']);
+        }
 
         if (! empty($data['assigned_to'])) {
             $data['assigned_at'] = now();
@@ -522,7 +532,7 @@ class LeadController extends Controller
             'date_of_birth' => $lead->date_of_birth,
             'nationality' => $lead->nationality,
             'address' => $lead->city,
-            'referral_source' => $lead->source?->slug ?? 'other',
+            'referral_source' => $this->mapReferralSource($lead->source?->slug),
         ]);
         $patient->file_number = Patient::generateFileNumber();
         $patient->is_active = true;
@@ -597,6 +607,26 @@ class LeadController extends Controller
             ]),
             'performed_by' => auth()->id(),
         ]);
+
+        // CRM-1: auto-create a PENDING marketer commission for the assigned staff
+        // on conversion. Off by default; rate/type are CRM settings; idempotent;
+        // commission still needs the usual admin approval before payout.
+        $this->maybeCreateConversionCommission($lead, $booking);
+
+        // CRM-1: if the lead carried a patient-referral code, log the referring
+        // patient on the timeline (visibility for the referral program).
+        if ($lead->referral_code) {
+            $referrer = Patient::where('referral_code', $lead->referral_code)->first();
+            if ($referrer) {
+                LeadActivity::create([
+                    'lead_id' => $lead->id,
+                    'type' => 'system',
+                    'subject' => "Referred by patient #{$referrer->file_number} ({$referrer->full_name})",
+                    'metadata' => ['referrer_patient_id' => $referrer->id, 'referral_code' => $lead->referral_code],
+                    'performed_by' => auth()->id(),
+                ]);
+            }
+        }
 
         return redirect()->route('admin.leads.show', $lead)
             ->with('success', $successMessage);
@@ -953,11 +983,20 @@ class LeadController extends Controller
                 continue;
             }
 
-            // Check duplicates
+            // CRM-1: normalize phones before storing/deduping.
+            if (! empty($leadData['phone'])) {
+                $leadData['phone'] = PhoneNormalizer::normalize($leadData['phone']);
+            }
+            if (! empty($leadData['phone2'])) {
+                $leadData['phone2'] = PhoneNormalizer::normalize($leadData['phone2']);
+            }
+
+            // Check duplicates — normalized-aware: '+20 101…', '0101…' and
+            // '20101…' all collide with an existing row stored in any form.
             if ($skipDuplicates) {
                 $exists = false;
                 if (! empty($leadData['phone'])) {
-                    $exists = Lead::where('phone', $leadData['phone'])->exists();
+                    $exists = Lead::whereIn('phone', PhoneNormalizer::matchForms($leadData['phone']))->exists();
                 }
                 if (! $exists && ! empty($leadData['email'])) {
                     $exists = Lead::where('email', $leadData['email'])->exists();
@@ -1294,5 +1333,69 @@ class LeadController extends Controller
             'preferred_channel' => $preferredChannel,
             'avg_response_gap_hours' => $avgGap,
         ];
+    }
+
+    /**
+     * CRM-1 — auto conversion commission for the assigned staff member.
+     * Gated by CrmSetting auto_commission_enabled (default OFF). Type/rate come
+     * from settings; percentage uses the created booking's invoice subtotal as
+     * base (skipped when there is no booking). Created PENDING — the existing
+     * approval flow stays in charge. Idempotent per lead.
+     */
+    /**
+     * patients.referral_source is a fixed ENUM — lead-source slugs are
+     * free-form. Map them so conversion never hits a truncated-enum error.
+     */
+    private function mapReferralSource(?string $slug): string
+    {
+        return match ($slug) {
+            'walk_in', 'social_media', 'google', 'friend', 'doctor', 'advertisement', 'other' => $slug,
+            'instagram', 'facebook', 'tiktok', 'snapchat', 'twitter', 'whatsapp', 'youtube' => 'social_media',
+            'google_ads', 'google_maps', 'search' => 'google',
+            'referral', 'friend_referral', 'patient_referral' => 'friend',
+            'doctor_referral' => 'doctor',
+            'ads', 'billboard', 'flyer' => 'advertisement',
+            default => 'other',
+        };
+    }
+
+    private function maybeCreateConversionCommission(Lead $lead, $booking): void
+    {
+        if (! $lead->assigned_to) {
+            return;
+        }
+        if (! filter_var(\App\Models\CrmSetting::get('auto_commission_enabled', false), FILTER_VALIDATE_BOOLEAN)) {
+            return;
+        }
+        if (\App\Models\MarketerCommission::where('lead_id', $lead->id)->exists()) {
+            return; // already commissioned (manual or earlier run)
+        }
+
+        $type = \App\Models\CrmSetting::get('commission_type', 'fixed');
+        $type = in_array($type, ['fixed', 'percentage'], true) ? $type : 'fixed';
+        $rate = (float) \App\Models\CrmSetting::get('commission_rate', 0);
+        if ($rate <= 0) {
+            return;
+        }
+
+        $base = 0.0;
+        if ($type === 'percentage') {
+            $base = (float) ($booking?->invoice?->subtotal ?? 0);
+            if ($base <= 0) {
+                return; // nothing to take a percentage of
+            }
+        }
+
+        \App\Models\MarketerCommission::create([
+            'user_id' => $lead->assigned_to,
+            'lead_id' => $lead->id,
+            'booking_id' => $booking?->id,
+            'commission_type' => $type,
+            'rate' => $rate,
+            'base_amount' => $base,
+            'commission_amount' => $type === 'percentage' ? round($rate / 100 * $base, 2) : $rate,
+            'status' => 'pending',
+            'notes' => 'Auto-created on lead conversion (CRM setting).',
+        ]);
     }
 }

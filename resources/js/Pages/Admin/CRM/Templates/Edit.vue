@@ -28,6 +28,7 @@ const form = useForm({
 
 const availableVariables = [
     '{name}', '{phone}', '{email}', '{service}', '{date}', '{time}', '{clinic_name}', '{clinic_phone}',
+    '{source}', '{assigned_to}', '{next_follow_up}', '{module}',
 ];
 
 const channelOptions = [

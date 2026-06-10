@@ -88,6 +88,8 @@ class CrmCampaignController extends Controller
         return Inertia::render('Admin/CRM/Campaigns/Show', [
             'campaign' => $campaign,
             'leads' => $leads,
+            // CRM-1: real attributed revenue/ROI (converted lead → patient → invoices)
+            'roiSummary' => (new \App\Services\Crm\CrmRevenueService)->campaignRoi($campaign->id),
         ]);
     }
 

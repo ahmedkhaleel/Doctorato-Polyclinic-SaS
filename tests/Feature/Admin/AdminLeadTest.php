@@ -50,7 +50,8 @@ class AdminLeadTest extends TestCase
             'priority' => '2',
         ])->assertRedirect();
 
-        $this->assertDatabaseHas('leads', ['full_name' => 'Jane Doe', 'phone' => '01000000001']);
+        // CRM-1: phones are normalized to international form on create.
+        $this->assertDatabaseHas('leads', ['full_name' => 'Jane Doe', 'phone' => '201000000001']);
     }
 
     public function test_lead_requires_name(): void

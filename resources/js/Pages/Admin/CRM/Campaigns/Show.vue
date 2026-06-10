@@ -8,7 +8,7 @@ import { useCurrency } from '@/Composables/useCurrency.js';
 const { can } = usePermissions();
 const { formatCurrency } = useCurrency();
 
-const props = defineProps({ campaign: Object, leads: Object });
+const props = defineProps({ campaign: Object, leads: Object, roiSummary: Object });
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -200,6 +200,42 @@ onMounted(() => {
                         </div>
                         <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center">
                             <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z" /></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real Revenue + ROI (attributed: converted lead → patient → invoices) -->
+            <div
+                v-if="roiSummary"
+                :class="showStats ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                class="grid grid-cols-1 sm:grid-cols-2 gap-4 transition-all duration-500 ease-out delay-100"
+            >
+                <div class="relative bg-white rounded-xl shadow-sm p-5 border border-gray-100 overflow-hidden group hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+                    <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1 bg-gradient-to-r from-emerald-400 to-teal-500"></div>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold mb-1">{{ isRtl ? 'الايراد الفعلي المنسوب' : 'Attributed Revenue' }}</p>
+                            <p class="text-2xl md:text-3xl font-bold text-emerald-600">{{ formatCurrency(roiSummary.revenue) }}</p>
+                            <p class="text-xs text-gray-400 mt-1">{{ isRtl ? 'كل فواتير المرضى المحولين من هذه الحملة' : 'All invoices of patients converted from this campaign' }}</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative bg-white rounded-xl shadow-sm p-5 border border-gray-100 overflow-hidden group hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+                    <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1" style="background: linear-gradient(to right, #C4A265, #D4B87A);"></div>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold mb-1">{{ isRtl ? 'العائد على الاستثمار' : 'ROI' }}</p>
+                            <p class="text-2xl md:text-3xl font-bold" :class="roiSummary.roi === null ? 'text-gray-400' : (roiSummary.roi >= 0 ? 'text-emerald-600' : 'text-red-500')">
+                                {{ roiSummary.roi === null ? '-' : roiSummary.roi + '%' }}
+                            </p>
+                            <p class="text-xs text-gray-400 mt-1">{{ roiSummary.roi === null ? (isRtl ? 'ادخل التكلفة الفعلية لحساب العائد' : 'Set actual cost to compute ROI') : (isRtl ? 'مقابل التكلفة الفعلية' : 'vs actual cost') }}</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background-color: rgba(196, 162, 101, 0.1);">
+                            <svg class="w-6 h-6" style="color: #C4A265;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" /></svg>
                         </div>
                     </div>
                 </div>

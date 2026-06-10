@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CrmCampaign;
 use App\Models\Lead;
 use App\Models\LeadActivity;
 use App\Models\LeadFollowUp;
 use App\Models\LeadSource;
-use App\Models\CrmCampaign;
 use App\Models\MarketerCommission;
 use App\Models\User;
+use App\Services\Crm\CrmRevenueService;
 use App\Services\ModuleManager;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -42,6 +42,12 @@ class CrmReportController extends Controller
             'lost' => $leadBase()->where('status', 'lost')->count(),
         ];
 
+        // CRM-1 — real attributed revenue (converted lead → patient → all invoices),
+        // single grouped query per dimension instead of the old per-row N+1.
+        $revenueService = new CrmRevenueService;
+        $sourceRevenue = collect($revenueService->bySource(Carbon::parse($dateFrom)))->keyBy('lead_source_id');
+        $campaignRevenue = collect($revenueService->byCampaign(Carbon::parse($dateFrom)))->keyBy('campaign_id');
+
         // ── By Source ──
         $bySource = LeadSource::active()
             ->ordered()
@@ -58,13 +64,14 @@ class CrmReportController extends Controller
                 'converted' => $s->converted,
                 'lost' => $s->lost,
                 'rate' => $s->total > 0 ? round(($s->converted / $s->total) * 100, 1) : 0,
+                'revenue' => (float) ($sourceRevenue[$s->id]['revenue'] ?? 0),
             ]);
 
         // ── By Campaign ──
         $byCampaign = CrmCampaign::withCount([
-                'leads as total' => fn ($q) => $q->whereBetween('created_at', [$dateFrom, Carbon::parse($dateTo)->endOfDay()])->when($module, fn ($q2) => $q2->where('module', $module)),
-                'leads as converted' => fn ($q) => $q->where('status', 'converted')->whereBetween('created_at', [$dateFrom, Carbon::parse($dateTo)->endOfDay()])->when($module, fn ($q2) => $q2->where('module', $module)),
-            ])
+            'leads as total' => fn ($q) => $q->whereBetween('created_at', [$dateFrom, Carbon::parse($dateTo)->endOfDay()])->when($module, fn ($q2) => $q2->where('module', $module)),
+            'leads as converted' => fn ($q) => $q->where('status', 'converted')->whereBetween('created_at', [$dateFrom, Carbon::parse($dateTo)->endOfDay()])->when($module, fn ($q2) => $q2->where('module', $module)),
+        ])
             ->having('total', '>', 0)
             ->get(['id', 'name', 'budget', 'actual_cost'])
             ->map(fn ($c) => [
@@ -120,20 +127,15 @@ class CrmReportController extends Controller
 
         // ── Campaign ROI (cost vs revenue from converted leads) ──
         $campaignRoi = CrmCampaign::withCount([
-                'leads as total_leads' => fn ($q) => $q->whereBetween('created_at', [$dateFrom, Carbon::parse($dateTo)->endOfDay()])->when($module, fn ($q2) => $q2->where('module', $module)),
-                'leads as converted_leads' => fn ($q) => $q->where('status', 'converted')->whereBetween('created_at', [$dateFrom, Carbon::parse($dateTo)->endOfDay()])->when($module, fn ($q2) => $q2->where('module', $module)),
-            ])
+            'leads as total_leads' => fn ($q) => $q->whereBetween('created_at', [$dateFrom, Carbon::parse($dateTo)->endOfDay()])->when($module, fn ($q2) => $q2->where('module', $module)),
+            'leads as converted_leads' => fn ($q) => $q->where('status', 'converted')->whereBetween('created_at', [$dateFrom, Carbon::parse($dateTo)->endOfDay()])->when($module, fn ($q2) => $q2->where('module', $module)),
+        ])
             ->having('total_leads', '>', 0)
             ->get(['id', 'name', 'budget', 'actual_cost'])
-            ->map(function ($campaign) use ($dateFrom, $dateTo) {
-                // Revenue from converted leads: Lead → Booking → Invoice
-                $revenue = Lead::where('campaign_id', $campaign->id)
-                    ->where('status', 'converted')
-                    ->whereBetween('created_at', [$dateFrom, Carbon::parse($dateTo)->endOfDay()])
-                    ->whereNotNull('booking_id')
-                    ->with('booking.invoice')
-                    ->get()
-                    ->sum(fn ($lead) => $lead->booking?->invoice?->paid_amount ?? 0);
+            ->map(function ($campaign) use ($campaignRevenue) {
+                // CRM-1: lifetime patient revenue attributed to the campaign's
+                // converted leads (was first-booking invoice only, in an N+1 loop).
+                $revenue = (float) ($campaignRevenue[$campaign->id]['revenue'] ?? 0);
 
                 $cost = $campaign->actual_cost ?: $campaign->budget ?: 0;
                 $roi = $cost > 0 ? round((($revenue - $cost) / $cost) * 100, 1) : 0;

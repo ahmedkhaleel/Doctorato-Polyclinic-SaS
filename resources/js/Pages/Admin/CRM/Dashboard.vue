@@ -489,7 +489,7 @@ function missFollowUp(fuId) {
                             {{ slaMetrics.awaiting_contact }} {{ isRtl ? 'بانتظار التواصل' : 'awaiting contact' }}
                         </span>
                         <span v-else-if="slaMetrics?.total_contacted > 0" class="inline-flex items-center gap-0.5 text-xs font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md">
-                            {{ slaMetrics.within_1h }}/{{ slaMetrics.total_contacted }} {{ isRtl ? 'خلال ساعة' : 'within 1h' }}
+                            {{ slaMetrics.within_1h }}/{{ slaMetrics.total_contacted }} {{ isRtl ? `خلال ${slaMetrics.target_minutes || 60} دقيقة` : `within ${slaMetrics.target_minutes || 60}m` }}
                         </span>
                         <span v-else class="text-xs text-gray-400">{{ isRtl ? 'لا بيانات بعد' : 'No data yet' }}</span>
                     </div>

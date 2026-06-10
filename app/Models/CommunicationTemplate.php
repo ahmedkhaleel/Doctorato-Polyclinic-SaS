@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CommunicationTemplate extends Model
@@ -64,7 +64,9 @@ class CommunicationTemplate extends Model
         $body = $lang === 'ar' ? $this->body_ar : $this->body_en;
 
         foreach ($data as $key => $value) {
-            $body = str_replace('{{' . $key . '}}', $value, $body);
+            // Editors insert single-brace {name}; older templates used {{name}}.
+            // Support both so variables always render (CRM-1 flow fix).
+            $body = str_replace(['{{'.$key.'}}', '{'.$key.'}'], $value, $body);
         }
 
         return $body;
